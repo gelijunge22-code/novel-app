@@ -88,6 +88,87 @@ async def models_library(request: Request):
     return {"models": out}
 
 
+@router.post("/config/models/model")
+async def model_settings_save(request: Request, payload: dict = Body(default={})):
+    """保存**单个模型**的参数 —— 模型列表每行右上角那个「⋯」面板。
+
+    为什么要有：不同渠道的同一个模型能吃多长上下文、一次最多出多少、是不是推理模型
+    都不一样（1M / 256K / 128K…）；还有些渠道要显式告诉它"开思考、给多少预算"，
+    这些都得让用户自己填，不能让平台替他猜。
+
+    字段：
+      · contextWindowTokens —— 上下文上限（token）
+      · maxTokens           —— 单次最多出多少
+      · reasoning           —— 是不是推理模型（有些渠道要显式声明）
+      · optionsJson         —— **高级参数**，一段 JSON，原样并进请求体
+                               （例：{"thinking": {"type": "enabled", "budget_tokens": 8192}}）
+                               按 (渠道, 模型) 分开存，互不干扰。
+    """
+    current_user(request)
+    d = dbm.db()
+    p = payload or {}
+    source = str(p.get("source") or "").strip()
+    mid = str(p.get("id") or "").strip()
+    if not mid:
+        raise HTTPException(400, "缺 model id")
+
+    prov = None
+    for row in d.query("SELECT * FROM provider ORDER BY sort, id"):
+        if source and source in (row["name"] or "", row["grp"] or ""):
+            prov = row
+            break
+    if prov is None:
+        raise HTTPException(404, "找不到这个渠道")
+    mrow = d.one("SELECT * FROM provider_model WHERE provider_id=? AND model_id=?",
+                 (prov["id"], mid))
+    if mrow is None:
+        raise HTTPException(404, "找不到这个模型")
+
+    def _num(v, fallback):
+        try:
+            return int(str(v).strip()) if str(v).strip() not in ("", "None") else fallback
+        except Exception:
+            return fallback
+
+    cw = _num(p.get("contextWindowTokens"), mrow["context_window"])
+    mt = _num(p.get("maxTokens"), mrow["max_tokens"])
+    rs = mrow["reasoning"]
+    if p.get("reasoning") is not None:
+        rs = 1 if p.get("reasoning") else 0
+    d.execute("UPDATE provider_model SET context_window=?, max_tokens=?, reasoning=?,"
+              " updated_at=? WHERE id=?",
+              (cw, mt, rs, now_ms(), mrow["id"]))
+
+    opts = d.jloads(prov["options_json"], {}) or {}
+    if not isinstance(opts, dict):
+        opts = {}
+    if "optionsJson" in p:
+        raw = str(p.get("optionsJson") or "").strip()
+        if raw:
+            try:
+                extra = json.loads(raw)
+                if not isinstance(extra, dict):
+                    raise ValueError("要是一个 JSON 对象，比如 {\"thinking\": {\"type\": \"enabled\"}}")
+            except HTTPException:
+                raise
+            except Exception as e:
+                raise HTTPException(400, "高级参数不是合法 JSON：%s" % e)
+        else:
+            extra = {}
+        bym = opts.get("modelParams")
+        if not isinstance(bym, dict):
+            bym = {}
+        if extra:
+            bym[mid] = extra
+        else:
+            bym.pop(mid, None)
+        opts["modelParams"] = bym
+        d.execute("UPDATE provider SET options_json=?, updated_at=? WHERE id=?",
+                  (d.jdumps(opts), now_ms(), prov["id"]))
+    return {"ok": True, "source": prov["name"], "id": mid,
+            "contextWindowTokens": cw, "maxTokens": mt, "reasoning": bool(rs)}
+
+
 @router.get("/config/models/provider-templates")
 async def provider_templates(request: Request):
     current_user(request)

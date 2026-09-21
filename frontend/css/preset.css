@@ -179,3 +179,28 @@
   min-height:44px;max-height:42vh;resize:none;overflow-y:auto;
   line-height:1.55;
 }
+
+
+/* ── 模型列表每行右侧的「⋯」（打开"这个模型自己的参数"）───────────────
+   用户点名：「所有模型的右上角都应该加三个小点」。 */
+.pk-list li { display: flex; align-items: center; gap: var(--sp-2); }
+.pk-list li .t { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pk-more {
+  flex: 0 0 auto; width: 34px; height: 34px; border: none; background: transparent;
+  color: var(--ink-3); font-size: 17px; line-height: 1; display: grid; place-items: center;
+  border-radius: var(--r-sm, 8px); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.pk-more:active { background: var(--line); color: var(--ink); }
+
+/* 上下文上限的快捷胶囊（1M / 256K / 128K…） */
+.mp-chips { display: flex; flex-wrap: wrap; gap: var(--sp-1); margin-top: var(--sp-2); }
+.mp-chip {
+  border: 1px solid var(--line); background: transparent; color: var(--ink-2);
+  border-radius: 999px; padding: 5px 12px; font-size: var(--t-sm); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.mp-chip:active { background: var(--line); }
+
+/* 参数面板底部两个按钮 */
+.mp-acts { display: flex; gap: var(--sp-2); justify-content: flex-end;
+  padding: var(--sp-3) var(--sp-4) var(--sp-5); }

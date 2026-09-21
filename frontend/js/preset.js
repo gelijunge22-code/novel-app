@@ -194,7 +194,8 @@
   }
 
   /* 选择抽屉：预设库 / 模型，都带搜索 */
-  function openList(title, items, cur, onPick, previewPath) {
+  function openList(title, items, cur, onPick, previewPath, opts) {
+    opts = opts || {};
     const html =
       '<div class="sheet-grip"></div>'
       + '<div class="pk-search"><input id="pk-q" placeholder="搜索" autocomplete="off"></div>'
@@ -212,12 +213,23 @@
           list.innerHTML = hit.slice(0, 400).map((it) =>
             '<li data-v="' + esc(it.value) + '"' + (it.value === cur ? ' class="on"' : '') + '>'
             + '<span class="t">' + esc(it.label) + '</span>'
-            + (it.value === cur ? '<span class="s">当前</span>' : '') + '</li>').join('')
+            + (it.value === cur ? '<span class="s">当前</span>' : '')
+            /* 每行右侧的「⋯」：模型列表用它打开"这个模型自己的参数"面板。
+               用户点名要的：右上角三个点，点进去调上下文（1M/256K…）和高级参数。 */
+            + (opts.rowExtra ? '<button type="button" class="pk-more" data-more="' + esc(it.value)
+               + '" aria-label="这个模型的参数">' + '\u22ef' + '</button>' : '')
+            + '</li>').join('')
             || '<li><span class="t muted">没找到</span></li>';
         };
         draw('');
         input.addEventListener('input', () => draw(input.value));
         list.addEventListener('click', (e) => {
+          const more = e.target.closest('button[data-more]');
+          if (more && opts.onExtra) {           // 点的是「⋯」：开参数面板，不算选中
+            e.stopPropagation();
+            opts.onExtra(more.dataset.more);
+            return;
+          }
           const li = e.target.closest('li[data-v]');
           if (!li) return;
           onPick(li.dataset.v);
@@ -250,11 +262,115 @@
   }
 
   function openModelPick() {
-    const list = (S.data.models || []).map((m) => ({ value: m.key, label: m.label || m.key }));
+    const list = (S.data.models || []).map((m) => ({ value: m.key,
+      label: (m.name || m.label || m.key) + (m.provider ? '  ·  ' + m.provider : '') }));
     openList('挑模型', list, mdl().modelKey, (v) => {
       mdl().modelKey = v;
       render();
       mark(true);
+    }, null, {
+      rowExtra: () => true,
+      onExtra: (k) => openModelParams(k),
+    });
+  }
+
+
+  /* ── 单个模型的参数面板（模型列表每行右上角那个「⋯」）──────────────
+     用户点名要的：「所有模型的右上角都应该加三个小点，点击之后可以调这个模型的具体参数，
+     比如最高的上下文 1M、256K 都可以让他们自己调，以及一些代码的填写，
+     因为一些 AI 是可以通过这种高级的修改来修改思考强度的。」
+     存在的意义：同一个模型在不同渠道上，能吃多长、一次能出多少、是不是推理模型都不一样，
+     平台猜不准，得让用户自己说了算。 */
+  function openModelParams(key) {
+    const it = (S.data.models || []).find((x) => x.key === key) || {};
+    const parts = String(key).split('/');
+    const group = it.group || parts[0] || '';
+    const mid = parts.slice(1).join('/') || key;
+    const PRE = [['1000000', '1M'], ['256000', '256K'], ['128000', '128K'],
+                 ['64000', '64K'], ['32000', '32K'], ['16000', '16K']];
+    const html =
+      '<div class="sheet-grip"></div>'
+      + '<h3 class="sheet-h">' + esc(it.name || mid) + '</h3>'
+      + '<p class="pfield-ds" style="padding:0 var(--sp-4)">这个模型自己的参数。'
+      + '改完点「保存」—— 只影响这一个模型，别的模型不动。</p>'
+      + '<div class="pfield"><div class="pfield-lb">上下文上限 <span class="hint">一次能吃多少 token</span></div>'
+      + '<div class="pfield-ct"><input class="pinput" id="mp-ctx" inputmode="numeric" placeholder="比如 128000">'
+      + '<div class="mp-chips">'
+      + PRE.map(([v, lb]) => '<button type="button" class="mp-chip" data-ctx="' + v + '">' + lb + '</button>').join('')
+      + '</div></div></div>'
+      + '<div class="pfield"><div class="pfield-lb">单次最多出多少 <span class="hint">token，留空=默认</span></div>'
+      + '<div class="pfield-ct"><input class="pinput" id="mp-max" inputmode="numeric" placeholder="比如 8192"></div></div>'
+      + '<div class="pfield"><div class="pfield-lb">推理模型 <span class="hint">有些渠道要显式声明</span></div>'
+      + '<div class="pfield-ct"><div class="pradio" id="mp-rs">'
+      + '<button type="button" data-v="0">不算</button>'
+      + '<button type="button" data-v="1">是推理模型</button></div></div></div>'
+      + '<div class="pfield"><div class="pfield-lb">高级参数 <span class="hint">一段 JSON，原样并进请求体</span></div>'
+      + '<p class="pfield-ds">给懂的人用：想调"思考强度"就写这儿，例如 '
+      + '<code>{"thinking": {"type": "enabled", "budget_tokens": 8192}}</code>。留空 = 什么都不发。</p>'
+      + '<div class="pfield-ct"><textarea class="pinput" id="mp-json" rows="5" spellcheck="false" '
+      + 'autocomplete="off" placeholder=\'{"thinking": {"type": "enabled"}}\'></textarea></div></div>'
+      + '<div class="mp-acts"><button type="button" class="btn" id="mp-cancel">取消</button>'
+      + '<button type="button" class="btn btn-primary" id="mp-save">保存</button></div>';
+
+    App.sheet(html, {
+      onMount(panel) {
+        const ctx = q('#mp-ctx', panel);
+        const mx = q('#mp-max', panel);
+        const js = q('#mp-json', panel);
+        const rs = q('#mp-rs', panel);
+        let reasoning = null;
+        const setRs = (v) => {
+          reasoning = v;
+          [...rs.querySelectorAll('button')].forEach((b) => b.classList.toggle('on', b.dataset.v === String(v)));
+        };
+        panel.querySelectorAll('[data-ctx]').forEach((b) => b.addEventListener('click', () => {
+          if (ctx) ctx.value = b.dataset.ctx;
+        }));
+        rs.addEventListener('click', (e) => {
+          const b = e.target.closest('button[data-v]');
+          if (b) setRs(b.dataset.v === '1');
+        });
+        // 拉这个模型现在的值
+        API.models().then((d) => {
+          const hit = (d && d.models || []).find((m) => m.id === mid && (!group || m.source === it.provider || m.source === it.group))
+                   || (d && d.models || []).find((m) => m.id === mid);
+          if (hit) {
+            if (ctx && !ctx.value) ctx.value = hit.contextWindowTokens || '';
+            if (mx && !mx.value) mx.value = hit.maxTokens || '';
+            setRs(!!hit.reasoning);
+          } else { setRs(reasoning === null ? false : reasoning); }
+        }).catch(() => setRs(false));
+        // 高级参数：从渠道的 options 里把按模型存的那份取回来
+        API.nb('api/config/snapshot').then((snap) => {
+          const provs = (((snap || {}).effective || {}).models || {}).providers || {};
+          for (const k of Object.keys(provs)) {
+            const pr = provs[k];
+            if (it.provider && pr.name !== it.provider) continue;
+            const bym = (pr.options || {}).modelParams || {};
+            if (bym[mid] && js) { js.value = JSON.stringify(bym[mid], null, 2); break; }
+          }
+        }).catch(() => {});
+        q('#mp-cancel', panel).addEventListener('click', () => App.closeSheet());
+        q('#mp-save', panel).addEventListener('click', async () => {
+          const btn = q('#mp-save', panel);
+          if (btn) { btn.disabled = true; btn.textContent = '保存中…'; }
+          try {
+            await API.modelSave({ source: it.provider || group, id: mid,
+              contextWindowTokens: ctx ? ctx.value.trim() : '',
+              maxTokens: mx ? mx.value.trim() : '',
+              reasoning: reasoning === null ? undefined : reasoning,
+              optionsJson: js ? js.value.trim() : '' });
+            App.toast('已保存');
+            App.haptic && App.haptic();
+            App.closeSheet();
+            /* 让预设页下次重新拉一遍（模型库是缓存过的） */
+            S.data = null;
+          } catch (e) {
+            if (btn) { btn.disabled = false; btn.textContent = '保存'; }
+            App.toast('保存失败：' + (e.message || e));
+          }
+        });
+      },
     });
   }
 

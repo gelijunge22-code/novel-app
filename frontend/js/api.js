@@ -342,6 +342,9 @@
     models: () => window.API.nb('api/config/models/library'),
     /* 连通自检：真发一句话出去看回不回得来（见 server/routers/config_models.py 的 model_test） */
     modelTest: (modelKey) => window.API.nb('api/config/models/test', { method: 'POST', body: { modelKey: modelKey || '' } }),
+    /* 保存**单个模型**的参数（模型列表右上角「⋯」那个面板）：
+       上下文上限 / 单次最大输出 / 是不是推理模型 / 高级参数(JSON)。 */
+    modelSave: (body) => window.API.nb('api/config/models/model', { method: 'POST', body: body || {} }),
     newSession: (profileKey, slug) => window.API.nb('api/agent/sessions', {
       method: 'POST', body: { profileKey, currentProjectRoot: slug },
     }),
