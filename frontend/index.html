@@ -169,6 +169,9 @@
   <div id="chat-body" class="chat-body"></div>
   <div id="chat-compose" class="chat-compose">
     <button id="chat-plus" class="icon-btn sm" data-icon="plus" aria-label="更多"></button>
+    <!-- 联网搜索：一枚看得见、一下就能开/关的胶囊（用户点名"专门的那种类似于胶囊的按钮"）。
+         关着的时候一个请求都不发；开着的时候后台用主创的模型自己跑。 -->
+    <button id="chat-net" class="net-pill" role="switch" aria-checked="false" aria-label="联网搜索">联网</button>
     <textarea id="chat-input" class="chat-input" rows="1" placeholder="说点什么…"></textarea>
     <button id="chat-send" class="btn btn-send" data-icon="send" aria-label="发送"></button>
   </div>

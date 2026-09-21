@@ -288,11 +288,9 @@
     line.appendChild(run);
     host.appendChild(line);
     host.appendChild(who);          // 「谁来做」自己一行，不跟上面挤
-    host.appendChild(hint);
-    host.appendChild(el);
-    el.addEventListener('click', (e) => {
-      const b = e.target.closest('[data-k]');
-      if (!b) return;
+    /* 这一行**自己**绑点击 —— 不能挂在别人身上：上一版就是挂错容器 + 被
+       对方的 `if (!b) return` 提前 return 掉，表现是"点不了、像有 bug"（用户原话）。 */
+    who.addEventListener('click', (e) => {
       const sp = e.target.closest('[data-split]');
       if (sp) {
         S.divided = sp.dataset.split === '1';
@@ -301,14 +299,18 @@
         App.haptic && App.haptic();
         return;
       }
-      const gt = e.target.closest('#chat-goto-split');
-      if (gt) {                       // 只是跳转：去预设页调"哪一步交给谁"
+      if (e.target.closest('#chat-goto-split')) {   // 只是跳转：去预设页调"哪一步交给谁"
         try {
           if (window.Preset && Preset.open) Preset.open('project', (window.BookCtx && BookCtx.slug && BookCtx.slug()) || '');
           else App.show('preset');
         } catch (e2) { try { App.show('preset'); } catch (e3) {} }
-        return;
       }
+    });
+    host.appendChild(hint);
+    host.appendChild(el);
+    el.addEventListener('click', (e) => {
+      const b = e.target.closest('[data-k]');
+      if (!b) return;
       if (b.dataset.k === 'profile') profileSheet(false);
       else if (b.dataset.k === 'stream') cycleStream();
       else if (b.dataset.k === 'setup') modelsSetupSheet();
@@ -359,6 +361,53 @@
     return list.filter((m) => m.key === key)[0] || null;
   }
   /* 谁来做那两枚胶囊（分工 / 一个人）—— 三种干活方式共用同一个开关 */
+
+  /* ── 联网搜索那枚胶囊 ────────────────────────────────────────
+     用户要求：默认跟主创共用一个模型（后端 web.enabled 只管"能不能上网"），
+     一枚胶囊直接开/关；**开着才联网**，关着一个请求都不发。 */
+  const NET = { on: null, busy: false };
+  function bindNet() {
+    const b = $('#chat-net');
+    if (!b || b.dataset.bound === '1') return;
+    b.dataset.bound = '1';
+    b.addEventListener('click', (e) => { e.preventDefault(); toggleNet(); });
+  }
+  function paintNet() {
+    const b = $('#chat-net');
+    if (!b) return;
+    const on = NET.on === true;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-checked', on ? 'true' : 'false');
+    b.title = on ? '联网搜索：开着 —— 需要资料时后台用主创的模型自己上网找' : '联网搜索：关着 —— 一个请求都不发';
+  }
+  async function loadNet() {
+    try {
+      const d = await API.webConfig();
+      NET.on = !!(d && d.enabled);
+    } catch (e) { NET.on = null; }
+    paintNet();
+  }
+  async function toggleNet() {
+    if (NET.busy) return;
+    NET.busy = true;
+    const b = $('#chat-net');
+    if (b) b.disabled = true;
+    const want = !(NET.on === true);
+    try {
+      const r = await API.webSave({ enabled: want });
+      NET.on = !!(r && r.enabled !== undefined ? r.enabled : want);
+      try { window.WebSearch && WebSearch.invalidate && WebSearch.invalidate(); } catch (e2) {}
+      App.toast(NET.on ? '联网搜索：已开启（后台用主创的模型跑）' : '联网搜索：已关闭（不会联网）');
+      App.haptic && App.haptic();
+    } catch (e) {
+      App.toast('改不了联网开关：' + (e.message || e));
+    } finally {
+      NET.busy = false;
+      if (b) b.disabled = false;
+      paintNet();
+    }
+  }
+
   function renderSplit() {
     const box = $('#chat-split');
     if (!box) return;
@@ -379,6 +428,8 @@
       '" aria-pressed="' + (m.key === S.mode ? 'true' : 'false') + '"' +
       ' title="' + esc(m.desc || '') + '">' + esc(m.name) + '</button>').join('');
     renderSplit();
+    bindNet();          // 胶囊绑一次
+    loadNet();          // 联网开关的真实状态每次进来都重读
     applyMode();
   }
   /* 切模式要**看得见地**变：说明文字 / 状态条 / 输入框提示 三处一起跟着走。

@@ -247,3 +247,23 @@
   border-radius: var(--r-sm, 8px); cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
 .md-more:active { background: var(--line); color: var(--ink); }
+
+
+/* ── 联网搜索那枚胶囊（聊天输入行左边）─────────────────────────
+   用户原话：「现在联网搜索根本就没有开启或者关闭的功能…弄个专门的那种类似于胶囊的按钮，
+   然后开启之后我在下面问东西，它会调用主创的模型在后台自己跑」。
+   关 = 灰描边空心；开 = 强调色实心 + 一点呼吸感。一眼看出现在能不能上网。 */
+.net-pill{
+  flex:0 0 auto;height:30px;padding:0 11px;border-radius:999px;
+  border:1px solid var(--line);background:transparent;color:var(--ink-3);
+  font-size:var(--t-sm);line-height:1;display:inline-flex;align-items:center;gap:4px;
+  -webkit-tap-highlight-color:transparent;cursor:pointer;transition:background .16s,color .16s,border-color .16s;
+}
+.net-pill::before{content:'';width:6px;height:6px;border-radius:50%;background:currentColor;opacity:.45}
+.net-pill:active{transform:scale(.96)}
+.net-pill.on{
+  background:var(--accent);border-color:var(--accent);color:#fff;
+  box-shadow:0 1px 6px -2px var(--accent);
+}
+.net-pill.on::before{opacity:1;background:#fff}
+.net-pill[disabled]{opacity:.5}
