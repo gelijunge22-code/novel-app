@@ -30,8 +30,24 @@
 #        · 新增机器判据：安全区/手势 42 条（+3 条反证各自红在点名的那条上）、UI 硬判据 44 屏（+wide 反证 45 屏全红）
 #        · 用户点名的 5 个新功能全部落地并带实测（故事线 / 常用指令 / 小批注 / 点一下看设定 / 章节顺序）
 #        · 夜间全站体检 0 条红（对比度量化，阈值跟主题走）+ 两条反证
-versionCode=25
-versionName=2.0.5
+versionCode=26
+versionName=2.0.6
+# 2.0.6：**修「手机上怎么输密码都进不去」**（用户实测卡死，服务器日志里一条请求都没有）
+#        根因两条，都在文件开头那段"file:// 页面发不出跨源请求"的老坑上：
+#        · ① `ApiBridge` 里**没有 `ready()` 方法** → 前端 `bridgeUsable()` 回落到
+#          `localReady()`（判的是"手机里的本地后端起没起"，默认不起）→ 桥被判成不能用
+#          → 所有 JSON 请求改走 fetch → 而 file:// 的跨源 fetch 被 Android 默认拦掉，
+#          而且是**静默**的：界面看着正常、点「进入」什么都不发生。
+#          修：补 `ApiBridge.ready()`（只要有服务器地址，桥就能用）。
+#        · ② WebView 没开跨源：补 `setAllowUniversalAccessFromFileURLs(true)` +
+#          `setAllowFileAccessFromFileURLs(true)` + `MIXED_CONTENT_ALWAYS_ALLOW`
+#          （给 fetch / 媒体 / SSE 兜底，不只靠桥）。
+#        · ③ 服务器地址纠偏：老的 `/nbapp/` 前缀每次启动自动纠回 DEFAULT_SERVER
+#          （指着旧后端的 App 会一直"密码不对"，旧后端当然不认新口令）。
+#        · ④ 前端三个真 bug 一起带上：
+#          · 登录框 `autocomplete=current-password` → 自动填**旧密码**，点进入发的是旧的
+#          · 免登录链接 `?t=` 以前只认手机本机口令，网页上完全没用（新增 API.useToken）
+#          · 已登录但登录页不消失（`start()` 从来没关过登录页）
 # 2.0.5：**用户最后一批 5 条**（第 46 轮）落地版。
 #        · ①「顶上这一大块空白」收掉：内容流里那 42px 的切书带子没了
 #          （实测 logs/r46-probe-before.json：顶栏底下 42px 只有一枚 34×34 小方块）

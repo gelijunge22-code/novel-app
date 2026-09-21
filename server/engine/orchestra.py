@@ -122,6 +122,22 @@ MODES: dict[str, dict] = {
             ("leader", "定稿计划", "按取料与查证结果改定计划，逐条列出「下一步做什么」，并写明要动哪个文件（给路径）。"),
         ],
     },
+    "solo": {
+        "name": "一个人干完",
+        "desc": "不分工、不接力：**同一个 AI 从头做到尾**（想清楚 → 直接写/改 → 自己回头查一遍）。"
+                "想快点出活的用这个；要精雕细琢的用「执行」（多几棒互相挑刺）。",
+        "writes": True,
+        "steps": [
+            ("leader", "想清楚再做",
+             "先用一句话说清你打算怎么处理这件事，然后**直接动手**，不用等人拍板。"),
+            ("leader", "一口气做完",
+             "把这件事做完：要写正文就写**整章**（不是提纲、不是片段），要改稿就直接改。"
+             "别把活留给「下一棒」——这一轮没有下一棒。"),
+            ("leader", "回头自查",
+             "检查你刚才的产出：跟已有设定/前文冲突的地方、写崩的人物、AI 味的句子（比喻堆砌、"
+             "排比抒怀、段尾总结）。有问题**直接改掉**，最后用三五句话说清你改了什么。"),
+        ],
+    },
     "execute": {
         "name": "执行",
         "desc": "一竿子到底：计划 → 取料 → 查证 → 写初稿 → 挑刺 → 改稿 → 汇总。",
@@ -291,6 +307,16 @@ def _target_path(slug: str, text: str, payload: dict) -> str:
         files = []
     if not files:
         return "manuscript/001-第一章.md"
+    # 空章优先：**最新章节是空的，就写它**，别往后跳。
+    # 用户实测的毛病：新开的书自带一个空的「001-第一章.md」，旧逻辑按"最大章号 +1"算
+    # → 直接跑去写第二章，第一章永远空着；而且 AI 以为自己是"接着写"，
+    # 根本不知道这本书还没开张（用户原话：「他不知道这张小说是刚打开」）。
+    for f in reversed(files):
+        try:
+            if int(f.get("words") or 0) <= 0:
+                return f["path"]
+        except Exception:
+            continue
     nums, last = [], files[-1]["path"]
     for f in files:
         mm = re.search(r"(\d+)", f["path"].rsplit("/", 1)[-1])
@@ -305,6 +331,43 @@ def _target_path(slug: str, text: str, payload: dict) -> str:
     stem = re.sub(r"第\s*0*(\d+)\s*章", f"第{nxt:03d}章", stem)
     # 扩展名要留着：上一版把 `.md` 剥掉之后没加回来，写手真的写出了没有后缀的文件
     return f"manuscript/{nxt:03d}-{stem}.md"
+
+
+def _book_state_bits(slug: str, target: str) -> str:
+    """【这本书现在的状态】—— 新书 / 有空章时必须让 AI 知道它从哪儿开始写。
+
+    用户实测的毛病：新开的书自带一个空的「001-第一章.md」，AI 从目录里看到"第一章"，
+    就以为前情已经有了，**直接开写第二章**，第一章永远是空的；
+    而且它以为自己是"接着写"，满篇"如前所述"这类承接语，读起来莫名其妙。
+    """
+    from ..store import chapter_files
+    try:
+        files = chapter_files(slug)
+    except Exception:
+        files = []
+    if not files:
+        return ("【这本书现在的状态】**还没有任何章节** —— 这是全新的一本书，没有任何前情。\n"
+                "你这一章就是开场：把人物、地点、正在发生的事立起来；\n"
+                "**不要**写「如前所述」「话说回来」「接上文」这类承接语（没有上文可接）。")
+    def _empty(f):
+        try:
+            return int(f.get("words") or 0) <= 0
+        except Exception:
+            return False
+    empties = [f for f in files if _empty(f)]
+    tgt = next((f for f in files if f.get("path") == target), None)
+    lines = ["【这本书现在的状态】共 %d 章，其中 %d 章还是空的。" % (len(files), len(empties))]
+    if tgt is not None and _empty(tgt):
+        lines.append("**这一章（%s）现在还是空的，你要写的就是它** —— "
+                     "这本书还没有正文，直接从头讲起，不要承接任何「上一章」。"
+                     % (tgt.get("name") or tgt.get("path")))
+    elif empties:
+        lines.append("还有空章：%s。这一轮要写的是 %s。"
+                     % ("、".join(str(e.get("name") or e.get("path") or "?") for e in empties[:5]),
+                        target))
+    else:
+        lines.append("上一章是 %s，接着往下写。" % (files[-1].get("name") or files[-1].get("path")))
+    return "\n".join(lines)
 
 
 def _index_bits(slug: str) -> str:
@@ -373,6 +436,8 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
     # 每个角色看到的上下文**不一样**：critic/retriever 不给"写作设定堆"，writer 才给
     system = build_system(r["profile"], slug, values,
                           memory_hits=memory_hits if role in ("leader", "writer") else None)
+    # 这本书现在的状态：新书/空章必须说清楚，否则 AI 会跳过空的第一章直接写第二章
+    system += "\n\n" + _book_state_bits(slug, target)
     system += ("\n\n【你这一步的角色】" + r["name"] + "：" + r["duty"] +
                "\n【你只能看到这些】" + "、".join(r["sees"]) +
                "\n【硬规矩】" + ("你不改任何文件，只交结论。" if r["scope"] == "read" else

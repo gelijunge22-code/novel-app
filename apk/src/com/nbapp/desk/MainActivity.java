@@ -293,6 +293,18 @@ public class MainActivity extends Activity {
      * （不清的话下次启动还会"多等本机 10 秒"）；服务器地址没设过就补上默认的那台。
      */
     private void migratePrefs() {
+        /* 服务器地址纠偏（**每次启动都查**）：
+           老版本可能把地址存成了旧前缀 `/nbapp/`（旧 App 的反代），
+           或者用户手输过一个已经不用的地址 —— 那样 App 会一直跟**错的后端**说话，
+           表现就是「密码怎么输都不对」（旧后端当然不认新口令）。
+           只纠"明显是旧前缀"的那种，用户自己填的其它地址不动。 */
+        try {
+            String su = sp.getString(KEY_SERVER, "");
+            if (su != null && su.contains("/nbapp")) {
+                CrashLog.step(this, "服务器地址纠偏：" + su + " → " + DEFAULT_SERVER);
+                sp.edit().putString(KEY_SERVER, normalize(DEFAULT_SERVER)).apply();
+            }
+        } catch (Throwable ignored) {}
         int schema = sp.getInt(KEY_SCHEMA, 1);
         if (schema >= SCHEMA_NOW) {
             // 老版本留的 prefer_local 也要保证是关的（这一版它不该再起作用）
@@ -835,6 +847,14 @@ public class MainActivity extends Activity {
         s.setDatabaseEnabled(true);
         s.setLoadWithOverviewMode(true);
         s.setUseWideViewPort(true);
+        /* 内嵌界面是从 `file:///android_asset/` 加载的，而接口在 http:// 的服务器上 —— 跨源。
+           Android **默认禁止** file:// 页面发跨源请求，被拦时是**静默**的：
+           界面看着正常，点「进入」什么都不发生，服务器日志里一条请求都没有。
+           （真机事故：用户装的 2.0.5 就是"怎么输密码都进不去"。）
+           桥那条路已经由 ApiBridge.ready() 修好；这几行是给 fetch / 媒体 / SSE 兜底。 */
+        s.setAllowUniversalAccessFromFileURLs(true);
+        s.setAllowFileAccessFromFileURLs(true);
+        try { s.setMixedContentMode(WebSettings.MIXED_CONTENT_ALWAYS_ALLOW); } catch (Throwable ignored) {}
         s.setSupportZoom(false);
         s.setBuiltInZoomControls(false);
         s.setDisplayZoomControls(false);
