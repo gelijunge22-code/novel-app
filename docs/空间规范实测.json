@@ -1,20 +1,7 @@
 {
- "at": "2026-09-21 18:49:37",
- "force": "bare",
+ "at": "2026-09-21 19:06:23",
+ "force": null,
  "checked": 737,
- "violations": [
-  {
-   "file": "panels.css",
-   "line": 99,
-   "why": "间距写了裸 px（52px）—— 只能用 var(--sp-*)",
-   "text": ".chat-empty{padding:52px var(--sp-5);text-align:center;color:var(--ink-3);font-size:var(--t-base);line-height:1.9}.chat-empty .big{font-size"
-  },
-  {
-   "file": "js/__force.js",
-   "line": 1,
-   "why": "间距写了裸 px（13px）—— 只能用 var(--sp-*)",
-   "text": "const x = '<div style=\"padding:13px\"></div>';"
-  }
- ],
- "violationCount": 2
+ "violations": [],
+ "violationCount": 0
 }

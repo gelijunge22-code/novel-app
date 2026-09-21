@@ -72,7 +72,9 @@
   color:var(--ink);border-radius:var(--radius-sm);padding:var(--sp-3) var(--sp-3);
   font:400 var(--t-base)/1.5 var(--ui-font);outline:none;
   transition:border-color var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out);
-}.t-input:focus, .t-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}.t-area{resize:none;line-height:1.75;font-family:var(--ui-font);min-height:64px}.t-area.mono{font:400 var(--t-md)/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;min-height:220px;
+}.t-input:focus, .t-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}
+/* 搜索框是 input，撑不出 ::after 隐形热区 → 自己长到 44（tools/e2e-uicheck.js 的「② 点击热区」量它） */
+.t-input[data-q]{min-height:var(--hit)}.t-area{resize:none;line-height:1.75;font-family:var(--ui-font);min-height:64px}.t-area.mono{font:400 var(--t-md)/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;min-height:220px;
   white-space:pre;overflow-wrap:normal;overflow-x:auto}.t-hint{font:400 var(--t-sm)/1.5 var(--ui-font);color:var(--ink-3);margin-top:var(--sp-2)}/* ── 按钮 ── */
 .t-bar{display:flex;gap:var(--sp-2);margin:0 0 var(--sp-4)}.t-btn{
   flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);
@@ -80,7 +82,9 @@
   cursor:pointer;-webkit-tap-highlight-color:transparent;
   transition:transform var(--dur-1) var(--ease-out),background var(--dur-2) linear;
 }.t-btn:active{transform:scale(.97)}.t-btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}.t-btn.dan{color:var(--danger);border-color:var(--danger-line)}/* 列表里的行内删除：次要色，别用危险色抢眼睛（危险色留给"删掉整本/整章"那种） */
-.t-btn.sm.dim{color:var(--ink-3);border-color:var(--line);background:transparent}.t-btn.sm{flex:none;padding:var(--sp-2) var(--sp-3);font-size:var(--t-md)}.t-btn[disabled]{opacity:.45;pointer-events:none}/* ── 标签 / 徽章 ── */
+.t-btn.sm.dim{color:var(--ink-3);border-color:var(--line);background:transparent}.t-btn.sm{flex:none;padding:var(--sp-2) var(--sp-3);font-size:var(--t-md)}
+/* 小按钮（列表里的「删」那种）宽度也要够手指：42 → 44（tools/e2e-uicheck.js 的「② 点击热区」量到过 42） */
+.t-btn.sm{min-width:var(--hit)}.t-btn[disabled]{opacity:.45;pointer-events:none}/* ── 标签 / 徽章 ── */
 /* 一排小标签，用来列「它会用到哪些工具」这种东西 */
 .t-chips{
   display: flex;

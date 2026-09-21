@@ -191,6 +191,16 @@
 }
 .stepper button::after{content:'';position:absolute;inset:-4px;border-radius:inherit}   /* token-ok: -4px 是把可点范围撑到 44 */
 .stepper button:active{transform:scale(.9);background:var(--accent-soft)}
+
+/* ── 第 49 轮 · 隐形热区：看得见的框收一档，手指够得着的面积仍然 ≥44 ─────────
+   用户要"整体缩小"，但"点不准"是另一回事。所以缩的是**看得见的框**（36 / 28 / 26），
+   可点面积用一层透明的 ::after 撑回 44 —— 跟上面 .stepper button::after 同一套做法。
+   判据：tools/e2e-uicheck.js 的「② 点击热区 ≥44×44」会把 ::after 算进去（它自己就写着这条）。
+   `:where()` 的选择器权重是 0：谁自己写了 ::after（.stepper / .chip 之类）谁赢，不会打架。 */
+:where(button, [data-act], [data-q], [role="button"], a[href], .tab){position:relative}
+:where(button, [data-act], [data-q], [role="button"], a[href], .tab)::after{
+  content:'';position:absolute;left:0;right:0;top:50%;height:var(--hit);transform:translateY(-50%);
+}
 .stepper .v{min-width:var(--sp-16);text-align:center;font-variant-numeric:tabular-nums;font-size:var(--t-base)}
 
 /* 屏幕阅读器专用：只在无障碍树里存在，视觉上一个像素都不占。
