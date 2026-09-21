@@ -15,9 +15,9 @@ done
 echo
 echo "═══ 4. 公网入口（App 实际走的） ═══"
 for u in "/api/tts/voices" "/api/tts?text=测试&voice=zh-CN-YunxiNeural"; do
-  code=$(timeout 25 curl -s -o /tmp/ttsout2.bin -w "%{http_code}" "http://[REDACTED-HOST]/novel$u" 2>/dev/null)
+  code=$(timeout 25 curl -s -o /tmp/ttsout2.bin -w "%{http_code}" "http://<你的服务器地址>/novel$u" 2>/dev/null)
   size=$(stat -c%s /tmp/ttsout2.bin 2>/dev/null || echo 0)
-  echo "  [REDACTED-HOST]/novel$u → HTTP $code  ${size}B"
+  echo "  <你的服务器地址>/novel$u → HTTP $code  ${size}B"
 done
 echo
 echo "═══ 5. 有没有反代/中间层拦截 ═══"

@@ -6,7 +6,7 @@ grep -rn "StaticFiles\|mount\|assets\|web/\|frontend" server/app.py 2>/dev/null 
 echo
 echo "═══ 2. 公网吐出来的 reader.js 跟仓库逐字节比 ═══"
 for f in js/reader.js js/api.js js/chat.js index.html css/base.css; do
-  curl -s "http://[REDACTED-HOST]/novel/$f" -o /tmp/served_$(basename $f) 2>/dev/null
+  curl -s "http://<你的服务器地址>/novel/$f" -o /tmp/served_$(basename $f) 2>/dev/null
   if [ -f "frontend/$f" ]; then
     a=$(md5sum "frontend/$f" | cut -d' ' -f1)
     b=$(md5sum "/tmp/served_$(basename $f)" | cut -d' ' -f1)

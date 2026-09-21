@@ -2,7 +2,7 @@ const { open, sleep } = require('./cdp.js');
 (async () => {
   const p = await open({ port: 9432, width: 390, height: 844, settle: 1500 });
   try {
-    for (const url of ['http://[REDACTED-HOST]/novel/', 'http://127.0.0.1:8899/']) {
+    for (const url of ['http://<你的服务器地址>/novel/', 'http://127.0.0.1:8899/']) {
       try {
         await p.nav(url);
         await sleep(4000);

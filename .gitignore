@@ -60,3 +60,16 @@ docs/*.png
 
 # Android SDK 路径是每台机器自己的，不进仓库（build.sh 会按 ANDROID_HOME 现写）
 apk/local.properties
+
+# App（安卓壳）**不进公开仓库** —— 用户要的对外形态只有"网页版"，
+# APP 是他自己的东西，以后可能当新功能上架。
+build-two.log
+
+# App（安卓壳）**不进公开仓库** —— 对外形态只要网页版；
+# App 是作者自己的东西，以后可能当新功能上架。
+apk/
+server/ondevice.py
+
+# app/ 是"通用空白版安装包"，**要进仓库**（别人 clone 完从网页版下载用）。
+!app/
+!app/*.apk

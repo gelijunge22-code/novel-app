@@ -13,7 +13,7 @@ A=apk/手机写作台.apk
 echo "  期望签名: 428cb931438c673fb2660e9e781d35ac4e6a3215edf4d0cf2c961f02337e8aa0"
 echo
 echo "  线上下载口:"
-curl -s -m 12 "http://[REDACTED-HOST]/novel/api/apk/version" 2>/dev/null | head -c 220
+curl -s -m 12 "http://<你的服务器地址>/novel/api/apk/version" 2>/dev/null | head -c 220
 echo
 echo
 echo "═══ 2. 前端大改开工了吗（两个关键指标）═══"

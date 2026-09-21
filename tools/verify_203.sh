@@ -26,6 +26,6 @@ echo "═══ 5. 复制成英文名（发送用） ═══"
 cp -f "$A" /home/ubuntu/NovelApp-2.0.3.apk && ls -la /home/ubuntu/NovelApp-2.0.3.apk | awk '{printf "  ✅ /home/ubuntu/NovelApp-2.0.3.apk  %.1fMB\n",$5/1048576}'
 echo
 echo "═══ 6. 线上下载口通不通 ═══"
-curl -s -m 15 "http://[REDACTED-HOST]/novel/api/apk/version" 2>/dev/null | head -c 250
+curl -s -m 15 "http://<你的服务器地址>/novel/api/apk/version" 2>/dev/null | head -c 250
 echo
-curl -s -m 20 -o /dev/null -w "  下载口 http=%{http_code}\n" "http://[REDACTED-HOST]/novel/api/apk"
+curl -s -m 20 -o /dev/null -w "  下载口 http=%{http_code}\n" "http://<你的服务器地址>/novel/api/apk"

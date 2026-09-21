@@ -41,6 +41,6 @@ curl -s -m 10 http://127.0.0.1:8890/api/apk/version 2>/dev/null | head -c 300
 echo
 echo
 echo "=== 公网下载口 ==="
-curl -s -m 25 -o /tmp/dl.apk -w "  http=%{http_code}  大小=%{size_download}B\n" http://[REDACTED-HOST]/nbapp/apk
+curl -s -m 25 -o /tmp/dl.apk -w "  http=%{http_code}  大小=%{size_download}B\n" http://<你的服务器地址>/nbapp/apk
 echo "  下载到的包 sha256: $(sha256sum /tmp/dl.apk 2>/dev/null | cut -c1-32)..."
 echo "  本地新包   sha256: $(echo $SHA | cut -c1-32)..."

@@ -212,7 +212,8 @@ async def apk_version():
 
 @router.get("/apk")
 async def apk_download():
-    for cand in (P.apk / "手机写作台.apk", P.apk / "app-release.apk",
+    for cand in (P.apk / "手机写作台.apk", P.repo / "app" / "写作台-通用版.apk",
+                  P.apk / "app-release.apk",
                  P.repo / "apk" / "手机写作台.apk"):
         if cand.exists():
             return FileResponse(str(cand), media_type="application/vnd.android.package-archive",

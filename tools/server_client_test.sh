@@ -17,5 +17,5 @@ PW=$(python3 -c "import json;print(json.load(open('/home/ubuntu/nbapp/config.jso
 javac -encoding UTF-8 -d "$OUT_DIR" "$SRC" "$TST"
 cd "$REPO"
 java -Dfile.encoding=UTF-8 -cp "$OUT_DIR" ServerClientTest \
-  "http://127.0.0.1:8899/" "http://[REDACTED-HOST]/novel/" "$PW" "docs/服务器后端实测.json"
+  "http://127.0.0.1:8899/" "http://<你的服务器地址>/novel/" "$PW" "docs/服务器后端实测.json"
 rm -rf "$OUT_DIR"

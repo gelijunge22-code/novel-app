@@ -8,7 +8,7 @@ sudo grep -nE "handle|reverse_proxy|redir|:80|listen" /etc/caddy/Caddyfile 2>/de
 echo
 echo "═══ 3. 公网能访问到哪些路径 ═══"
 for p in / /nbapp/ /app/ /novel/ /novelapp/; do
-  code=$(curl -s -m 8 -o /dev/null -w '%{http_code}' "http://[REDACTED-HOST]$p")
+  code=$(curl -s -m 8 -o /dev/null -w '%{http_code}' "http://<你的服务器地址>$p")
   printf "  %-14s http=%s\n" "$p" "$code"
 done
 echo

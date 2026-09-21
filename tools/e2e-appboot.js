@@ -26,7 +26,7 @@ const CHROME = '/home/ubuntu/.cache/ms-playwright/chromium-1228/chrome-linux64/c
 const ROOT = '/home/ubuntu/novel-app';
 const OUT = path.join(ROOT, 'docs/App启动实测.json');
 const SHOTDIR = path.join(ROOT, 'docs/前端截图');
-const SERVER = process.env.APP_SERVER || 'http://[REDACTED-HOST]/novel/';
+const SERVER = process.env.APP_SERVER || 'http://<你的服务器地址>/novel/';
 const ASSETS = 'file://' + path.join(ROOT, 'apk/assets/www/index.html');
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
@@ -43,7 +43,7 @@ async function runOne(label, url, { blockExternal = false } = {}) {
   const chrome = spawn(CHROME, ['--headless=new', '--disable-gpu', '--no-sandbox', '--hide-scrollbars',
     `--remote-debugging-port=${port}`, '--window-size=390,844', '--user-data-dir=' + profile,
     '--allow-file-access-from-files',
-    /* 桌面 Chrome 默认开着「HTTPS-First」：http://[REDACTED-HOST]/… 会被它自动升到 https，
+    /* 桌面 Chrome 默认开着「HTTPS-First」：http://<你的服务器地址>/… 会被它自动升到 https，
        而服务器只有 http → ERR_BLOCKED_BY_CLIENT，页面变成 chrome-error://。
        这是**测试环境**的毛病，不是 App 的：Android WebView 没有这个特性
        （明文由清单的 usesCleartextTraffic 说了算，我们那条断言已经守着）。

@@ -8,4 +8,4 @@ echo "=== 在线下载口（备用）==="
 echo "  线上包版本:"
 curl -s -m 10 http://127.0.0.1:8890/api/apk/version 2>/dev/null | head -c 200
 echo
-curl -s -m 10 -o /dev/null -w "  http://[REDACTED-HOST]/nbapp/apk  http=%{http_code} 大小=%{size_download}B\n" http://[REDACTED-HOST]/nbapp/apk
+curl -s -m 10 -o /dev/null -w "  http://<你的服务器地址>/nbapp/apk  http=%{http_code} 大小=%{size_download}B\n" http://<你的服务器地址>/nbapp/apk

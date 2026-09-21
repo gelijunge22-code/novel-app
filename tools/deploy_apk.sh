@@ -28,9 +28,9 @@ PY
 echo
 echo "=== 线上核对 ==="
 curl -s -m 20 http://127.0.0.1:8890/api/apk/version | head -c 260; echo
-curl -s -m 30 -o /dev/null -w "  手机下载口 http=%{http_code} 大小=%{size_download}B\n" http://[REDACTED-HOST]/nbapp/apk
+curl -s -m 30 -o /dev/null -w "  手机下载口 http=%{http_code} 大小=%{size_download}B\n" http://<你的服务器地址>/nbapp/apk
 echo
 echo "=== 下载下来的包是不是就是 2.0 修复版 ==="
-curl -s -m 60 http://[REDACTED-HOST]/nbapp/apk -o /tmp/dl.apk
+curl -s -m 60 http://<你的服务器地址>/nbapp/apk -o /tmp/dl.apk
 sha256sum /tmp/dl.apk | cut -c1-40 | sed 's/^/  下载到: /'
 sha256sum $SRC | cut -c1-40 | sed 's/^/  源文件: /'

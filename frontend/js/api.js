@@ -44,8 +44,11 @@
      浏览器里（http 来源）**一律不兜底**：相对路径天然就是对的，写死地址反而会指错机器。
      ⚠️ 这个值必须跟 apk/.../MainActivity.java 的 DEFAULT_SERVER 一致，
         tools/verify_apk.sh 有一条断言盯着它俩。 */
-  const FALLBACK_BASE = (typeof location !== 'undefined' && location.protocol === 'file:')
-    ? 'http://[REDACTED-HOST]/novel/' : '';
+  /* 没有兜底地址了：开源版**不许写死任何人的服务器** —— 写死的那台，
+     所有 clone 下来的人都会往作者的机器上打。
+     App 第一次打开要自己在登录页点「服务器设置」填地址；浏览器里本来就不需要它
+     （http 来源下相对路径天然是对的）。 */
+  const FALLBACK_BASE = '';
   const baseOf = () => callBridge('base', '') || FALLBACK_BASE;
   /* ── 会话口令 ────────────────────────────────────────────────────────────
      两条来源，取到哪条算哪条：

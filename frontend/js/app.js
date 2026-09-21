@@ -636,6 +636,16 @@
       }
     };
     document.getElementById('login-go').addEventListener('click', go);
+    /* 登录页的「服务器设置」：**只在 App 里出现**。
+       通用版（不带任何服务器地址）第一次打开就靠它绑定自己那台；
+       没有它的话，连不上服务器时用户被卡在登录页、又够不着设置（设置要登录后才进得去）。 */
+    try {
+      const _sb = document.getElementById('login-server');
+      if (_sb && window.Android && Android.openSettings) {
+        _sb.classList.remove('hidden');
+        _sb.addEventListener('click', () => { try { Android.openSettings(); } catch (e) {} });
+      }
+    } catch (e) {}
     const rb = document.getElementById('login-retry');
     if (rb) rb.addEventListener('click', () => App.retryConnect());
     pass.addEventListener('keydown', (e) => { if (e.key === 'Enter') go(); });
