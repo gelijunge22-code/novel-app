@@ -696,6 +696,23 @@
       App.showRetry(false);
       if (st.loggedIn) start();
       else App.needLogin();
+      /* 登录页把"后端状态"写出来 —— 手机上用户没有 logcat，
+         连不上时这是**唯一**能看见的线索（排障时也是我要看的第一眼）。
+         写的是：走的是本机离线 / 连的哪个服务器 / 连不上。 */
+      try {
+        const _m = document.getElementById('login-msg');
+        if (_m && !_m.textContent) {
+          const _be = (typeof backend === 'function' ? backend() : null) || {};
+          let _base = '';
+          try { _base = API.base ? String(API.base() || '') : ''; } catch (e) {}
+          const _mode = _be.mode || '';
+          const _head = _mode === 'local' ? '本机离线模式'
+                     : _mode === 'server' ? '已连服务器'
+                     : _mode === 'server-down' ? '连不上服务器'
+                     : '';
+          if (_head) _m.textContent = _head + (_base ? '：' + _base : '');
+        }
+      } catch (e) {}
     } catch (e) {
       /* 连不上服务器（断网 / 后端没起来）：别把人卡在登录页 ——
          界面本身在 App 包里，缓存过的书还能接着看。

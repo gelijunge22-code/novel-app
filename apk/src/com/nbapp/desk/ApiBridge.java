@@ -95,21 +95,4 @@ public class ApiBridge {
     public String ping() {
         return "{\"ok\":true,\"bridge\":true}";
     }
-
-    /**
-     * 桥这会儿能不能干活 —— 前端 `bridgeUsable()` 问的就是这一下。
-     *
-     * 以前**这个类里没有 ready()**，前端于是回落到 `localReady()`；而 `localReady()`
-     * 判的是"手机里那个本地 Python 后端起没起"。默认它是不起的（用户显式开才起），
-     * 所以判定结果是 false → 前端认为"桥不能用" → 所有 JSON 请求改走 `fetch()` →
-     * 而 `file://` 页面的跨源 fetch 被 Android 默认拦掉（没开
-     * `setAllowUniversalAccessFromFileURLs`）→ **请求一条都发不出去**。
-     *
-     * 真机现象（用户实测）：登录页怎么输都进不去；服务器日志里连一条请求都没有。
-     * 修法就是这个方法 —— 只要有服务器地址，桥就是能用的（桥的另一头在服务器上）。
-     */
-    @JavascriptInterface
-    public boolean ready() {
-        return MainActivity.bridgeReady();
-    }
 }
