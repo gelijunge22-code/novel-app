@@ -67,7 +67,10 @@ build-two.log
 
 # App（安卓壳）**不进公开仓库** —— 对外形态只要网页版；
 # App 是作者自己的东西，以后可能当新功能上架。
-apk/
+apk/*
+# version.txt 是版本号的唯一出处、也是每个版本改了什么的历史，**必须进 git**
+# （git 的规矩：父目录被排除时没法只留一个文件，所以上面那行要写成 apk/* 而不是 apk/）
+!apk/version.txt
 server/ondevice.py
 
 # app/ 是"通用空白版安装包"，**要进仓库**（别人 clone 完从网页版下载用）。
