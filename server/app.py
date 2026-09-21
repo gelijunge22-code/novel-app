@@ -303,6 +303,11 @@ def bootstrap_user() -> None:
         # 打印到控制台 —— 别人 clone 下来第一次跑，口令得让人**看得见**，
         # 藏在一个 0600 的小文件里等于没有（用户实测反馈：不知道密码是多少）
         print("\n" + "=" * 58)
+        try:                      # 记牢（前端"下载 App"旁边要显示，见 routers/core.py）
+            from .routers.core import remember_password
+            remember_password(pw)
+        except Exception:
+            pass
         print("  首次启动：这是你的登录口令")
         print("    %s" % pw)
         print("  （已存到 %s，随时可用 tools/set_password.py 改）" % f)

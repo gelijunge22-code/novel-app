@@ -65,6 +65,13 @@ def main() -> int:
         os.chmod(t, 0o600)
     except Exception:
         pass
+    # 再往 setting 表记一份 —— 前端「设置 → 关于」要显示它（见 server/routers/core.py）
+    try:
+        d.execute("DELETE FROM setting WHERE key=?", ("app.password_plain",))
+        d.execute("INSERT INTO setting(key, value_json, updated_at) VALUES(?,?,?)",
+                  ("app.password_plain", d.jdumps(pw), now_ms()))
+    except Exception as e:
+        print("   （setting 表没写进去：%s —— 不影响口令本身）" % e)
     print("✅ 已重设 %s 的口令：%s" % (user, pw))
     print("   （现在就能用，不用重启后端；在 App 的「设置」里也能自己再改）")
     return 0

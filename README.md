@@ -44,6 +44,16 @@ server/venv/bin/python -m uvicorn server.app:app --host 127.0.0.1 --port 8899
 cat data/口令.txt
 ```
 
+### 口令忘了 / 找不到
+
+登录之后，**设置 → 关于** 那一页会直接显示当前口令（就在「下载安卓包」旁边），
+旁边还有「复制」和「换一个」。所以下完 App 不用再去翻控制台。
+
+口令也同时存在这几个地方：
+
+- 启动后端时**控制台会直接打印**
+- `data/口令.txt`、`data/initial-password.txt`（权限 600）
+
 改口令（立刻生效，不用重启）：
 
 ```bash
@@ -51,7 +61,8 @@ python3 tools/set_password.py            # 随机生成一个新的
 python3 tools/set_password.py 我的新口令   # 设成你要的
 ```
 
-登录后也能在 App 的「设置」里改。
+登录后也能在 App 的「设置」里改，或者在 **设置 → 关于 → 换一个** 一键换新的。
+这三种方式都会同步更新 `data/口令.txt`，所以「设置 → 关于」显示的永远是最新那个。
 
 ## 功能
 

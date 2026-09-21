@@ -1164,7 +1164,43 @@
           ${inApp ? '<div class="settings-row"><span class="k">服务器设置</span><button class="btn sm" id="do-server">改地址</button></div>' : ''}
           ${inApp ? '<div class="settings-row"><span class="k">服务器后端 <span class="hint" id="local-sub" style="font-size:var(--t-sm);color:var(--ink-3)">查一下…</span></span><button class="btn sm" id="do-local">重试连接</button></div>' : ''}
           <div class="settings-row"><span class="k">安卓安装包</span><span id="apk-slot"><button class="btn sm" id="do-apk">下载 / 更新</button></span></div>
+          <div class="settings-row"><span class="k">登录口令 <span class="hint">在 App 里登录用</span></span>
+            <span id="pw-slot" class="muted" style="font-size:var(--t-md);font-family:ui-monospace,Menlo,monospace">读取中…</span></div>
+          <div class="settings-row"><span class="k">口令还能从哪找</span>
+            <span><button class="btn sm" id="do-pw-copy">复制</button> <button class="btn sm" id="do-pw-new">换一个</button></span></div>
+          <p class="hint" style="margin:0;line-height:1.5">后端启动时控制台会打印；也写在 data/口令.txt 里。
+            忘了就点「换一个」——换完立刻生效，当前这个登录不掉，去 App 里输新的就行。</p>
         </div>`);
+      /* ── 登录口令 ──────────────────────────────────────────────────
+         用户实测卡在"下完 App，密码是多少？"—— 控制台滚过去了、data/口令.txt 又不知道在哪。
+         所以就在"下载 App"旁边把它显示出来，忘了还能一键换一个。
+         接口只给**已登录**的人看，不写日志、不进仓库。 */
+      const pws = body.querySelector('#pw-slot');
+      const paintPw = (pw) => {
+        if (!pws) return;
+        pws.textContent = pw || '（读不到，看下面那行）';
+        pws.style.color = pw ? 'var(--ink)' : 'var(--ink-3)';
+      };
+      if (pws) API.appPassword().then((r) => paintPw(r && r.password)).catch(() => paintPw(''));
+      const pc = body.querySelector('#do-pw-copy');
+      if (pc) pc.addEventListener('click', async () => {
+        try {
+          const r = await API.appPassword();
+          const pw = (r && r.password) || '';
+          if (!pw) { App.toast('读不到口令，看 data/口令.txt'); return; }
+          try { await navigator.clipboard.writeText(pw); App.toast('口令已复制'); }
+          catch (e) { App.toast('口令：' + pw); }
+        } catch (e) { App.toast('复制失败：' + (e.message || e)); }
+      });
+      const pn = body.querySelector('#do-pw-new');
+      if (pn) pn.addEventListener('click', async () => {
+        if (!confirm('换一个新口令？换完旧口令立刻失效，App 里要输新的。当前这个登录不会掉。')) return;
+        try {
+          const r = await API.rotatePassword();
+          paintPw(r && r.password);
+          App.toast('新口令：' + ((r && r.password) || '') + '（去 App 里输这个）');
+        } catch (e) { App.toast('换不了：' + (e.message || e)); }
+      });
       const sb = body.querySelector('#do-server');
       if (sb) sb.addEventListener('click', () => { try { Android.openSettings(); } catch (e) {} });
 

@@ -6,6 +6,7 @@
 from __future__ import annotations
 
 import json
+import os
 import time
 from pathlib import Path
 
@@ -111,10 +112,104 @@ async def change_password(request: Request, payload: dict = Body(...)):
     if not verify_password(old, row["password_hash"], row["salt"]):
         raise HTTPException(400, "原密码不对")
     h, salt = hash_password(new)
+    remember_password(new)      # 界面里改的也要记牢（不然"口令去哪儿找"又断了）
     dbm.db().execute("UPDATE user SET password_hash=?, salt=?, session_version=session_version+1,"
                      " updated_at=? WHERE id=?", (h, salt, now_ms(), me["id"]))
     dbm.db().execute("UPDATE session_token SET revoked=1 WHERE user_id=?", (me["id"],))
     return {"ok": True, "note": "密码改了，请重新登录"}
+
+
+
+
+# ── 口令去哪儿找（用户实测卡在"下完 App，密码是多少？"）─────────────────
+# 控制台早滚过去了、data/口令.txt 又不知道在哪儿 —— 所以：
+#   ① 每次设口令（首启随机 / tools/set_password.py / 界面里改）都把明文记一份
+#      → setting 表 + data/口令.txt（0600，只在本机）
+#   ② GET  /app/password         让**已登录**的界面把口令显示出来（就放在"下载 App"旁边）
+#   ③ POST /app/password/rotate  一键换一个新的并返回（换完当前这个登录不掉）
+PW_KEY = "app.password_plain"
+
+
+def remember_password(pw: str) -> None:
+    """把明文口令记牢：`setting` 表 + `data/口令.txt`。
+
+    只在**我自己的机器**上，接口也只给已登录的人看 —— 不写日志、不进 git。
+    """
+    pw = str(pw or "").strip()
+    if not pw:
+        return
+    try:
+        d = dbm.db()
+        d.execute("DELETE FROM setting WHERE key=?", (PW_KEY,))          # 先删再插：不依赖唯一索引
+        d.execute("INSERT INTO setting(key, value_json, updated_at) VALUES(?,?,?)",
+                  (PW_KEY, d.jdumps(pw), now_ms()))
+    except Exception:
+        pass
+    try:
+        data = Paths(CFG).data
+        data.mkdir(parents=True, exist_ok=True)
+        f = data / "口令.txt"
+        f.write_text("App 登录口令：%s\n\n"
+                     "(改口令： python3 tools/set_password.py 新口令；\n"
+                     " 也能在 App 的「设置」里改)\n" % pw, encoding="utf-8")
+        os.chmod(f, 0o600)
+        g = data / "initial-password.txt"
+        if not g.exists():
+            g.write_text(pw + "\n", encoding="utf-8")
+            os.chmod(g, 0o600)
+    except Exception:
+        pass
+
+
+@router.get("/app/password")
+async def app_password(request: Request):
+    """把当前的登录口令给**已登录**的界面看。
+
+    前端放在「设置 → 关于 → 安卓安装包」那一块：用户下完 App 要输口令，
+    就在同一个地方能看见，不用再去翻控制台或找文件。
+    """
+    current_user(request)
+    d = dbm.db()
+    pw = ""
+    try:
+        raw = d.scalar("SELECT value_json FROM setting WHERE key=?", (PW_KEY,))
+        if raw:
+            v = d.jloads(raw, "")
+            pw = v if isinstance(v, str) else ""
+    except Exception:
+        pw = ""
+    if not pw:                      # 老部署没记进 setting 表 → 回退读文件
+        for name in ("initial-password.txt", "口令.txt"):
+            try:
+                f = Paths(CFG).data / name
+                if not f.exists():
+                    continue
+                t = f.read_text("utf-8")
+                pw = (t.split("：", 1)[1].splitlines()[0] if "：" in t else t.splitlines()[0]).strip()
+                if pw:
+                    break
+            except Exception:
+                continue
+    return {"password": pw, "known": bool(pw),
+            "howto": ["启动时控制台会直接打印",
+                      "data/口令.txt 和 data/initial-password.txt",
+                      "python3 tools/set_password.py 新口令",
+                      "改完后立刻生效，不用重启"],
+            "file": str(Paths(CFG).data / "口令.txt")}
+
+
+@router.post("/app/password/rotate")
+async def app_password_rotate(request: Request):
+    """一键换一个新口令并返回（当前这个登录不会掉）。"""
+    me = current_user(request)
+    import secrets
+    alpha = "abcdefghjkmnpqrstuvwxyz23456789"      # 去掉 0/O/1/l/I，好念好打
+    pw = "".join(secrets.choice(alpha) for _ in range(10))
+    h, salt = hash_password(pw)
+    dbm.db().execute("UPDATE user SET password_hash=?, salt=?, updated_at=? WHERE id=?",
+                     (h, salt, now_ms(), me["id"]))
+    remember_password(pw)
+    return {"ok": True, "password": pw}
 
 
 @router.get("/admin/users")

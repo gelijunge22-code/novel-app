@@ -380,6 +380,10 @@
     providerDelete: (id) => window.API.nb('api/config/models/provider?id=' + id, { method: 'DELETE' }),
     modelTest: (modelKey) => window.API.nb('api/config/models/test', { method: 'POST', body: { modelKey: modelKey || '' } }),
     /* 第 31 轮「联网搜索」：所有 AI 都能开（默认关，关着时一个请求都不发） */
+    /* 当前登录口令：只给已登录的人看。前端放在「设置 → 关于 → 下载 App」旁边 ——
+       用户下完 App 要输口令，就在同一个地方能看见，不用去翻控制台或找文件。 */
+    appPassword: () => window.API.nb('api/app/password'),
+    rotatePassword: () => window.API.nb('api/app/password/rotate', { method: 'POST', body: {} }),
     webConfig: () => window.API.nb('api/config/web'),
     webSave: (body) => window.API.nb('api/config/web', { method: 'POST', body }),
     webTest: (body) => window.API.nb('api/config/web/test', { method: 'POST', body }),
