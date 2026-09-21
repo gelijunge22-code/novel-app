@@ -23,14 +23,26 @@ server/venv/bin/python -m uvicorn server.app:app --host 127.0.0.1 --port 8899
 
 浏览器打开 **http://127.0.0.1:8899/** 就是网页版。
 
-**第一次的口令在哪？** 按这个顺序取：
+### 第一次的登录口令
 
-1. 你启动前设的环境变量 `NOVELAPP_INIT_PASSWORD`
-2. 没设就自动生成一个，写在 `data/initial-password.txt`（权限 600）
+**每次部署都是随机生成的**（不会所有人共用一个，避免泄漏）。按这个顺序取：
+
+1. 你启动前设的环境变量 `NOVELAPP_INIT_PASSWORD`（想自己指定就用它）
+2. 没设 → 启动时**控制台会直接打印**出来，一眼能看到
+3. 同时也写到 `data/initial-password.txt` 和 `data/口令.txt`（权限 600）
 
 ```bash
-cat data/initial-password.txt
+cat data/口令.txt
 ```
+
+### 想改口令
+
+```bash
+python3 tools/set_password.py              # 随机生成一个新的，打印出来
+python3 tools/set_password.py 我的新口令     # 设成你自己要的
+```
+
+改完**立刻生效，不用重启**。也可以用旧口令登录后在 App 的「设置」里改。
 
 ## 想给外网访问？（可选）
 

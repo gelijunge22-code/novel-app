@@ -255,12 +255,31 @@ def bootstrap_user() -> None:
                         break
             except Exception:
                 continue
+    _generated = False
     if not pw:
         import secrets
-        pw = secrets.token_urlsafe(9)
+        _alpha = "abcdefghjkmnpqrstuvwxyz23456789"   # 去掉 0/O/1/l/I，好念好打
+        pw = "".join(secrets.choice(_alpha) for _ in range(10))
+        _generated = True
         f = P.data / "initial-password.txt"
         f.write_text(pw + "\n", encoding="utf-8")
         os.chmod(f, 0o600)
+        if f.parent.is_dir():
+            try:
+                _t = f.parent / "口令.txt"      # 中文名，用户在文件管理器里一眼能看到
+                _t.write_text("App 登录口令：%s\n\n"
+                              "(改口令： python3 tools/set_password.py 新口令；\n"
+                              " 也能在 App 的「设置」里改)\n" % pw, encoding="utf-8")
+                os.chmod(_t, 0o600)
+            except Exception:
+                pass
+        # 打印到控制台 —— 别人 clone 下来第一次跑，口令得让人**看得见**，
+        # 藏在一个 0600 的小文件里等于没有（用户实测反馈：不知道密码是多少）
+        print("\n" + "=" * 58)
+        print("  首次启动：这是你的登录口令")
+        print("    %s" % pw)
+        print("  （已存到 %s，随时可用 tools/set_password.py 改）" % f)
+        print("=" * 58 + "\n", flush=True)
     h, salt = hash_password(pw)
     n = now_ms()
     d.execute("INSERT INTO user(username,display_name,password_hash,salt,role,status,"
