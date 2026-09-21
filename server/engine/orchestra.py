@@ -122,22 +122,6 @@ MODES: dict[str, dict] = {
             ("leader", "定稿计划", "按取料与查证结果改定计划，逐条列出「下一步做什么」，并写明要动哪个文件（给路径）。"),
         ],
     },
-    "solo": {
-        "name": "一个人干完",
-        "desc": "不分工、不接力：**同一个 AI 从头做到尾**（想清楚 → 直接写/改 → 自己回头查一遍）。"
-                "想快点出活的用这个；要精雕细琢的用「执行」（多几棒互相挑刺）。",
-        "writes": True,
-        "steps": [
-            ("leader", "想清楚再做",
-             "先用一句话说清你打算怎么处理这件事，然后**直接动手**，不用等人拍板。"),
-            ("leader", "一口气做完",
-             "把这件事做完：要写正文就写**整章**（不是提纲、不是片段），要改稿就直接改。"
-             "别把活留给「下一棒」——这一轮没有下一棒。"),
-            ("leader", "回头自查",
-             "检查你刚才的产出：跟已有设定/前文冲突的地方、写崩的人物、AI 味的句子（比喻堆砌、"
-             "排比抒怀、段尾总结）。有问题**直接改掉**，最后用三五句话说清你改了什么。"),
-        ],
-    },
     "execute": {
         "name": "执行",
         "desc": "一竿子到底：计划 → 取料 → 查证 → 写初稿 → 挑刺 → 改稿 → 汇总。",
@@ -160,7 +144,32 @@ KNOWN_TOOLS: frozenset[str] = frozenset(
     t for r in ROLES.values() for t in r["tools"])
 
 
-def steps_for(mode: str, slug: str = "") -> list[tuple[str, str, str, bool]]:
+# 单人模式：每个"干活方式"一句话说清"一个人从头做到尾"是什么样
+ONE_SHOT: dict[str, str] = {
+    "discuss": "先把你的想法说清楚，然后自己站到对面驳一遍，再收敛成最终主张。**不动任何文件**。",
+    "plan": "自己把这件事拆成可执行步骤、把要用的材料列齐，最后交一份能直接照着做的计划。"
+            "**不写正文、不动任何文件**。",
+    "execute": "自己计划、自己取料、自己写、自己挑刺改稿 —— 一口气做完，"
+               "别把活留给「下一棒」（这一轮没有下一棒）。要写正文就写**整章**。"
+               "写完全文，再用三五行说清你改动了哪个文件、还剩什么要用户拍板。",
+}
+
+
+def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str, str, str, bool]]:
+    """这一轮要跑的那几棒。
+
+    `divided`：
+      · True（默认）—— 多 Agent 分工：计划/取料/查证/写稿/挑刺各是一个人。
+        好处是每个角色只装一件事（写手放开写、挑刺往死里挑），互相不折中。
+      · False —— **一个人干完**：整轮就一棒，由主创一个人从头做到尾，快、省。
+    用户要求：讨论/计划/执行**每一种都要能选这两种**，而不是另开一个"单人模式"。"""
+    _m = MODES.get(mode, MODES["execute"])
+    if not divided:
+        return [("leader", _m["name"],
+                 "这一轮按「%s」的方式，由你**一个人**从头做到尾。" % _m["name"]
+                 + ONE_SHOT.get(mode, ""),
+                 bool(_m.get("writes")))]
+
     """这一轮实际要跑的那几棒：`(角色, 标题, 要求, 是不是正文那一棒)`。
 
     为什么要单开一个函数（第 33 轮）：用户把预设里"什么活派给谁"从**一个没人读的输入框**
@@ -171,7 +180,7 @@ def steps_for(mode: str, slug: str = "") -> list[tuple[str, str, str, bool]]:
     把写手换成主创，主创的 scope 是 all，不会因此少掉权限；反过来才会出事，
     所以那张表里根本不提供"把只看的人派去写"的选项。
     """
-    steps = list(MODES.get(mode, MODES["execute"])["steps"])
+    steps = list(MODES.get(mode, MODES["execute"])["steps"])  # 分工模式下用这几棒
     if os.environ.get("DELEGATE_FORCE") == "ignore":
         return [(r, t, d, r == "writer") for r, t, d in steps]
     try:
@@ -862,7 +871,11 @@ async def run(sid: int, text: str, inv: str, payload: dict, model_key: str = "")
     # 第 9 遍打磨实测：把 try 从中间开始，用户刚好在这两步之间删掉会话，异常还是会漏出去。
     try:
         rt.append_entry(sid, "user", [{"type": "text", "content": text}])
-        steps = steps_for(mode, slug)   # 分工在这一刻生效（预设有书级覆盖就按书）
+        # 单人 / 分工：用户在前端选的（默认分工）。三种干活方式**都能**切成单人。
+        _dv = payload.get("divided", True)
+        if isinstance(_dv, str):
+            _dv = _dv.strip().lower() not in ("0", "false", "no", "off", "")
+        steps = steps_for(mode, slug, divided=bool(_dv))   # 分工在这一刻生效（预设有书级覆盖就按书）
         events.emit(sid, "orchestra_run_start", {
             "type": "orchestra_run_start", "runId": run_id, "mode": mode,
             "modeName": MODES[mode]["name"], "targetPath": target,

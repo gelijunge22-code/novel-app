@@ -354,10 +354,13 @@
        discuss/plan/execute —— 多 Agent 编排（主创/取上下文/查证/写手/挑刺分工）。 */
     /* stream：true=必须流式 / false=整段出 / 不传=自动（先流式，渠道不给正文就整段回退）。
        两条路**同一份解析**（都在服务端 providers.stream_chat），不是两套实现。 */
-    invoke: (id, text, mode, stream) => window.API.nb('api/agent/sessions/' + id + '/invocations', {
+    invoke: (id, text, mode, stream, divided) => window.API.nb('api/agent/sessions/' + id + '/invocations', {
       method: 'POST',
       body: Object.assign({ mode: mode || 'prompt', clientMessageId: uuid(), message: { text } },
-        (stream === true || stream === false) ? { stream: stream } : {}),
+        (stream === true || stream === false) ? { stream: stream } : {},
+        /* 谁来做：true=多 Agent 分工（默认） / false=一个人干完。
+           用户要求三种干活方式（讨论/计划/执行）**都能**切这两种。 */
+        (divided === true || divided === false) ? { divided: divided } : {}),
     }),
     /* 带 slug：预设里主创的「干活方式」是**这本书**的默认干活方式（后端只增不减多加一个
        defaultMode 字段，没配置就是空串，前端自己回落）。 */

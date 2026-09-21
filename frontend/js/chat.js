@@ -64,6 +64,7 @@
        新用户一进来随手发一句就可能改动自己的正文 —— 第一遍打磨时就是执行，
        等于把最危险的那个模式设成默认。要写正文自己切过去（切了会记住）。 */
     mode: 'discuss', modes: null, roles: null, modeFromPreset: false,
+    divided: true,          // 谁来做：true=多 Agent 分工 / false=一个人干完
     seen: Object.create(null), lastSeq: -1, epoch: null,
     turnCtx: null,   /* 这一轮「AI 用了什么」的账（后端 turn_context 事件推过来） */
     waitT: null, waitN: 0,   /* "模型一直不出字"的看门狗计时器（见 waitTick） */
@@ -253,6 +254,18 @@
     row.className = 'mode-row';
     row.innerHTML = '<span class="mode-lab">干活方式</span><span class="mode-seg" id="chat-modes"></span>';
     S.modeRow = row;
+    /* 「谁来做」单起一行 —— 跟「干活方式」挤在同一行会顶出屏幕（用户截图里的"穿模"）。
+       这一行：分工 / 一个人 两枚胶囊 + 一个小小的「分工设置」跳转按钮。
+       用户原话：「这三种都应该分别有一个单独 AI 完成所有流程的模式，然后也可以切换成多 agent 分工…
+       以及应该在 AI 聊天那里增加一个快捷的小小的按钮…只是跳转就行，因为很多人可能不太懂」。 */
+    const who = document.createElement('div');
+    who.className = 'mode-row';
+    who.innerHTML = '<span class="mode-lab">谁来做</span><span class="mode-seg" id="chat-split">'
+      + '<button type="button" class="mode-btn on" data-split="1" title="多 Agent 分工：计划/取料/查证/写稿/挑刺各一个人，互相挑刺">分工</button>'
+      + '<button type="button" class="mode-btn" data-split="0" title="一个人干完：同一个 AI 从头做到尾，快">一个人</button>'
+      + '</span>'
+      + '<button type="button" class="pk pk-mini" id="chat-goto-split" title="去调『哪一步交给谁』">分工设置</button>';
+    S.whoRow = who;
     /* 编排进度行：只在多 Agent 真跑起来时出现（讨论/计划/执行），
        写着「第 2/4 棒 · 挑刺 · 复审 正在干活」。事件来自后端的 orchestra_* 。 */
     /* 模式说明行：**每个模式一句话说清它到底干什么**（讨论=先商量不落笔 / 计划=只出计划 /
@@ -274,11 +287,28 @@
     line.appendChild(row);
     line.appendChild(run);
     host.appendChild(line);
+    host.appendChild(who);          // 「谁来做」自己一行，不跟上面挤
     host.appendChild(hint);
     host.appendChild(el);
     el.addEventListener('click', (e) => {
       const b = e.target.closest('[data-k]');
       if (!b) return;
+      const sp = e.target.closest('[data-split]');
+      if (sp) {
+        S.divided = sp.dataset.split === '1';
+        renderSplit();
+        try { store.set({ divided: S.divided }); } catch (e2) {}
+        App.haptic && App.haptic();
+        return;
+      }
+      const gt = e.target.closest('#chat-goto-split');
+      if (gt) {                       // 只是跳转：去预设页调"哪一步交给谁"
+        try {
+          if (window.Preset && Preset.open) Preset.open('project', (window.BookCtx && BookCtx.slug && BookCtx.slug()) || '');
+          else App.show('preset');
+        } catch (e2) { try { App.show('preset'); } catch (e3) {} }
+        return;
+      }
       if (b.dataset.k === 'profile') profileSheet(false);
       else if (b.dataset.k === 'stream') cycleStream();
       else if (b.dataset.k === 'setup') modelsSetupSheet();
@@ -328,6 +358,16 @@
     const list = S.modes || [];
     return list.filter((m) => m.key === key)[0] || null;
   }
+  /* 谁来做那两枚胶囊（分工 / 一个人）—— 三种干活方式共用同一个开关 */
+  function renderSplit() {
+    const box = $('#chat-split');
+    if (!box) return;
+    [...box.querySelectorAll('button[data-split]')].forEach((b) => {
+      const on = (b.dataset.split === '1') === (S.divided !== false);
+      b.classList.toggle('on', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
   function renderModes() {
     const box = $('#chat-modes');
     if (!box) return;
@@ -338,6 +378,7 @@
       '<button class="mode-btn' + (m.key === S.mode ? ' on' : '') + '" data-mode="' + esc(m.key) +
       '" aria-pressed="' + (m.key === S.mode ? 'true' : 'false') + '"' +
       ' title="' + esc(m.desc || '') + '">' + esc(m.name) + '</button>').join('');
+    renderSplit();
     applyMode();
   }
   /* 切模式要**看得见地**变：说明文字 / 状态条 / 输入框提示 三处一起跟着走。
@@ -377,6 +418,8 @@
           S.modeFromPreset = true;
         }
         if (!S.modes.some((m) => m.key === S.mode)) S.mode = S.modes[0].key;
+        /* 谁来做也一起恢复（上次选了"一个人"就还是一个人） */
+        if (typeof saved.divided === 'boolean') S.divided = saved.divided;
       }
     } catch (e) { /* 拿不到就用默认三个，不拦着用户说话 */ }
     renderModes();
@@ -1230,7 +1273,7 @@
     S.waitT = setTimeout(() => waitTick(0), WAIT_MS);
     setSendMode();
     try {
-      const r = await API.invoke(S.sid, t, S.mode, streamPref());
+      const r = await API.invoke(S.sid, t, S.mode, streamPref(), S.divided !== false);
       if (S.pending && S.pending.el) {
         const meta = S.pending.el.querySelector('.msg-meta');
         if (meta) meta.textContent = fmtTime(Date.now());
@@ -1453,9 +1496,19 @@
     box.className = '';
     box.innerHTML = top.map((m) => '<div class="picker-item' + (m.key === S.modelKey ? ' on' : '') + '" data-k="' + esc(m.key) + '">' +
       '<div class="nm"><b>' + esc(m.name) + '</b><div class="desc">' + esc(m.provider || '') + ' · ' + esc(m.key) + '</div></div>' +
-      (m.key === S.modelKey ? '<span class="ck">当前</span>' : '') + '</div>').join('') +
+      (m.key === S.modelKey ? '<span class="ck">当前</span>' : '') +
+      /* 每行右侧的「⋯」：调这个模型自己的参数（上下文 1M/256K、推理、高级 JSON）。
+         用户点名"三个点要放的就是这个地方" —— 就是这张「选模型」列表。
+         面板复用预设页那一个（Preset.modelParams），不写第二套。 */
+      '<button type="button" class="md-more" data-more="' + esc(m.key) + '" data-src="' + esc(m.provider || '')
+      + '" aria-label="这个模型的参数">\u22ef</button>' + '</div>').join('') +
       (list.length > top.length ? '<div class="picker-empty">还有 ' + (list.length - top.length) + ' 个，输入关键词再筛</div>' : '');
-    $$('.picker-item', box).forEach((it) => it.addEventListener('click', async () => {
+    $$('.md-more', box).forEach((b) => b.addEventListener('click', (e) => {
+      e.stopPropagation();                      // 别让它顺带把模型切了
+      try { window.Preset.modelParams(b.dataset.more, b.dataset.src); } catch (err) {}
+    }));
+    $$('.picker-item', box).forEach((it) => it.addEventListener('click', async (e) => {
+      if (e.target.closest('.md-more')) return;  // 点的是「⋯」，不算选中
       const k = it.dataset.k;
       /* 给某个编排角色定点换模型：换完**就地**把这张面板换成渠道页（不再先关再开） */
       if (MS.role) { const role = MS.role; MS.role = ''; await applyModelRole(role, k); modelsSetupSheet(); return; }

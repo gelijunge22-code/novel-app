@@ -222,3 +222,28 @@
   background:var(--card);color:var(--ink-2);font-size:var(--t-md);white-space:nowrap;
   transition:transform .1s var(--ease),background .16s var(--ease),color .16s var(--ease);
 }.cq-chip:active{transform:scale(.95);background:var(--accent-soft);color:var(--accent)}.cq-chip.add{border-style:dashed;color:var(--ink-3)}.cq-chip svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}.cq-hint{padding:var(--sp-2) var(--sp-4);font-size:var(--t-sm);color:var(--ink-3);display:block}
+
+
+/* 「分工设置」那个小小的快捷按钮（聊天顶部，点了跳到预设页调"哪一步交给谁"）。
+   用户原话：「增加一个快捷的小小的按钮…只是跳转就行，因为很多人可能不太懂」。 */
+.pk-mini {
+  flex: 0 0 auto; height: 26px; padding: 0 10px; font-size: var(--t-sm);
+  border-radius: 999px; border: 1px solid var(--line); background: transparent;
+  color: var(--ink-2); display: inline-flex; align-items: center; gap: 4px;
+  -webkit-tap-highlight-color: transparent; cursor: pointer;
+}
+.pk-mini:active { background: var(--line); }
+/* 谁来做那两枚胶囊跟模式胶囊同一套样式，只是稍微收窄一点，别把一行挤爆 */
+#chat-split { margin-left: var(--sp-1); }
+
+
+/* 「选模型」列表每行右侧的「⋯」—— 调这个模型自己的参数。
+   用户点名"三个点要放的就是这个地方"。跟预设页那个 .pk-more 同一套观感。 */
+.picker-item { display: flex; align-items: center; gap: var(--sp-2); }
+.picker-item .nm { flex: 1 1 auto; min-width: 0; }
+.md-more {
+  flex: 0 0 auto; width: 36px; height: 36px; border: none; background: transparent;
+  color: var(--ink-3); font-size: 18px; line-height: 1; display: grid; place-items: center;
+  border-radius: var(--r-sm, 8px); cursor: pointer; -webkit-tap-highlight-color: transparent;
+}
+.md-more:active { background: var(--line); color: var(--ink); }

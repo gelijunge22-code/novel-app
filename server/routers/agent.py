@@ -170,7 +170,8 @@ async def session_invoke(sid: str, request: Request, payload: dict = Body(...)):
     if mode and mode not in orchestra.MODES:
         raise HTTPException(400, f"不认识的模式：{mode}（可选 {list(orchestra.MODES)}）")
     inv = rt.start_invocation(i, text, model_key=payload.get("modelKey") or "",
-                              payload={"mode": mode, "path": payload.get("path") or ""})
+                              payload={"mode": mode, "path": payload.get("path") or "",
+                                         "divided": payload.get("divided", True)})
     return {"invocationId": inv, "status": "running", "mode": mode,
             "clientMessageId": payload.get("clientMessageId") or ""}
 

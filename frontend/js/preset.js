@@ -281,10 +281,13 @@
      因为一些 AI 是可以通过这种高级的修改来修改思考强度的。」
      存在的意义：同一个模型在不同渠道上，能吃多长、一次能出多少、是不是推理模型都不一样，
      平台猜不准，得让用户自己说了算。 */
-  function openModelParams(key) {
-    const it = (S.data.models || []).find((x) => x.key === key) || {};
+  function openModelParams(key, sourceHint) {
+    const it = ((S.data && S.data.models) || []).find((x) => x.key === key) || {};
     const parts = String(key).split('/');
     const group = it.group || parts[0] || '';
+    /* sourceHint：别处（聊天的「选模型」）传进来的渠道名。
+       两处的列表都调这一个面板，不写第二套实现。 */
+    if (!it.provider && sourceHint) it.provider = sourceHint;
     const mid = parts.slice(1).join('/') || key;
     const PRE = [['1000000', '1M'], ['256000', '256K'], ['128000', '128K'],
                  ['64000', '64K'], ['32000', '32K'], ['16000', '16K']];
@@ -332,8 +335,9 @@
         });
         // 拉这个模型现在的值
         API.models().then((d) => {
-          const hit = (d && d.models || []).find((m) => m.id === mid && (!group || m.source === it.provider || m.source === it.group))
-                   || (d && d.models || []).find((m) => m.id === mid);
+          const all = (d && d.models) || [];
+          const hit = all.find((m) => m.id === mid && (!group || m.source === it.provider || m.source === it.group))
+                   || all.find((m) => m.id === mid);
           if (hit) {
             if (ctx && !ctx.value) ctx.value = hit.contextWindowTokens || '';
             if (mx && !mx.value) mx.value = hit.maxTokens || '';
@@ -490,6 +494,8 @@
   /* ---------------- 对外 ---------------- */
 
   window.Preset = {
+    /* 给聊天的「选模型」用：那边每一行也要能打开这个模型的参数（同一个面板） */
+    modelParams: (key, source) => openModelParams(key, source),
     /* App.show() 切到这一页时会调 onShow */
     onShow() { return window.Preset.open(); },
     async open(scope, slug) {
