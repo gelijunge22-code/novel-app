@@ -1,0 +1,56 @@
+{
+ "at": "2026-09-21 09:45:06",
+ "force": "nopin",
+ "before": {
+  "tabbarH": 50,
+  "tabFont": 11,
+  "tabPadTop": 8,
+  "rdFbH": 48,
+  "rdFbFont": 11,
+  "tBase": 15,
+  "settingsH3": 13,
+  "toolGap": 12,
+  "hostBand": 42
+ },
+ "after": {
+  "tabbarH": 50,
+  "tabFont": "11px",
+  "tabPadTop": "7.36px",
+  "tBase": "13.8px",
+  "settingsH3": "11.96px",
+  "toolGap": null,
+  "rdFbH": 48,
+  "rdFbFont": "11px",
+  "rdQuickH3": null,
+  "hosts": [
+   {
+    "sel": "#shelf-book",
+    "h": 0
+   },
+   {
+    "sel": "#preset-book",
+    "h": 0
+   },
+   {
+    "sel": "#lore-book",
+    "h": 0
+   },
+   {
+    "sel": "#tools-book",
+    "h": 0
+   }
+  ],
+  "topbars": [
+   {
+    "id": "screen-settings",
+    "h": 89
+   }
+  ],
+  "rdFootH": 114.08,
+  "tmd": 11.96,
+  "sp3": 11.04
+ },
+ "bad": [
+  "底部导航里的文字位置变了：padding-top 7.36px ≠ 8px"
+ ]
+}

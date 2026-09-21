@@ -1,0 +1,172 @@
+{
+ "at": "2026-09-21T10:06:52.916Z",
+ "force": "（正常）",
+ "minFontSize": 11,
+ "ellipsisWorth": 0.85,
+ "surfaces": [
+  {
+   "id": "shelf",
+   "root": "#screen-shelf",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "preset",
+   "root": "#screen-preset",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "lore",
+   "root": "#screen-lore",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "chat",
+   "root": "#screen-chat",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "chat-drawer",
+   "root": "#chat-drawer",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "tools",
+   "root": "#screen-tools",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "settings",
+   "root": "#screen-settings",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "reader",
+   "root": "#screen-reader",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "chip-pick",
+   "root": "#sheet-panel",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "chapter-menu",
+   "root": "#sheet-panel",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "modal",
+   "root": "#modal-panel",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "rdquick-type",
+   "root": "#rd-quick",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "rdquick-theme",
+   "root": "#rd-quick",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "rdquick-tts",
+   "root": "#rd-quick",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "rdquick-mark",
+   "root": "#rd-quick",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "rdquick-note",
+   "root": "#rd-quick",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "rdtoc",
+   "root": "#rd-toc",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  },
+  {
+   "id": "toast",
+   "root": "#toast",
+   "opened": true,
+   "hard": [],
+   "soft": [],
+   "tiny": [],
+   "err": ""
+  }
+ ],
+ "soft": [],
+ "bad": []
+}

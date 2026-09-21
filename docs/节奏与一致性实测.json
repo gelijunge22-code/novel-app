@@ -1,0 +1,534 @@
+{
+ "at": "2026-09-20 01:55:27",
+ "base": "http://127.0.0.1:8899",
+ "scratchBook": "节奏实测-0920-015527",
+ "total": 34,
+ "passed": 34,
+ "failed": 0,
+ "curve": {
+  "slug": "节奏实测-0920-015527",
+  "points": [
+   {
+    "chars": 198,
+    "dialogue": 0.111,
+    "valence": -0.25,
+    "arousal": 0.164,
+    "action": 0.0,
+    "avgSent": 12.3,
+    "sentSpread": 9.4,
+    "paras": 8,
+    "avgPara": 25,
+    "exclaim": 0.0,
+    "index": 1,
+    "path": "manuscript/001-开篇.md",
+    "title": "",
+    "words": 162
+   },
+   {
+    "chars": 17,
+    "dialogue": 0.0,
+    "valence": 0.0,
+    "arousal": 0.0,
+    "action": 0.0,
+    "avgSent": 18.0,
+    "sentSpread": 0.0,
+    "paras": 1,
+    "avgPara": 17,
+    "exclaim": 0.0,
+    "index": 2,
+    "path": "manuscript/第001章-未命名.md",
+    "title": "",
+    "words": 4
+   },
+   {
+    "chars": 201,
+    "dialogue": 0.129,
+    "valence": -0.727,
+    "arousal": 0.162,
+    "action": 19.9,
+    "avgSent": 14.5,
+    "sentSpread": 11.3,
+    "paras": 9,
+    "avgPara": 22,
+    "exclaim": 0.0,
+    "index": 3,
+    "path": "manuscript/002-争吵一.md",
+    "title": "",
+    "words": 170
+   },
+   {
+    "chars": 207,
+    "dialogue": 0.087,
+    "valence": -0.842,
+    "arousal": 0.157,
+    "action": 4.83,
+    "avgSent": 12.8,
+    "sentSpread": 8.2,
+    "paras": 8,
+    "avgPara": 26,
+    "exclaim": 0.0,
+    "index": 4,
+    "path": "manuscript/003-争吵二.md",
+    "title": "",
+    "words": 176
+   },
+   {
+    "chars": 201,
+    "dialogue": 0.055,
+    "valence": -0.812,
+    "arousal": 0.0,
+    "action": 4.98,
+    "avgSent": 10.8,
+    "sentSpread": 8.6,
+    "paras": 8,
+    "avgPara": 25,
+    "exclaim": 0.0,
+    "index": 5,
+    "path": "manuscript/004-争吵三.md",
+    "title": "",
+    "words": 168
+   },
+   {
+    "chars": 213,
+    "dialogue": 0.019,
+    "valence": -0.5,
+    "arousal": 0.862,
+    "action": 61.03,
+    "avgSent": 18.4,
+    "sentSpread": 10.3,
+    "paras": 7,
+    "avgPara": 30,
+    "exclaim": 0.091,
+    "index": 6,
+    "path": "manuscript/005-动手.md",
+    "title": "",
+    "words": 184
+   },
+   {
+    "chars": 164,
+    "dialogue": 0.0,
+    "valence": -0.727,
+    "arousal": 0.297,
+    "action": 0.0,
+    "avgSent": 17.2,
+    "sentSpread": 8.2,
+    "paras": 5,
+    "avgPara": 33,
+    "exclaim": 0.0,
+    "index": 7,
+    "path": "manuscript/006-喘息.md",
+    "title": "",
+    "words": 142
+   },
+   {
+    "chars": 181,
+    "dialogue": 0.077,
+    "valence": 0.625,
+    "arousal": 0.0,
+    "action": 5.52,
+    "avgSent": 14.1,
+    "sentSpread": 9.9,
+    "paras": 7,
+    "avgPara": 26,
+    "exclaim": 0.0,
+    "index": 8,
+    "path": "manuscript/007-平静.md",
+    "title": "",
+    "words": 155
+   },
+   {
+    "chars": 169,
+    "dialogue": 0.047,
+    "valence": 0.5,
+    "arousal": 0.0,
+    "action": 5.92,
+    "avgSent": 13.2,
+    "sentSpread": 8.3,
+    "paras": 6,
+    "avgPara": 28,
+    "exclaim": 0.0,
+    "index": 9,
+    "path": "manuscript/008-尾声.md",
+    "title": "",
+    "words": 146
+   }
+  ],
+  "alerts": [
+   {
+    "level": "warn",
+    "key": "flat_negative",
+    "from": 3,
+    "to": 7,
+    "chapters": 5,
+    "text": "第 3–7 章连着 5 章情绪都压在负面（而且起伏不大，像一直在吵架）",
+    "advice": "中间插一章缓的：换个场景、让人笑一次，或者把这场冲突收掉再开下一场",
+    "paths": [
+     "manuscript/002-争吵一.md",
+     "manuscript/003-争吵二.md",
+     "manuscript/004-争吵三.md",
+     "manuscript/005-动手.md",
+     "manuscript/006-喘息.md"
+    ]
+   },
+   {
+    "level": "info",
+    "key": "too_short",
+    "from": 2,
+    "to": 2,
+    "chapters": 1,
+    "text": "第 2 章只有 17 字",
+    "advice": "是占位还是真的就这几句？太短的一章读者会觉得被骗",
+    "paths": [
+     "manuscript/第001章-未命名.md"
+    ]
+   },
+   {
+    "level": "info",
+    "key": "no_dialogue",
+    "from": 5,
+    "to": 7,
+    "chapters": 3,
+    "text": "第 5–7 章几乎没有对话（对白占比都低于 6%）",
+    "advice": "让人开口说话：一句话能交代的信息，叙述要三句",
+    "paths": [
+     "manuscript/004-争吵三.md",
+     "manuscript/005-动手.md",
+     "manuscript/006-喘息.md"
+    ]
+   }
+  ],
+  "summary": {
+   "chapters": 9,
+   "words": 1551,
+   "valenceAvg": -0.304,
+   "arousalAvg": 0.182,
+   "arousalMax": 0.862,
+   "arousalMaxAt": 6,
+   "dialogueAvg": 0.058,
+   "longest": 213,
+   "shortest": 17
+  }
+ },
+ "consistency": {
+  "slug": "节奏实测-0920-015527",
+  "score": 72,
+  "grade": "要改",
+  "stats": {
+   "people": 3,
+   "scanned": 44,
+   "warn": 3,
+   "info": 2
+  },
+  "issues": [
+   {
+    "level": "warn",
+    "key": "age_drift",
+    "who": "主角",
+    "text": "主角 的年龄前后差 2 岁（17岁、19岁）",
+    "advice": "要么中间写清过了几年，要么把一个岁数改掉（成长弧线也要跟着改）",
+    "where": [
+     {
+      "path": "manuscript/001-开篇.md",
+      "line": 3,
+      "quote": "，两条腿用麻绳捆着，桌角刻着几道记号。那年主角十七岁，黑发，瘦得像根竹竿。沈岩站在门口，看了他很久。"
+     },
+     {
+      "path": "manuscript/004-争吵三.md",
+      "line": 3,
+      "quote": "。主角银发被风吹乱，她站在门口不肯进来。沈岩已经十九岁了，他不想再哄。“我恨你。”主角说。“恨吧"
+     }
+    ]
+   },
+   {
+    "level": "warn",
+    "key": "hair_conflict",
+    "who": "主角",
+    "text": "主角 的发色前后不一致（银、黑）",
+    "advice": "定一个为准，其余的地方统一改；改不动就把变化写进剧情（染了、伤了）",
+    "where": [
+     {
+      "path": "manuscript/001-开篇.md",
+      "line": 3,
+      "quote": "用麻绳捆着，桌角刻着几道记号。那年主角十七岁，黑发，瘦得像根竹竿。沈岩站在门口，看了他很久。老周蹲"
+     },
+     {
+      "path": "manuscript/004-争吵三.md",
+      "line": 3,
+      "quote": "腿用麻绳捆着，桌角刻着几道记号。雪还在下。主角银发被风吹乱，她站在门口不肯进来。沈岩已经十九岁了，"
+     }
+    ]
+   },
+   {
+    "level": "warn",
+    "key": "pronoun_mix",
+    "who": "主角",
+    "text": "主角 既被写成「他」又被写成「她」",
+    "advice": "确认是这个人的性别写错，还是旁边有另一个人（那就把名字补上）",
+    "where": [
+     {
+      "path": "manuscript/001-开篇.md",
+      "line": 3,
+      "quote": "诺十七岁，黑发，瘦得像根竹竿。沈岩站在门口，看了他很久。老周蹲在门槛上抽烟，没说话。“进来。”"
+     },
+     {
+      "path": "manuscript/001-开篇.md",
+      "line": 8,
+      "quote": "。”主角说。沈岩说：“进来。”主角跺了跺脚，他还是进去了。他站在灯下，慢慢把帽子摘下来，把雪抖"
+     },
+     {
+      "path": "manuscript/001-开篇.md",
+      "line": 8,
+      "quote": "沈岩说：“进来。”主角跺了跺脚，他还是进去了。他站在灯下，慢慢把帽子摘下来，把雪抖在地上。老周"
+     },
+     {
+      "path": "manuscript/002-争吵一.md",
+      "line": 8,
+      "quote": "沈岩说。“这也是理由？”主角说。主角很生气，他觉得委屈，他难受极了，他恨透了这间屋子，恨透了这"
+     },
+     {
+      "path": "manuscript/002-争吵一.md",
+      "line": 8,
+      "quote": "这也是理由？”主角说。主角很生气，他觉得委屈，他难受极了，他恨透了这间屋子，恨透了这张桌子。他"
+     },
+     {
+      "path": "manuscript/002-争吵一.md",
+      "line": 8,
+      "quote": "”主角说。主角很生气，他觉得委屈，他难受极了，他恨透了这间屋子，恨透了这张桌子。他咬着牙不说话"
+     }
+    ]
+   },
+   {
+    "level": "info",
+    "key": "similar_name",
+    "who": "主角",
+    "text": "正文里有「林偌」，和已登记的「主角」只差一个字",
+    "advice": "是笔误就统一改；真是另一个人的话，给他建个角色（不然出场统计会漏）",
+    "where": [],
+    "suggestAlias": [
+     "主角",
+     "林偌"
+    ]
+   },
+   {
+    "level": "info",
+    "key": "missing_character",
+    "who": "老周",
+    "text": "老周 已经 8 章没露面了（最后出现在第 1 章）",
+    "advice": "长篇里人不见了最容易被读者记住：要么让他回来，要么交代一句他去哪了",
+    "where": [
+     {
+      "path": "manuscript/001-开篇.md",
+      "line": 0,
+      "quote": ""
+     }
+    ]
+   }
+  ]
+ },
+ "items": [
+  {
+   "name": "曲线按章给出（8 章 8 个点，按顺序）",
+   "ok": true,
+   "why": "点数 9",
+   "data": null
+  },
+  {
+   "name": "每个点都有张力/情绪/对话占比/句长/动作密度",
+   "ok": true,
+   "why": "{\"chars\": 198, \"dialogue\": 0.111, \"valence\": -0.25, \"arousal\": 0.164, \"action\": 0.0, \"avgSent\": 12.3, \"sentSpread\": 9.4, \"paras\": 8, \"avgPara\": 25, \"exclaim\": 0.0, \"index\": 1, \"path\": \"manuscript/001-开篇.md\", \"title\": \"\",",
+   "data": null
+  },
+  {
+   "name": "挑出「连着几章都在吵」（情绪同向没起伏）",
+   "ok": true,
+   "why": "[\"flat_negative\", \"no_dialogue\", \"too_short\"]",
+   "data": null
+  },
+  {
+   "name": "挑出「连着几章没对话」",
+   "ok": true,
+   "why": "[\"flat_negative\", \"no_dialogue\", \"too_short\"]",
+   "data": null
+  },
+  {
+   "name": "报警指得出是哪几章、并且给得出改法",
+   "ok": true,
+   "why": "{\"level\": \"warn\", \"key\": \"flat_negative\", \"from\": 3, \"to\": 7, \"chapters\": 5, \"text\": \"第 3–7 章连着 5 章情绪都压在负面（而且起伏不大，像一直在吵架）\", \"advice\": \"中间插一章缓的：换个场景、让人笑一次，或者把这场冲突收掉再开下一场\", \"paths\": [\"manuscript/002-争吵一.md\", \"manuscript/003-争吵二.md\", \"manuscript/004-争吵三.md\", \"manuscript/005-动手.md\", \"manuscript/006-喘息.m",
+   "data": null
+  },
+  {
+   "name": "打斗那一章的张力明显高于平静章（曲线分得开，不是一条直线）",
+   "ok": true,
+   "why": "动手 0.86/61.03 vs 平静 0.00/5.52",
+   "data": null
+  },
+  {
+   "name": "情绪正负也是分得开的（争吵章偏负、喘息章偏正）",
+   "ok": true,
+   "why": "争吵二 -0.84 / 平静 0.62",
+   "data": null
+  },
+  {
+   "name": "摘要给得出全书平均与最高点在第几章",
+   "ok": true,
+   "why": "{\"chapters\": 9, \"words\": 1551, \"valenceAvg\": -0.304, \"arousalAvg\": 0.182, \"arousalMax\": 0.862, \"arousalMaxAt\": 6, \"dialogueAvg\": 0.058, \"longest\": 213, \"shortest\": 17}",
+   "data": null
+  },
+  {
+   "name": "单章形状算得出来（写作台要看这一章的节奏）",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "单章不带 path 会被 400 拒掉",
+   "ok": true,
+   "why": "400 {'detail': '要看哪一章（path 不能空）'}",
+   "data": null
+  },
+  {
+   "name": "体检报告有评分/等级/统计",
+   "ok": true,
+   "why": "{\"people\": 3, \"scanned\": 44, \"warn\": 3, \"info\": 2}",
+   "data": null
+  },
+  {
+   "name": "年龄漂移被挑出来（17 岁 → 19 岁）",
+   "ok": true,
+   "why": "[\"age_drift\", \"hair_conflict\", \"missing_character\", \"pronoun_mix\", \"similar_name\"]",
+   "data": null
+  },
+  {
+   "name": "发色冲突被挑出来（黑发 → 银发）",
+   "ok": true,
+   "why": "[\"age_drift\", \"hair_conflict\", \"missing_character\", \"pronoun_mix\", \"similar_name\"]",
+   "data": null
+  },
+  {
+   "name": "他/她混用被挑出来",
+   "ok": true,
+   "why": "[\"age_drift\", \"hair_conflict\", \"missing_character\", \"pronoun_mix\", \"similar_name\"]",
+   "data": null
+  },
+  {
+   "name": "名字只差一个字被挑出来（林偌 / 主角）",
+   "ok": true,
+   "why": "[\"age_drift\", \"hair_conflict\", \"missing_character\", \"pronoun_mix\", \"similar_name\"]",
+   "data": null
+  },
+  {
+   "name": "消失的角色被点名（老周只在第 1 章出现）",
+   "ok": true,
+   "why": "[\"age_drift\", \"hair_conflict\", \"missing_character\", \"pronoun_mix\", \"similar_name\"]",
+   "data": null
+  },
+  {
+   "name": "每条都带出处（哪一章第几行 + 原句）",
+   "ok": true,
+   "why": "{\"level\": \"warn\", \"key\": \"age_drift\", \"who\": \"主角\", \"text\": \"主角 的年龄前后差 2 岁（17岁、19岁）\", \"advice\": \"要么中间写清过了几年，要么把一个岁数改掉（成长弧线也要跟着改）\", \"where\": [{\"path\": \"manuscript/001-开篇.md\", \"line\": 3, \"quote\": \"，两条腿用麻绳捆着，桌角刻着几道记号。那年主角十七岁，黑发，瘦得像根竹竿。沈岩站在门口，看了他很久。\"}, {\"path\": \"manuscript/004-争吵三.md\", \"line\": 3, \"quote\"",
+   "data": null
+  },
+  {
+   "name": "「是笔误/是另一个人」能一键登记成别名，登记后不再报",
+   "ok": true,
+   "why": "{\"alias\": {\"ok\": true, \"entityId\": 226, \"alias\": \"林偌\"}, \"left\": []}",
+   "data": null
+  },
+  {
+   "name": "别名参数不全时 400",
+   "ok": true,
+   "why": "400",
+   "data": null
+  },
+  {
+   "name": "能往书架里放一条（带标签）",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "列得出来，标签聚合也对",
+   "ok": true,
+   "why": "[\"对白\", \"打斗\", \"节奏\"]",
+   "data": null
+  },
+  {
+   "name": "关键词搜得到（搜正文而不只是标题）",
+   "ok": true,
+   "why": "1",
+   "data": null
+  },
+  {
+   "name": "按标签筛得到",
+   "ok": true,
+   "why": "1",
+   "data": null
+  },
+  {
+   "name": "打开一条能看到**全文**（列表里那个只是摘要）",
+   "ok": true,
+   "why": "全文 360 字 vs 列表摘要 160 字",
+   "data": null
+  },
+  {
+   "name": "能改（id 给了就是改，不新增）",
+   "ok": true,
+   "why": "条数 2",
+   "data": null
+  },
+  {
+   "name": "按 id 取片段（给写作链路用）",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "挑的范文真的进了写正文的提示词（带「不要抄句子」的提醒）",
+   "ok": true,
+   "why": "preview 返回 200 / 字数 1264",
+   "data": null
+  },
+  {
+   "name": "预演同时报出「这次带了参考/带了声音档案」",
+   "ok": true,
+   "why": "{\"hasRefs\": true, \"hasVoice\": false}",
+   "data": null
+  },
+  {
+   "name": "空标题被 400 拒掉",
+   "ok": true,
+   "why": "400",
+   "data": null
+  },
+  {
+   "name": "超长文本被 400 拒掉（不静默截断）",
+   "ok": true,
+   "why": "400 {'detail': '这段太长（200001 字），上限 200000 字；拆成几条更好用'}",
+   "data": null
+  },
+  {
+   "name": "删不存在的条目返回 404",
+   "ok": true,
+   "why": "404",
+   "data": null
+  },
+  {
+   "name": "删得掉（软删不适用：这里就是用户的摘抄，删了就是删了）",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "空数据：书里没参考时返回空数组而不是报错",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "测试书进回收站（不留垃圾）",
+   "ok": true,
+   "why": "{'ok': True, 'trashedTo': '/home/ubuntu/novel-app/data/trash/book-节奏实测-0920-015527-1789840527'}",
+   "data": null
+  }
+ ]
+}

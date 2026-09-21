@@ -1,0 +1,8 @@
+# 写作台 · NovelApp 后端依赖
+# 安装：pip install -r requirements.txt
+# 跑：python -m uvicorn server.app:app --host 127.0.0.1 --port 8899
+edge_tts==7.2.8
+fastapi==0.141.1
+httpx==0.28.1
+reportlab==5.0.1
+uvicorn==0.53.0

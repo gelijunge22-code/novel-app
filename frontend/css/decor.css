@@ -1,0 +1,107 @@
+/* ══════════════════════════════════════════════════════════════════════════
+   大背景质感（第 35 轮）—— 纸纹 / 竹影 / 水波 / 自然光
+
+   用户原话（一字不改）：
+     「现在的大背景，说实话还是有点单调，总感觉有点丑丑的，可以增加一些那种就是
+       波纹啊，或者就是比较好看的那种花纹，那种竹子啊」
+     「我说的华丽不是各种堆什么特效，而是整体看上去舒服、有美感」
+
+   做法（为什么这么做，逐条）：
+   1. **不引外链图片**：竹子和水波都是内联 SVG **手绘**（路径写在 tools/mk_decor.py 里，
+      可读、可调）。理由：没许可风险、不额外发请求、不吃内存（3.6G 那台机器的红线）。
+   2. **四层，从下往上**：底部收边 → 顶部自然光 → 竹影（左下）→ 水波（右上）→ 纸纹。
+      一层只干一件事，日间/夜间各一套（夜间的墨色翻成"暗纸上的淡米"）。
+   3. **铺在"屏幕自己身上"**，不是 body 上一张固定层：切屏时装饰跟着屏一起走。
+      要是放 body 上，屏被藏了装饰还亮着 —— `tools/e2e-nav.js` 那条
+      「屏上必须有货（墨迹 ≥ 1%）」的判据就会被装饰喂饱，反证再也报不了红。
+   4. **透明度压在墨迹阈以下**：`tools/imgstat.py` 判"这一屏有没有货"用的是
+      "跟底色的三通道差之和" —— 浅底 30 / 深底 12。上面的数值是按这个阈**倒推**的上限
+      （浅底 ≤ .067、深底 ≤ .018），所以装饰看得见、但那把尺子一点没被废掉。
+   5. **阅读器（#screen-reader）一律不铺**：正文要干净，而且那边有
+      「上下像素色必须等于 --paper」的判据（`tools/check_rdshell.py`），别去动它。
+   ══════════════════════════════════════════════════════════════════════════ */
+
+/* >>> 机器生成（tools/mk_decor.py --write）：手别改这一段 <<< */
+:root{
+  /* 大背景的四层装饰（浅色主题那一套）—— 从下往上：光 · 竹影 · 水波 · 纸纹 */
+  --decor-grain:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27saturate%27 values=%270%27/%3E%3C/filter%3E%3Crect width=%2796%27 height=%2796%27 filter=%27url(%23n)%27 opacity=%270.055%27/%3E%3C/svg%3E");
+  --decor-bamboo:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 220 640%27 fill=%27none%27%3E%3Cg stroke=%27%237a6a52%27 stroke-linecap=%27round%27 stroke-width=%277%27 opacity=%270.072%27%3E%3Cpath d=%27M52 648C48 520 54 400 48 280C44 200 50 120 46 44M104 648C100 540 106 430 100 320C96 240 102 160 98 92M156 648C152 560 158 470 152 372C148 300 154 230 150 178%27/%3E%3C/g%3E%3Cg stroke=%27%237a6a52%27 stroke-linecap=%27round%27 stroke-width=%272.2%27 opacity=%270.072%27%3E%3Cpath d=%27M40 172h22M40 292h22M42 404h20M42 512h18M92 214h22M90 330h22M92 424h20M94 530h18M142 246h20M142 356h20M144 452h18M144 556h16%27/%3E%3C/g%3E%3Cg fill=%27%237a6a52%27 opacity=%270.072%27%3E%3Cpath d=%27M46 44C34 26 18 16 0 12C14 32 30 46 48 56ZM96 92C110 74 128 64 146 62C132 82 116 96 98 104ZM150 178C136 162 120 154 102 152C116 170 132 182 150 190ZM48 280C64 264 82 256 100 256C84 274 66 286 50 292ZM156 372C172 358 190 352 208 352C192 368 174 378 158 384Z%27/%3E%3C/g%3E%3C/svg%3E");
+  --decor-ripple:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 420 420%27 fill=%27none%27%3E%3Cdefs%3E%3CradialGradient id=%27g%27 cx=%27420%27 cy=%270%27 r=%27420%27 gradientUnits=%27userSpaceOnUse%27%3E%3Cstop offset=%270%27 stop-color=%27%237a6a52%27 stop-opacity=%270.072%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%237a6a52%27 stop-opacity=%270.0504%27/%3E%3Cstop offset=%271%27 stop-color=%27%237a6a52%27 stop-opacity=%270%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Cg stroke=%27url(%2523g)%27 stroke-width=%271.7%27%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%2788%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27132%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27180%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27232%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27288%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27348%27/%3E%3C/g%3E%3C/svg%3E");
+  --decor-wash:linear-gradient(180deg, rgba(255,255,255,.30) 0, rgba(255,255,255,.10) 96px, rgba(255,255,255,0) 220px);
+  --decor-floor:linear-gradient(0deg, rgba(58,48,32,.05) 0, rgba(58,48,32,.018) 88px, rgba(58,48,32,0) 176px);
+}
+html[data-theme="night"]{
+  /* 夜间：装饰改成"暗纸上的淡墨"，并且再压一档 —— 夜里屏幕大、一点亮斑都刺眼 */
+  --decor-grain:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27saturate%27 values=%270%27/%3E%3C/filter%3E%3Crect width=%2796%27 height=%2796%27 filter=%27url(%23n)%27 opacity=%270.026%27/%3E%3C/svg%3E");
+  --decor-bamboo:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 220 640%27 fill=%27none%27%3E%3Cg stroke=%27%23e6d9c0%27 stroke-linecap=%27round%27 stroke-width=%277%27 opacity=%270.017%27%3E%3Cpath d=%27M52 648C48 520 54 400 48 280C44 200 50 120 46 44M104 648C100 540 106 430 100 320C96 240 102 160 98 92M156 648C152 560 158 470 152 372C148 300 154 230 150 178%27/%3E%3C/g%3E%3Cg stroke=%27%23e6d9c0%27 stroke-linecap=%27round%27 stroke-width=%272.2%27 opacity=%270.017%27%3E%3Cpath d=%27M40 172h22M40 292h22M42 404h20M42 512h18M92 214h22M90 330h22M92 424h20M94 530h18M142 246h20M142 356h20M144 452h18M144 556h16%27/%3E%3C/g%3E%3Cg fill=%27%23e6d9c0%27 opacity=%270.017%27%3E%3Cpath d=%27M46 44C34 26 18 16 0 12C14 32 30 46 48 56ZM96 92C110 74 128 64 146 62C132 82 116 96 98 104ZM150 178C136 162 120 154 102 152C116 170 132 182 150 190ZM48 280C64 264 82 256 100 256C84 274 66 286 50 292ZM156 372C172 358 190 352 208 352C192 368 174 378 158 384Z%27/%3E%3C/g%3E%3C/svg%3E");
+  --decor-ripple:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 420 420%27 fill=%27none%27%3E%3Cdefs%3E%3CradialGradient id=%27g%27 cx=%27420%27 cy=%270%27 r=%27420%27 gradientUnits=%27userSpaceOnUse%27%3E%3Cstop offset=%270%27 stop-color=%27%23e6d9c0%27 stop-opacity=%270.018%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%23e6d9c0%27 stop-opacity=%270.0126%27/%3E%3Cstop offset=%271%27 stop-color=%27%23e6d9c0%27 stop-opacity=%270%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Cg stroke=%27url(%2523g)%27 stroke-width=%271.7%27%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%2788%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27132%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27180%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27232%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27288%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27348%27/%3E%3C/g%3E%3C/svg%3E");
+  /* 夜间顶部那道"环境光"。第 42 轮实测：.05 时整屏 p99 差 = 10/255，**超过判据上限 9**（装饰发白）。
+     深底 #14120f 与 #ffecce 的差 ≈ 235 → a=.035 时 ≈ 8.2/255，压回阈值以内。
+     注意：真正刺眼的不是那几层纹样（它们更淡），是这道 wash —— 所以先调它。 */
+  --decor-wash:linear-gradient(180deg, rgba(255,236,206,.035) 0, rgba(255,236,206,.014) 96px, rgba(255,236,206,0) 220px);
+  --decor-floor:linear-gradient(0deg, rgba(0,0,0,.22) 0, rgba(0,0,0,.08) 88px, rgba(0,0,0,0) 176px);
+}
+/* >>> 生成结束 <<< */
+
+/* ── 七个屏（阅读器不在里面）────────────────────────────────────────────
+   位置固定：竹影在左下（根基藏在底栏后面，像是"从纸里长出来"），
+   水波从右上角荡开（顶栏是实底，所以往下挪 40px 让它露在内容区）。
+   尺寸用 vh/vw，横竖屏都不会溢出（`tools/e2e-layout.js` 会量溢出）。 */
+#screen-shelf,#screen-chat,#screen-lore,#screen-preset,#screen-settings,#screen-tools,#screen-tool{
+  background-color:var(--paper);
+  background-image:var(--decor-grain),var(--decor-bamboo),var(--decor-ripple),var(--decor-wash),var(--decor-floor),var(--userbg-veil),var(--userbg);
+  background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat,no-repeat,var(--userbg-repeat);
+  background-position:0 0,left -24px bottom -6vh,right -90px top 30px,0 0,0 100%,0 0,var(--userbg-pos);
+  background-size:96px 96px,auto 96vh,min(140vw,600px) auto,100% 260px,100% 190px,100% 100%,var(--userbg-size);
+}
+
+/* ── 用户自己传的背景图（第 43 轮）───────────────────────────────────────
+   用户原话：「整个大背景要弄成可以自己上传图片的」「我说的大背景是这整个前端」。
+   位置：**最底那一层**（在纸纹/竹影/水波/自然光下面）—— 等于给他换一张"自己的纸"，
+   第 35 轮那套质感一层都没少，照旧压在上面。
+   上面那层 `--userbg-veil`（纸色的半透明纱）是**给对比度兜底的**：用户传的可能是全黑图，
+   正文直接压上去就读不了了。纱是纸色，所以没传图时它跟底色一模一样（看不出变化）。
+   三种铺法用三个 class 切换（`html.ubg-*`，由 js/appearance.js 挂）：
+     铺满 cover / 平铺 tile / 居中 center —— 都**不拉伸变形**（tile 给一个固定的砖块尺寸，
+     不然用户随手传一张 4000px 的大图，平铺出来只有一块碎片）。 */
+:root{
+  --userbg:none;                 /* 没传图：这一层什么都不画 */
+  --userbg-veil:none;            /* 纱也跟着空 —— 宁可什么都不铺，也不给底加一层看不见的灰 */
+  --userbg-size:cover;
+  --userbg-pos:center center;
+  --userbg-repeat:no-repeat;
+}
+html.ubg-cover  {--userbg-size:cover;      --userbg-pos:center center;--userbg-repeat:no-repeat}
+html.ubg-tile   {--userbg-size:min(46vw,300px) auto;--userbg-pos:0 0;     --userbg-repeat:repeat}
+html.ubg-center {--userbg-size:contain;    --userbg-pos:center center;--userbg-repeat:no-repeat}
+
+/* ── 启动页 / 登录页：一屏几乎全空，是"华丽"最该出现的地方 ───────────────
+   同一套层，但竹影更大、水波更大 —— 这两屏只有一枚字标，装饰不会跟任何正文打架。 */
+#splash,.login{
+  background-color:var(--paper);
+  background-image:var(--decor-grain),var(--decor-bamboo),var(--decor-ripple),var(--decor-wash),var(--decor-floor);
+  background-repeat:repeat,no-repeat,no-repeat,no-repeat,no-repeat;
+  background-position:0 0,left -10px bottom -30px,right -84px top -40px,0 0,0 100%;
+  background-size:96px 96px,auto min(80vh,640px),min(124vw,540px) auto,100% 320px,100% 220px;
+}
+
+/* ── 有用户图时：内置质感**退让**（第 44 轮）──────────────────────────────
+   用户原话：「切换整个前端的背景图是无用的」。
+   第 43 轮把用户图铺成**最底那一层**，上面还压着纸纹/竹影/水波/自然光/收边五层，再压一层
+   纸色纱 —— 结果就是"传了也看不出"（那一版还有个更致命的问题：地址被当成 /css/… 解析 → 404，
+   见 js/appearance.js 顶部）。这一条把"有图"和"没图"分成两种铺法：
+
+     没图（现状，一个字不改）：纸纹 · 竹影 · 水波 · 自然光 · 收边（五层全在）
+     有图（这条规则）：**只留 纸色纱 + 用户图** —— 竹影/水波/自然光/收边/纸纹全撤，
+                        纱的浓淡由 js/appearance.js 按这张图的亮度算好（保证墨色压得住）。
+
+   为什么不留纸纹：用户传的就是"我要的这张纸"，再叠一层灰噪点只是脏。
+   阅读器（#screen-reader）不在名单里 —— 正文页保持干净（这条从第 35 轮起就没变过）。 */
+html[class*="ubg-"] #screen-shelf,html[class*="ubg-"] #screen-chat,html[class*="ubg-"] #screen-lore,
+html[class*="ubg-"] #screen-preset,html[class*="ubg-"] #screen-settings,html[class*="ubg-"] #screen-tools,
+html[class*="ubg-"] #screen-tool{
+  background-image:var(--userbg-veil),var(--userbg);
+  background-repeat:no-repeat,var(--userbg-repeat);
+  background-position:center center,var(--userbg-pos);
+  background-size:100% 100%,var(--userbg-size);
+}

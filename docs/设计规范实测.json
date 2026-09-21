@@ -1,0 +1,36 @@
+{
+ "at": "2026-09-21 16:53:54",
+ "cssFiles": [
+  "base.css",
+  "components.css",
+  "decor.css",
+  "panels.css",
+  "preset.css",
+  "reader.css",
+  "shelf.css",
+  "tokens.css",
+  "tools.css"
+ ],
+ "checkedDecls": 3755,
+ "themeSwatches": {
+  "themes": [
+   "green",
+   "night",
+   "paper",
+   "sepia",
+   "slate",
+   "white"
+  ],
+  "swatches": [
+   "green",
+   "night",
+   "paper",
+   "sepia",
+   "slate",
+   "white"
+  ],
+  "checked": 6
+ },
+ "violations": [],
+ "violationCount": 0
+}

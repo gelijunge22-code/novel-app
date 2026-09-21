@@ -1,0 +1,91 @@
+{
+ "at": "2026-09-20T08:22:20.526Z",
+ "base": "http://127.0.0.1:8899/",
+ "force": "",
+ "surfaces": [
+  {
+   "id": "shelf",
+   "root": "#screen-shelf+#tabbar",
+   "shot": "rd1-02-登录后书架.png",
+   "res": {
+    "root": "#screen-shelf+#tabbar",
+    "checked": 85,
+    "overflow": [],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "chat",
+   "root": "#screen-chat+#tabbar",
+   "shot": "rd1-05-对话.png",
+   "res": {
+    "root": "#screen-chat+#tabbar",
+    "checked": 399,
+    "overflow": [],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "settings",
+   "root": "#screen-settings+#tabbar",
+   "shot": "rd1-03-设置.png",
+   "res": {
+    "root": "#screen-settings+#tabbar",
+    "checked": 141,
+    "overflow": [],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "reader",
+   "root": "#screen-reader+#tabbar+#rd-quick",
+   "shot": "rd1-reader-阅读.png",
+   "res": {
+    "root": "#screen-reader+#tabbar+#rd-quick",
+    "checked": 176,
+    "overflow": [],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [],
+   "bad": 0
+  }
+ ],
+ "fails": [],
+ "flat": {
+  "wrap": [],
+  "hot": [],
+  "overflow": [],
+  "center": [],
+  "anim": []
+ },
+ "sum": {
+  "wrap": 0,
+  "hot": 0,
+  "overflow": 0,
+  "center": 0,
+  "anim": 0
+ },
+ "ok": true
+}

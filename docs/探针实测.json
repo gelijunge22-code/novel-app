@@ -1,0 +1,23 @@
+{
+  "at": "2026-09-20T00:54:16.307Z",
+  "expr": "(async () => {\n  const rd = document.documentElement;\n  const g = (v) => getComputedStyle(rd).getPropertyValue(v).trim();\n  const out = { rootTheme: rd.dataset.theme, paper: g('--paper') };\n  try { App.show('shelf'); } catch (e) {}\n  // 打开那本书的阅读器\n  const card = document.querySelector('#shelf-list .book-card[data-slug=\"example-book\"]')\n    || document.querySelector('#s",
+  "out": {
+    "rootTheme": "paper",
+    "paper": "#f3ead9",
+    "afterOpen": {
+      "tab": "reader",
+      "screen": [
+        "screen-reader"
+      ]
+    },
+    "paper2": "#f3ead9",
+    "readerBg": "rgb(243, 234, 217)",
+    "pageBg": null,
+    "prefs": [],
+    "afterWhite": {
+      "paper": "#f7f6f4",
+      "readerBg": "rgb(247, 246, 244)",
+      "pageBg": null
+    }
+  }
+}

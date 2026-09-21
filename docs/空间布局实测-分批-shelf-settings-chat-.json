@@ -1,0 +1,155 @@
+{
+ "at": "2026-09-20T11:06:15.591Z",
+ "base": "http://127.0.0.1:8899/",
+ "force": "",
+ "surfaces": [
+  {
+   "id": "shelf",
+   "root": "#screen-shelf+#tabbar",
+   "shot": "r27-layout-02-登录后书架.png",
+   "res": {
+    "root": "#screen-shelf+#tabbar",
+    "align": [],
+    "breath": [],
+    "weight": [],
+    "csize": [],
+    "nums": {
+     "weights": [
+      "11/400",
+      "11/600",
+      "12/400",
+      "13/500",
+      "16/400",
+      "16/600",
+      "16/700",
+      "22/400"
+     ]
+    }
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "preset",
+   "root": "#screen-preset+#tabbar",
+   "shot": "r27-layout-preset-预设.png",
+   "res": {
+    "root": "#screen-preset+#tabbar",
+    "align": [],
+    "breath": [],
+    "weight": [],
+    "csize": [],
+    "nums": {
+     "weights": [
+      "11/400",
+      "11/500",
+      "12/400",
+      "13/500",
+      "13/600",
+      "14.5/600",
+      "14.5/700",
+      "16/400",
+      "16/600",
+      "16/700"
+     ]
+    }
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "lore",
+   "root": "#screen-lore+#tabbar",
+   "shot": "r27-layout-04-设定.png",
+   "res": {
+    "root": "#screen-lore+#tabbar",
+    "align": [],
+    "breath": [],
+    "weight": [],
+    "csize": [],
+    "nums": {
+     "weights": [
+      "11/400",
+      "12/400",
+      "13/400",
+      "14.5/400",
+      "16/400",
+      "16/600",
+      "16/700"
+     ]
+    }
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "chat",
+   "root": "#screen-chat+#tabbar",
+   "shot": "r27-layout-05-对话.png",
+   "res": {
+    "root": "#screen-chat+#tabbar",
+    "align": [],
+    "breath": [],
+    "weight": [],
+    "csize": [],
+    "nums": {
+     "weights": [
+      "11/400",
+      "12/400",
+      "12/500",
+      "12/600",
+      "13/400",
+      "14.5/400",
+      "14.5/600",
+      "16/400",
+      "16/600",
+      "16/700"
+     ]
+    }
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "settings",
+   "root": "#screen-settings+#tabbar",
+   "shot": "r27-layout-03-设置.png",
+   "res": {
+    "root": "#screen-settings+#tabbar",
+    "align": [],
+    "breath": [],
+    "weight": [],
+    "csize": [],
+    "nums": {
+     "weights": [
+      "11/400",
+      "12/400",
+      "13/400",
+      "13/600",
+      "14.5/400",
+      "14.5/500",
+      "16/400",
+      "16/600",
+      "16/700",
+      "18/400"
+     ]
+    }
+   },
+   "notes": [],
+   "bad": 0
+  }
+ ],
+ "fails": [],
+ "flat": {
+  "align": [],
+  "breath": [],
+  "weight": [],
+  "csize": []
+ },
+ "sum": {
+  "align": 0,
+  "breath": 0,
+  "weight": 0,
+  "csize": 0
+ }
+}

@@ -1,0 +1,35 @@
+{
+ "at": "2026-09-20T01:42:07.928Z",
+ "bad": true,
+ "server": "http://127.0.0.1:9/（故意的死端口）",
+ "shell": "file:///home/ubuntu/novel-app/apk/assets/www/index.html",
+ "steps": [
+  {
+   "name": "建了一本临时书当沙盒（自测绝不往用户那本塞东西）",
+   "ok": true,
+   "detail": {
+    "slug": "参考图片自测-临时-1789868526331",
+    "login": 200
+   }
+  },
+  {
+   "name": "反证：连不上后端时，面板说的是人话（不是装作\"你的书架是空的\"）",
+   "ok": true,
+   "detail": {
+    "text": "参\n读不到：连不上服务器",
+    "human": true,
+    "fakeEmpty": false
+   }
+  },
+  {
+   "name": "反证跑完把临时书删掉（不留垃圾）",
+   "ok": true,
+   "detail": {
+    "slug": "参考图片自测-临时-1789868526331"
+   }
+  }
+ ],
+ "problems": [],
+ "total": 3,
+ "passed": 3
+}

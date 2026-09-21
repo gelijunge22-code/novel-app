@@ -1,0 +1,58 @@
+{
+ "at": "2026-09-21 09:45:26",
+ "force": "noscale",
+ "before": {
+  "tabbarH": 50,
+  "tabFont": 11,
+  "tabPadTop": 8,
+  "rdFbH": 48,
+  "rdFbFont": 11,
+  "tBase": 15,
+  "settingsH3": 13,
+  "toolGap": 12,
+  "hostBand": 42
+ },
+ "after": {
+  "tabbarH": 50,
+  "tabFont": "11px",
+  "tabPadTop": "8px",
+  "tBase": "15px",
+  "settingsH3": "13px",
+  "toolGap": null,
+  "rdFbH": 48,
+  "rdFbFont": "11px",
+  "rdQuickH3": null,
+  "hosts": [
+   {
+    "sel": "#shelf-book",
+    "h": 0
+   },
+   {
+    "sel": "#preset-book",
+    "h": 0
+   },
+   {
+    "sel": "#lore-book",
+    "h": 0
+   },
+   {
+    "sel": "#tools-book",
+    "h": 0
+   }
+  ],
+  "topbars": [
+   {
+    "id": "screen-settings",
+    "h": 92
+   }
+  ],
+  "rdFootH": 116,
+  "tmd": 13,
+  "sp3": 12
+ },
+ "bad": [
+  "正文那一档字号没缩：15px（改前 15px）",
+  "字号阶梯中档没缩：--t-md = 13px（改前 13px）",
+  "间距令牌没缩：--sp-3 = 12px（改前 12px）"
+ ]
+}

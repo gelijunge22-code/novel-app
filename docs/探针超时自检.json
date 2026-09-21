@@ -1,0 +1,7 @@
+{
+ "files": 39,
+ "probes": 84,
+ "minLoop": 40,
+ "minTimeout": 30000,
+ "violations": []
+}

@@ -1,0 +1,374 @@
+{
+ "at": "2026-09-20T07:25:48.285Z",
+ "base": "http://127.0.0.1:8899/",
+ "force": "wide",
+ "surfaces": [
+  {
+   "id": "chip-pick",
+   "root": "#sheet-panel",
+   "shot": "r19ui-overlay-弹层-切书书单.png",
+   "res": {
+    "root": "#sheet-panel",
+    "checked": 16,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "chapter-menu",
+   "root": "#sheet-panel",
+   "shot": "r19ui-overlay-弹层-章节长按菜单.png",
+   "res": {
+    "root": "#sheet-panel",
+    "checked": 11,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "modal",
+   "root": "#modal-panel",
+   "shot": "r19ui-overlay-弹层-确认弹窗.png",
+   "res": {
+    "root": "#modal-panel",
+    "checked": 5,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 40,
+      "right": 640,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "rdquick-type",
+   "root": "#rd-quick",
+   "shot": "r19ui-rdquick-底部面板-排版.png",
+   "res": {
+    "root": "#rd-quick",
+    "checked": 50,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "rdquick-theme",
+   "root": "#rd-quick",
+   "shot": "r19ui-rdquick-底部面板-背景.png",
+   "res": {
+    "root": "#rd-quick",
+    "checked": 28,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "rdquick-tts",
+   "root": "#rd-quick",
+   "shot": "r19ui-rdquick-底部面板-听书.png",
+   "res": {
+    "root": "#rd-quick",
+    "checked": 63,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "rdquick-toc",
+   "root": "#rd-quick",
+   "shot": "r19ui-rdquick-底部面板-目录.png",
+   "res": {
+    "root": "#rd-quick",
+    "checked": 35,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "rdquick-mark",
+   "root": "#rd-quick",
+   "shot": "r19ui-rdquick-底部面板-书签.png",
+   "res": {
+    "root": "#rd-quick",
+    "checked": 17,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "rdquick-note",
+   "root": "#rd-quick",
+   "shot": "r19ui-rdquick-底部面板-笔记.png",
+   "res": {
+    "root": "#rd-quick",
+    "checked": 25,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "toast",
+   "root": "#toast",
+   "shot": "r19ui-toast-提示条.png",
+   "res": {
+    "root": "#toast",
+    "checked": 1,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 55,
+      "right": 655,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  }
+ ],
+ "fails": [],
+ "flat": {
+  "wrap": [],
+  "hot": [],
+  "overflow": [
+   {
+    "surface": "chip-pick",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "chapter-menu",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "modal",
+    "el": "div#__uichk-wide",
+    "left": 40,
+    "right": 640,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "rdquick-type",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "rdquick-theme",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "rdquick-tts",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "rdquick-toc",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "rdquick-mark",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "rdquick-note",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "toast",
+    "el": "div#__uichk-wide",
+    "left": 55,
+    "right": 655,
+    "W": 390,
+    "txt": ""
+   }
+  ],
+  "center": [],
+  "anim": []
+ },
+ "sum": {
+  "wrap": 0,
+  "hot": 0,
+  "overflow": 10,
+  "center": 0,
+  "anim": 0
+ },
+ "ok": false
+}

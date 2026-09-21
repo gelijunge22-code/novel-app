@@ -1,0 +1,275 @@
+{
+ "at": "2026-09-20T22:46:48.606Z",
+ "base": "http://127.0.0.1:8899/",
+ "force": "breath",
+ "surfaces": [
+  {
+   "id": "shelf",
+   "root": "#screen-shelf+#tabbar",
+   "shot": "r30f-02-登录后书架.png",
+   "res": {
+    "root": "#screen-shelf+#tabbar",
+    "align": [],
+    "breath": [],
+    "weight": [],
+    "csize": [],
+    "switch": [],
+    "clip": [],
+    "tail": [],
+    "cv": [],
+    "nums": {
+     "weights": [
+      "11/400",
+      "11/600",
+      "12/400",
+      "13/500",
+      "16/400",
+      "16/600",
+      "16/700",
+      "22/400"
+     ],
+     "switches": 0,
+     "gapCvs": 0,
+     "gapLevels": {}
+    }
+   },
+   "notes": [],
+   "bad": 0
+  },
+  {
+   "id": "settings",
+   "root": "#screen-settings+#tabbar",
+   "shot": "r30f-03-设置.png",
+   "res": {
+    "root": "#screen-settings+#tabbar",
+    "align": [],
+    "breath": [
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row.stack",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row.stack",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     },
+     {
+      "parent": "div.settings-group",
+      "a": "div.settings-row",
+      "b": "div.settings-row",
+      "gap": 6
+     }
+    ],
+    "weight": [],
+    "csize": [],
+    "switch": [],
+    "clip": [],
+    "tail": [],
+    "cv": [],
+    "nums": {
+     "gapMean": 9,
+     "gapSd": 6.7,
+     "gapN": 31,
+     "weights": [
+      "11/400",
+      "12/400",
+      "13/400",
+      "13/600",
+      "14.5/400",
+      "14.5/500",
+      "16/400",
+      "16/600",
+      "16/700",
+      "18/400"
+     ],
+     "switches": 5,
+     "gapCvs": 3,
+     "gapLevels": {
+      "2": 24,
+      "3": 6
+     }
+    }
+   },
+   "notes": [
+    "间距不在格 13 处"
+   ],
+   "bad": 13
+  }
+ ],
+ "fails": [],
+ "flat": {
+  "align": [],
+  "breath": [
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row.stack",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row.stack",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   },
+   {
+    "surface": "settings",
+    "parent": "div.settings-group",
+    "a": "div.settings-row",
+    "b": "div.settings-row",
+    "gap": 6
+   }
+  ],
+  "weight": [],
+  "csize": [],
+  "switch": [],
+  "clip": [],
+  "tail": [],
+  "cv": []
+ },
+ "sum": {
+  "align": 0,
+  "breath": 13,
+  "weight": 0,
+  "csize": 0,
+  "switch": 0,
+  "clip": 0,
+  "tail": 0,
+  "cv": 0
+ }
+}

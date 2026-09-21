@@ -1,0 +1,115 @@
+{
+ "at": "2026-09-20 07:54:47",
+ "server": "http://127.0.0.1:8898",
+ "phone": "http://127.0.0.1:8899",
+ "total": 21,
+ "ok": 21,
+ "fail": 0,
+ "items": [
+  {
+   "name": "① 准备：服务器上先有这本书",
+   "ok": true,
+   "why": "HTTP 200 对端同步自测-862084"
+  },
+  {
+   "name": "①b 服务器上有 2 章正文 + 自带的空白章",
+   "ok": true,
+   "why": "['manuscript/第001章-服务器写的.md', 'manuscript/第001章-未命名.md', 'manuscript/第002章-服务器写的.md']"
+  },
+  {
+   "name": "② 手机上还没有这本书 → 先照服务器建一本，再把章节拉下来（真的落盘）",
+   "ok": true,
+   "why": "{\"http\": 200, \"chapters\": [\"第001章-服务器写的\", \"第001章-未命名\", \"第002章-服务器写的\"], \"r\": {\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"direction\": \"pull\", \"pull\": {\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"serverTime\": 1789862085288, \"since\":"
+  },
+  {
+   "name": "②b 一章都没漏（拉下 + 本来就一样 = 服务器上的章数，且 0 错误 0 冲突）",
+   "ok": true,
+   "why": "{\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"serverTime\": 1789862085288, \"since\": 0, \"changed\": 3, \"pulled\": 2, \"unchanged\": 1, \"conflicts\": 0, \"errors\": 0, \"failed\": [], \"serverHas\": 3, \"more\": 0, \"nextSince\": 1789862085288}"
+  },
+  {
+   "name": "③ 再拉一次是增量的（没变的不重复拉）",
+   "ok": true,
+   "why": "{\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"serverTime\": 1789862085362, \"since\": 1789862085288, \"changed\": 0, \"pulled\": 0, \"unchanged\": 0, \"conflicts\": 0, \"errors\": 0, \"failed\": [], \"s"
+  },
+  {
+   "name": "④ 手机上改一章 → 推给服务器 → 服务器上确实是新版",
+   "ok": true,
+   "why": "{\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"direction\": \"push\", \"push\": {\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"pushed\": 1, \"conflicts\": 0, \"unchanged\": 2, \"results"
+  },
+  {
+   "name": "⑤ 两边都改过 → 报冲突，服务器那版一个字节没动",
+   "ok": true,
+   "why": "{\"conflicts\": 1, \"serverUnchanged\": true}"
+  },
+  {
+   "name": "⑤b 冲突列在手机这边（能点进去看两版）",
+   "ok": true,
+   "why": "[{\"id\": 185, \"path\": \"manuscript/\\u7b2c001\\u7ae0-\\u670d\\u52a1\\u5668\\u5199\\u7684.md\", \"status\": \"open\", \"base_mtime\": 1789862085425, \"local_mtime\": 1789862085437, \"server_mtime\": 1789862085443, \"create"
+  },
+  {
+   "name": "⑤c 冲突详情：两版正文都在",
+   "ok": true,
+   "why": "local 270 字 / server 240 字"
+  },
+  {
+   "name": "⑥ 两边都改过时**拉**也报冲突（不硬盖手机上的改动）",
+   "ok": true,
+   "why": "{\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"serverTime\": 1789862085580, \"since\": 1789862085508, \"changed\": 1, \"pulled\": 0, \"unchanged\": 0, \"conflicts\": 1, \"errors\": 0, \"failed\": [], \"s"
+  },
+  {
+   "name": "⑦ 挑「用服务器那版」→ 手机变成服务器那版（逐字节一样），并推了回去",
+   "ok": true,
+   "why": "{\"res\": {\"ok\": true, \"id\": 185, \"pick\": \"server\", \"slug\": \"对端同步自测-862084\", \"path\": \"manuscript/第001章-服务器写的.md\", \"chars\": 180, \"pushed\": {\"slug\": \"对端同步自测-862084\", \"base\": \"http://127.0.0.1:8898\", \"pushed\": 0, \"conflicts\": 0, \"unchanged\": 1, \"results\": [{\"path\":"
+  },
+  {
+   "name": "⑧ 挑「我合并的」→ 手机是合并稿，服务器也跟着变了",
+   "ok": true,
+   "why": "{\"条数\": 1, \"same\": true, \"serverSame\": true}"
+  },
+  {
+   "name": "⑨ 留痕：记着「跟谁同步到哪儿了」",
+   "ok": true,
+   "why": "{\"slug\": \"对端同步自测-862084\", \"base_url\": \"http://127.0.0.1:8898\", \"last_time\": 1789862085786, \"last_sync\": 1789862085786, \"last_result\": \"推上 1 章\"}"
+  },
+  {
+   "name": "⑩ 服务器地址不通 → 中文人话（不是 500 堆栈）",
+   "ok": true,
+   "why": "HTTP 502 连不上 http://127.0.0.1:9：<urlopen error [Errno 111] Connection refused>"
+  },
+  {
+   "name": "⑯ 从没同步过就点「推」→ 服务器那版没被静默盖掉（报冲突，两份都留）",
+   "ok": true,
+   "why": "{\"slug 相同\": true, \"http\": 200, \"push\": {\"slug\": \"同步前推自测-862085\", \"base\": \"http://127.0.0.1:8898\", \"pushed\": 0, \"conflicts\": 1, \"unchanged\": 0, \"batches\": 1, \"more\": 0, \"preflight\": 1}, \"服务器还是原文\": true}"
+  },
+  {
+   "name": "⑰ 手机上有、服务器上没有 → 点「推」把整本书建到服务器上，正文真的在",
+   "ok": true,
+   "why": "{\"服务器原先\": 404, \"http\": 200, \"服务器现在几章\": 4, \"push\": {\"slug\": \"整本推自测-862085\", \"base\": \"http://127.0.0.1:8898\", \"pushed\": 3, \"conflicts\": 0, \"unchanged\": 1, \"batches\": 1, \"more\": 0, \"preflight\": 0}}"
+  },
+  {
+   "name": "⑫ 长书（71 章）一次对账全拉到本机（超上限的不会静默丢），且耗时在谱上",
+   "ok": true,
+   "why": "{\"http\": 200, \"本机\": 71, \"服务器\": 71, \"耗时秒\": 0.36, \"pull\": {\"slug\": \"对端长书自测-862085\", \"base\": \"http://127.0.0.1:8898\", \"serverTime\": 1789862086479, \"since\": 0, \"changed\": 71, \"pulled\": 70, \"unchanged\": 1, \"conflicts\": 0, \"errors\": 0, \"failed\": [], \"serverHas\": 71, \"more\": 0, \"nextSince\": 1789862086479}}"
+  },
+  {
+   "name": "⑬ 再对一次是增量的（长书也一样：0 章要拉）",
+   "ok": true,
+   "why": "{\"slug\": \"对端长书自测-862085\", \"base\": \"http://127.0.0.1:8898\", \"serverTime\": 1789862086840, \"since\": 1789862086479, \"changed\": 0, \"pulled\": 0, \"unchanged\": 0, \"conflicts\": 0, \"errors\": 0, \"failed\": [], \"serverHas\": 71, \"more\": 0, \"nextSince\": 1"
+  },
+  {
+   "name": "⑭ 同一条章反复对账 → 只留 1 条待挑的冲突（不是每点一次多一条）",
+   "ok": true,
+   "why": "[{\"id\": 188, \"path\": \"manuscript/第001章-未命名.md\", \"status\": \"open\", \"base_mtime\": 1789862085982, \"local_mtime\": 1789862086846, \"server_mtime\": 1789862086853, \"created_at\": 1789862086918, \"lc\": 120, \"sc\": 140}]"
+  },
+  {
+   "name": "⑮ 70 章一起推 → 服务器那边真的全变了（服务器一个请求只收 50 条，得自己分批）",
+   "ok": true,
+   "why": "{\"http\": 200, \"服务器上变了的章数\": 70, \"期望\": 70, \"冲突章（故意没推）\": [\"manuscript/第001章-未命名.md\"], \"本机章数\": 71, \"push\": {\"slug\": \"对端长书自测-862085\", \"base\": \"http://127.0.0.1:8898\", \"pushed\": 70, \"conflicts\": 1, \"unchanged\": 0, \"batches\": 2, \"more\": 0, \"preflight\": 0}}"
+  },
+  {
+   "name": "⑪ 收尾：两边的自测书都清掉了（手机这边确认没了）",
+   "ok": true,
+   "why": ""
+  }
+ ]
+}

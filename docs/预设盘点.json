@@ -1,0 +1,149 @@
+{
+ "at": "2026-09-21 08:30:41",
+ "force": "（正常）",
+ "book": "zz-预设自测-0921-083039",
+ "steps": [
+  {
+   "step": "甲 预设每一项都有落点 + 代码里真读它（没有「填了不生效」的项）",
+   "expect": "未标落点 0 项 / 无人读 0 项；顺带列出每项的落点",
+   "res": {
+    "字段数": 27,
+    "没标落点的": [],
+    "没人读的": [],
+    "两样都缺的": [],
+    "落点表": {
+     "customTopSystemPrompt": "提示词",
+     "writingStylePreset": "提示词",
+     "writingReferencePreset": "提示词",
+     "narrativePerson": "提示词",
+     "paragraphRhythm": "提示词",
+     "wordCountControl": "提示词",
+     "polishingWorkflow": "提示词",
+     "adultStylePrompt": "提示词",
+     "fileChangeAwareness": "开关",
+     "planningStyle": "流程",
+     "delegateProse": "流程",
+     "delegateRetrieve": "流程",
+     "delegateResearch": "流程",
+     "delegatePolicy": "提示词",
+     "organizeStyle": "提示词",
+     "worldRules": "提示词",
+     "researchStyle": "提示词",
+     "criticFocus": "提示词",
+     "inlineStyle": "提示词",
+     "retrieveFocus": "提示词"
+    }
+   },
+   "ok": true
+  },
+  {
+   "step": "乙 派活真的改编排：选了「正文交给主创」，执行模式里写正文那两棒真的是主创",
+   "expect": "写正文两棒 role=leader；取上下文/查证跟着换；没改的（挑刺）不许动",
+   "res": {
+    "默认那几棒": [
+     "leader",
+     "retriever",
+     "researcher",
+     "writer",
+     "critic",
+     "writer",
+     "leader"
+    ],
+    "改后那几棒": [
+     "leader",
+     "leader",
+     "leader",
+     "leader",
+     "critic",
+     "leader",
+     "leader"
+    ],
+    "写正文那两棒": [
+     "leader",
+     "leader"
+    ],
+    "取上下文": "leader",
+    "查证": "leader",
+    "挑刺（没改，不许动）": "critic"
+   },
+   "ok": true
+  },
+  {
+   "step": "丙 分工进主创的提示词；档案专属项只进它自己的档案",
+   "expect": "主创有【分工（用户定的）】；素材助手有整理风格；主创没有整理风格；写手没有分工块",
+   "res": {
+    "主创有分工": true,
+    "素材助手有自己的项": true,
+    "写手没有分工块": true
+   },
+   "ok": true
+  },
+  {
+   "step": "丁 「改动感知」真管用：选「直接用」→ AI 写文件直接算数；默认要确认 → 进「改动」",
+   "expect": "默认 pending；选 off 后 accepted",
+   "res": {
+    "默认（要确认）": {
+     "工具回话": "改动已进入「改动」列表，等用户确认",
+     "库里状态": "pending"
+    },
+    "选「直接用」": {
+     "工具回话": "已直接写入（预设里「改动感知」选了「直接用」；版本快照仍在，可换回）",
+     "库里状态": "accepted"
+    }
+   },
+   "ok": true
+  },
+  {
+   "step": "戊 「干活方式」真管用：预设改了，对话页拿到的默认方式跟着变",
+   "expect": "discuss → defaultMode=discuss；plan → defaultMode=plan",
+   "res": {
+    "选 discuss 时": "discuss",
+    "选 plan 时": "plan",
+    "对话页三个模式": [
+     "discuss",
+     "plan",
+     "execute"
+    ]
+   },
+   "ok": true
+  },
+  {
+   "step": "己 每个档案都有配置页（反过来：没有「配了不存在的档案」的页）",
+   "expect": "档案数 = 页数，两边都没有孤儿",
+   "res": {
+    "档案": [
+     "critic",
+     "inline.editor",
+     "leader.assets",
+     "leader.default",
+     "researcher",
+     "retriever",
+     "world.engine",
+     "writer"
+    ],
+    "页": [
+     "critic",
+     "inline.editor",
+     "leader.assets",
+     "leader.default",
+     "researcher",
+     "retriever",
+     "world.engine",
+     "writer"
+    ],
+    "没有页的档案": [],
+    "没有档案的页": []
+   },
+   "ok": true
+  },
+  {
+   "step": "收尾：自测临时书删干净",
+   "expect": "用户那几本书还在、临时书没了",
+   "res": {
+    "清理": "已删掉自测临时书 zz-预设自测-0921-083039"
+   },
+   "ok": true
+  }
+ ],
+ "fails": []
+}

@@ -1,0 +1,21 @@
+[Unit]
+Description=小说 App 自研后端（novel-app，127.0.0.1:8899）
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+WorkingDirectory=/home/ubuntu/novel-app
+ExecStart=/home/ubuntu/novel-app/server/venv/bin/python -m uvicorn server.app:app --host 127.0.0.1 --port 8899 --log-level warning --timeout-graceful-shutdown 3
+Restart=always
+RestartSec=3
+# 挂着 SSE 长连接时 uvicorn 会一直等它断，默认要等满 90 秒才被 SIGKILL
+#（表现就是「改了代码重启不生效」）。给个短限时，到点直接收掉。
+TimeoutStopSec=7
+KillMode=mixed
+SendSIGKILL=yes
+StandardOutput=append:/home/ubuntu/novel-app/logs/novelapp.log
+StandardError=append:/home/ubuntu/novel-app/logs/novelapp.log
+
+[Install]
+WantedBy=default.target

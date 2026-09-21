@@ -1,0 +1,434 @@
+{
+  "at": "2026-09-21T04:03:17.792Z",
+  "steps": [
+    {
+      "name": "拍照前先等**启动页真的退场**（没退场就拍 = 拍到黄底启动页，算假证据）",
+      "ok": true,
+      "detail": {
+        "gone": true,
+        "waited": 0,
+        "at": "shelf-list"
+      }
+    },
+    {
+      "name": "先打开一本书、进到正文",
+      "ok": true,
+      "detail": {
+        "slug": "example-book",
+        "path": "manuscript/第001章-荒原雪夜.md",
+        "open": true
+      }
+    },
+    {
+      "name": "底栏点一下「设置」就出**底部**面板",
+      "ok": true,
+      "detail": {
+        "exists": true,
+        "hidden": false,
+        "on": true,
+        "y": 68,
+        "h": 776,
+        "screenH": 844,
+        "ratio": 0.92,
+        "fromBottom": 0,
+        "maskElementAtTop": "reader-head-title",
+        "maskIsOverlay": false,
+        "rows": 5,
+        "fontSizeCss": "19px",
+        "preferFont": 19,
+        "pageBottom": 728
+      }
+    },
+    {
+      "name": "面板**在下面**且**几乎霸占整屏**（占屏高 ≥85%、顶边贴屏幕上方）",
+      "ok": true,
+      "detail": {
+        "ratio": 0.92,
+        "y": 68,
+        "screenH": 844
+      }
+    },
+    {
+      "name": "面板**没有蒙层**：面板上面那一小条还是正文（不是灰罩子）",
+      "ok": true,
+      "detail": {
+        "at": "reader-head-title"
+      }
+    },
+    {
+      "name": "改字号：正文**真的跟着变大**（--fs 变了；面板一直开着 = 一边调一边看得到）",
+      "ok": true,
+      "detail": {
+        "before": {
+          "pref": 19,
+          "css": "15px"
+        },
+        "after": {
+          "pref": 21,
+          "css": "21px"
+        },
+        "stillOpen": true,
+        "panelTop": 68,
+        "pageVisible": true
+      }
+    },
+    {
+      "name": "改完面板还开着（可以连着调）",
+      "ok": true,
+      "detail": {
+        "stillOpen": true
+      }
+    },
+    {
+      "name": "面板里**只有 `.rd-quick-scroll` 一个滚动体**（没有\"上固定下滚动\"两层）",
+      "ok": true,
+      "detail": {
+        "能滚的元素": [
+          "rd-quick-scroll"
+        ],
+        "抓手条": "sticky"
+      }
+    },
+    {
+      "name": "7 格**不许 fixed/sticky**（要跟内容一起滚）",
+      "ok": true,
+      "detail": {
+        "页签定位": "static"
+      }
+    },
+    {
+      "name": "滚一下：**页签和内容一起动**（位移相同、误差 ≤1px）",
+      "ok": true,
+      "detail": {
+        "滚了": 160,
+        "页签位移": -160,
+        "内容位移": -160
+      }
+    },
+    {
+      "name": "滚到底：内容最后一行**不被面板底边裁掉**（被裁 0 像素）",
+      "ok": true,
+      "detail": {
+        "被裁": 0,
+        "能滚": true
+      }
+    },
+    {
+      "name": "外观 = 旧版：**没有**「阅读设置」标题、**没有**底部「完成」大白按钮",
+      "ok": true,
+      "detail": {
+        "标题": false,
+        "完成键": false
+      }
+    },
+    {
+      "name": "7 格铺满、**3 列等宽**（列宽误差 ≤0.5px）",
+      "ok": true,
+      "detail": {
+        "页签数": 7,
+        "三列起边": [
+          16,
+          138,
+          260
+        ],
+        "最宽减最窄": 0,
+        "每格宽": [
+          114,
+          114,
+          114,
+          114,
+          114,
+          114,
+          114
+        ]
+      }
+    },
+    {
+      "name": "**每格都有图标**（不是只有大字）",
+      "ok": true,
+      "detail": {
+        "有图标的格": 7
+      }
+    },
+    {
+      "name": "每格**热区 ≥44×44**",
+      "ok": true,
+      "detail": {
+        "最小边": 62.14,
+        "每格高": [
+          62.14,
+          62.14,
+          62.14,
+          62.14,
+          62.14,
+          62.14,
+          62.14
+        ]
+      }
+    },
+    {
+      "name": "页签网格和下面的卡片**共用同一条左右基准线**（左右误差 = 0）",
+      "ok": true,
+      "detail": {
+        "左差": 0,
+        "右差": 0
+      }
+    },
+    {
+      "name": "点一下正文，面板自己收起（不用去找关闭按钮）",
+      "ok": true,
+      "detail": {
+        "on": false,
+        "hidden": true,
+        "quickOn": false
+      }
+    },
+    {
+      "name": "返回键：**先收面板**，人还留在阅读器里（不退出、不跳屏）",
+      "ok": true,
+      "detail": {
+        "reopen": {
+          "on": true,
+          "hidden": false
+        },
+        "back": {
+          "before": {
+            "tab": "reader",
+            "on": true
+          },
+          "handled": true,
+          "after": {
+            "tab": "reader",
+            "on": false,
+            "hidden": true
+          }
+        }
+      }
+    },
+    {
+      "name": "底栏点「目录」→ 出的是**目录那一块**（#rd-toc 亮着、有章节行）",
+      "ok": true,
+      "detail": {
+        "rows": 5,
+        "no": "001",
+        "nm": "荒原雪夜"
+      }
+    },
+    {
+      "name": "目录**不是设置面板里的页签**：里面既没有页签条（.rd-qbtn）也没有排版控件（.stepper）",
+      "ok": true,
+      "detail": {
+        "页签": 0,
+        "排版控件": 0
+      }
+    },
+    {
+      "name": "点目录时**设置面板让位**（两层面板不叠在一起）",
+      "ok": true,
+      "detail": {
+        "打开目录前设置面板开着": true,
+        "现在": false
+      }
+    },
+    {
+      "name": "一行一章**只有章号 + 章名**（没有\"3194 字\"那种字数，也不夹说明文字）",
+      "ok": true,
+      "detail": {
+        "no": "001",
+        "nm": "荒原雪夜",
+        "首行": "001荒原雪夜"
+      }
+    },
+    {
+      "name": "当前章**高亮且只有一行**高亮",
+      "ok": true,
+      "detail": {
+        "高亮行数": 1,
+        "高亮": "001荒原雪夜"
+      }
+    },
+    {
+      "name": "目录是**高面板**（比底部设置面板大：占屏高 55%~80%）",
+      "ok": true,
+      "detail": {
+        "ratio": 0.72,
+        "top": 236
+      }
+    },
+    {
+      "name": "目录有蒙层（用户：\"那地方还有点挡着的感觉\" → 面板外不许露正文残字干扰）",
+      "ok": true,
+      "detail": {
+        "蒙层": true
+      }
+    },
+    {
+      "name": "目录里点一行 → 真的跳到那一章，并且目录自己收起（不留遮挡）",
+      "ok": true,
+      "detail": {
+        "want": "manuscript/第002章-一碗稠粥.md",
+        "now": "manuscript/第002章-一碗稠粥.md",
+        "原来那章": "manuscript/第001章-荒原雪夜.md",
+        "changed": true,
+        "tocHidden": true
+      }
+    },
+    {
+      "name": "返回键：从目录里按一下 → **只收目录**，人还在阅读器里（不跳到别的屏）",
+      "ok": true,
+      "detail": {
+        "handled": true,
+        "tab": "reader",
+        "tocOn": false,
+        "tocHidden": true
+      }
+    },
+    {
+      "name": "（「听书」那张图拍的时候，选中的必须是听书页）",
+      "ok": true,
+      "detail": {
+        "选中": "tts"
+      }
+    },
+    {
+      "name": "全程没有 JS 报错",
+      "ok": true,
+      "detail": {
+        "errors": []
+      }
+    }
+  ],
+  "problems": [],
+  "geometry": {
+    "exists": true,
+    "hidden": false,
+    "on": true,
+    "y": 68,
+    "h": 776,
+    "screenH": 844,
+    "ratio": 0.92,
+    "fromBottom": 0,
+    "maskElementAtTop": "reader-head-title",
+    "maskIsOverlay": false,
+    "rows": 5,
+    "fontSizeCss": "19px",
+    "preferFont": 19,
+    "pageBottom": 728
+  },
+  "live": {
+    "before": {
+      "pref": 19,
+      "css": "15px"
+    },
+    "after": {
+      "pref": 21,
+      "css": "21px"
+    },
+    "stillOpen": true,
+    "panelTop": 68,
+    "pageVisible": true
+  },
+  "threePart": {
+    "canScroll": true,
+    "scrolledBy": 160,
+    "tabsDelta": -160,
+    "bodyDelta": -160,
+    "sameDelta": true,
+    "scrollers": [
+      "rd-quick-scroll"
+    ],
+    "tabsPos": "static",
+    "barPos": "sticky",
+    "clipped": 0,
+    "panelH": 776,
+    "screenH": 844,
+    "tabCount": 7,
+    "icons": 7,
+    "btnW": [
+      114,
+      114,
+      114,
+      114,
+      114,
+      114,
+      114
+    ],
+    "btnH": [
+      62.14,
+      62.14,
+      62.14,
+      62.14,
+      62.14,
+      62.14,
+      62.14
+    ],
+    "colLefts": [
+      16,
+      138,
+      260
+    ],
+    "wSpread": 0,
+    "minHit": 62.14,
+    "hasTitle": false,
+    "hasFoot": false,
+    "tabLeft": 0,
+    "tabRight": 0,
+    "tabsInsideScroll": true
+  },
+  "closeByTap": {
+    "on": false,
+    "hidden": true,
+    "quickOn": false
+  },
+  "reopen": {
+    "on": true,
+    "hidden": false
+  },
+  "back": {
+    "before": {
+      "tab": "reader",
+      "on": true
+    },
+    "handled": true,
+    "after": {
+      "tab": "reader",
+      "on": false,
+      "hidden": true
+    }
+  },
+  "toc": {
+    "quickWasOn": true,
+    "quickSteppers": 3,
+    "tocOn": true,
+    "tocHidden": false,
+    "quickStillOn": false,
+    "rows": 5,
+    "no": "001",
+    "nm": "荒原雪夜",
+    "firstTxt": "001荒原雪夜",
+    "hasWordCount": false,
+    "curCount": 1,
+    "curTxt": "001荒原雪夜",
+    "sub": "共 5 章",
+    "tabsInsideToc": 0,
+    "steppersInsideToc": 0,
+    "panelTop": 236,
+    "panelH": 608,
+    "screenH": 844,
+    "scrim": true
+  },
+  "tocJump": {
+    "want": "manuscript/第002章-一碗稠粥.md",
+    "now": "manuscript/第002章-一碗稠粥.md",
+    "原来那章": "manuscript/第001章-荒原雪夜.md",
+    "changed": true,
+    "tocHidden": true
+  },
+  "tocBack": {
+    "handled": true,
+    "tab": "reader",
+    "tocOn": false,
+    "tocHidden": true
+  },
+  "ok": true
+}

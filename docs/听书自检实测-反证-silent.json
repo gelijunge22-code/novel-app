@@ -1,0 +1,165 @@
+{
+ "at": "2026-09-21 01:59:09",
+ "force": "silent",
+ "book": "example-book",
+ "chapter": "manuscript/第001章-荒原雪夜.md",
+ "steps": [
+  {
+   "step": "甲 正常时：自检逐项过，且每项摆出真数值（HTTP 码 / 字节数 / readyState…）",
+   "expect": "ok=true、至少 4 项、明细里有真数字",
+   "res": {
+    "ok": false,
+    "rows": [],
+    "why": "失败"
+   },
+   "ok": false
+  },
+  {
+   "step": "甲2 界面上点「听书自检」（大设置 · 听书）→ 面板逐项亮灯 + 一句结论",
+   "expect": "按钮在、点完面板里有 ≥4 行 + 结论",
+   "res": {
+    "has": true,
+    "点中了": true,
+    "rows": 0,
+    "why": "卡在哪儿：失败"
+   },
+   "ok": false
+  },
+  {
+   "step": "乙 地址指错 → 报\"服务器这一环没通\"",
+   "expect": "ok=false 且原因里说得清是哪一步 / 什么码",
+   "res": {
+    "ok": false,
+    "rows": [],
+    "why": "失败"
+   },
+   "ok": false
+  },
+  {
+   "step": "丙 音频地址坏 → 报\"取音频 HTTP 404\"",
+   "expect": "ok=false 且原因里说得清是哪一步 / 什么码",
+   "res": {
+    "ok": false,
+    "rows": [],
+    "why": "失败"
+   },
+   "ok": false
+  },
+  {
+   "step": "丁 章节不存在 → 报\"这一章读不到 404\"",
+   "expect": "ok=false 且原因里说得清是哪一步 / 什么码",
+   "res": {
+    "ok": false,
+    "rows": [],
+    "why": "失败"
+   },
+   "ok": false
+  },
+  {
+   "step": "戊 口令过期 → 报 401（不是\"没内容\"）",
+   "expect": "ok=false 且原因里说得清是哪一步 / 什么码",
+   "res": {
+    "ok": false,
+    "rows": [],
+    "why": "失败"
+   },
+   "ok": false
+  },
+  {
+   "step": "庚 真实自动播放策略下，点一下「听书」**真的出声**（paused=false 且 currentTime 在走）",
+   "expect": "1.6 秒里 currentTime 涨 ≥1 秒 + 这一下点击的同步解锁真的发生了",
+   "res": {
+    "开始时": {
+     "paused": false,
+     "currentTime": 1.512089,
+     "readyState": 4,
+     "networkState": 1,
+     "errorCode": null,
+     "src": "=%2B0%25&engine=edge&token=8VVJ6Z8biveYbiwUCnAmDCl2qKTQ2nsZD2dw1WW1Prk",
+     "段": 0,
+     "共几段": 72,
+     "在听": true,
+     "被打断过": false,
+     "解锁于": 1789955942973
+    },
+    "1.6秒后": {
+     "paused": false,
+     "currentTime": 3.112297,
+     "readyState": 4,
+     "networkState": 1,
+     "errorCode": null,
+     "src": "=%2B0%25&engine=edge&token=8VVJ6Z8biveYbiwUCnAmDCl2qKTQ2nsZD2dw1WW1Prk",
+     "段": 0,
+     "共几段": 72,
+     "在听": true,
+     "被打断过": false,
+     "解锁于": 1789955942973
+    },
+    "点前解锁于": 0,
+    "真鼠标点中了": true,
+    "当前章": "manuscript/第001章-荒原雪夜.md",
+    "屏": "reader",
+    "最近出错": null,
+    "涨了": 1.6,
+    "这一下解锁了": true,
+    "在走": true
+   },
+   "ok": true
+  },
+  {
+   "step": "辛 被\"页面冻结\"打断时：说人话 + 记住被打断 + **回前台自动接着读**",
+   "expect": "被打断过=true、提示里有人话、回前台后 paused=false 且 currentTime 涨 ≥1 秒",
+   "res": {
+    "被打断过": true,
+    "说了话": true,
+    "提示": [
+     "已停止听书",
+     "刚才被系统打断了（切到后台 / 省电冻结），回到这一页会自动接着读"
+    ],
+    "涨了": 1.6,
+    "接着读了": true
+   },
+   "ok": true
+  },
+  {
+   "step": "己 四种坏法各自报红、且原因两两不同（不是一句\"失败\"）",
+   "expect": "四个 why 互不相同且都不是空/太短",
+   "res": [
+    {
+     "tag": "乙",
+     "fault": "badbase",
+     "why": "失败",
+     "rows": 0
+    },
+    {
+     "tag": "丙",
+     "fault": "badurl",
+     "why": "失败",
+     "rows": 0
+    },
+    {
+     "tag": "丁",
+     "fault": "nochapter",
+     "why": "失败",
+     "rows": 0
+    },
+    {
+     "tag": "戊",
+     "fault": "badtoken",
+     "why": "失败",
+     "rows": 0
+    }
+   ],
+   "ok": false
+  }
+ ],
+ "fails": [
+  "甲 正常时自检就不对：{\"ok\":false,\"rows\":[],\"why\":\"失败\"}",
+  "甲2 界面自检入口不对：{\"has\":true,\"点中了\":true,\"rows\":0,\"why\":\"卡在哪儿：失败\"}",
+  "乙 没报清原因：{\"ok\":false,\"rows\":[],\"why\":\"失败\"}",
+  "丙 没报清原因：{\"ok\":false,\"rows\":[],\"why\":\"失败\"}",
+  "丁 没报清原因：{\"ok\":false,\"rows\":[],\"why\":\"失败\"}",
+  "戊 没报清原因：{\"ok\":false,\"rows\":[],\"why\":\"失败\"}",
+  "己 四种坏法分不出来：[{\"tag\":\"乙\",\"fault\":\"badbase\",\"why\":\"失败\",\"rows\":0},{\"tag\":\"丙\",\"fault\":\"badurl\",\"why\":\"失败\",\"rows\":0},{\"tag\":\"丁\",\"fault\":\"nochapter\",\"why\":\"失败\",\"rows\":0},{\"tag\":\"戊\",\"fault\":\"badtoken\",\"why\":\"失败\",\"rows\":0}]"
+ ]
+}

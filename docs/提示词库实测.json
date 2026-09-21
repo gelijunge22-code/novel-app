@@ -1,0 +1,136 @@
+{
+ "at": "2026-09-20 01:54:29",
+ "total": 18,
+ "ok": 18,
+ "fail": 0,
+ "results": [
+  {
+   "name": "① 提示词列表返回内置人设",
+   "ok": true,
+   "why": "status=200 n=7"
+  },
+  {
+   "name": "① 未改过时来源是 builtin",
+   "ok": true,
+   "why": "builtin"
+  },
+  {
+   "name": "① 列表里带内置正文（能对比/能恢复）",
+   "ok": true,
+   "why": 201
+  },
+  {
+   "name": "② 保存自定义人设（v1）",
+   "ok": true,
+   "why": "200 {'ok': True, 'key': 'writer', 'scope': 'global', 'slug': '', 'version': 1}"
+  },
+  {
+   "name": "③ 自定义人设进了系统提示词",
+   "ok": true,
+   "why": "system 里没有标记"
+  },
+  {
+   "name": "④ 版本列表最新一版带备注、号不撞车",
+   "ok": true,
+   "why": [
+    {
+     "version": 1,
+     "note": "自测第一版",
+     "createdAt": 1789840469664,
+     "chars": 28
+    }
+   ]
+  },
+  {
+   "name": "⑤ 再存一版 = 版本号 +1",
+   "ok": true,
+   "why": "200 {'ok': True, 'key': 'writer', 'scope': 'global', 'slug': '', 'version': 2} 1"
+  },
+  {
+   "name": "⑤ 能拿历史版本跟现在比（diff 列出差别）",
+   "ok": true,
+   "why": "200 ['--- v1', '+++ 现在（v2）', '@@ -1 +1 @@', '-【自测标记一-7f31】遇到这个标记说明用的是自定义人设', '+【自测标记二-7f32】这是第二版']"
+  },
+  {
+   "name": "⑥ 回滚到旧版本 = 新增一版且正文回退",
+   "ok": true,
+   "why": "200 current='【自测标记一-7f31】遇到这个标记说明用的是自定义人设'"
+  },
+  {
+   "name": "⑥ 回滚也是一条历史（备注写着回滚）",
+   "ok": true,
+   "why": [
+    {
+     "version": 3,
+     "note": "回滚到 v1",
+     "createdAt": 1789840469686,
+     "chars": 28
+    },
+    {
+     "version": 2,
+     "note": "自测第二版",
+     "createdAt": 1789840469681,
+     "chars": 17
+    },
+    {
+     "version": 1,
+     "note": "自测第一版",
+     "createdAt": 1789840469664,
+     "chars": 28
+    }
+   ]
+  },
+  {
+   "name": "⑦ 删除覆盖后回到内置",
+   "ok": true,
+   "why": "200 {'ok': True, 'removed': True, 'wasVersion': 3, 'body': '【自测标记一-7f31】遇到这个标记说明用的是自定义人设'}"
+  },
+  {
+   "name": "⑦ 来源回到 builtin",
+   "ok": true,
+   "why": [
+    "builtin",
+    0
+   ]
+  },
+  {
+   "name": "⑦ 系统提示词里标记已消失",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "⑧ 存片段",
+   "ok": true,
+   "why": "200 {'ok': True, 'key': 'selftest-snip'}"
+  },
+  {
+   "name": "⑧ 片段能列出来且内容对",
+   "ok": true,
+   "why": {
+    "key": "selftest-snip",
+    "name": "自测片段",
+    "body": "把这段塞进提示词",
+    "tags": "自测",
+    "useCount": 0,
+    "updatedAt": 1789840469709
+   }
+  },
+  {
+   "name": "⑧ 片段删掉了（跑完不留垃圾）",
+   "ok": true,
+   "why": {
+    "items": []
+   }
+  },
+  {
+   "name": "⑨ 自测留下的版本历史清干净",
+   "ok": true,
+   "why": []
+  },
+  {
+   "name": "⑨ 两个作用域都回到内置（跑完不留痕）",
+   "ok": true,
+   "why": []
+  }
+ ]
+}

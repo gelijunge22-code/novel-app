@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.nbapp.desk">
+    <!-- 版本号不写在这儿：唯一出处是 version.txt，build.sh 打包时用 aapt2 写进去，
+         打完再从安装包里读回来校验（见 build.sh 第 9 步）。 -->
+
+    <uses-sdk android:minSdkVersion="24" android:targetSdkVersion="34" />
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- 应用内更新要能拉起系统安装界面（Android 8+ 必需） -->
+    <uses-permission android:name="android.permission.REQUEST_INSTALL_PACKAGES" />
+    <!-- 长任务（AI 写正文 / 批量）在跑时起一个前台服务把进程保住，切后台不被回收 -->
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE_DATA_SYNC" />
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+
+    <!--
+      为什么这里**故意没有** android:name="com.chaquo.python.PyApplication"：
+        Chaquopy 的官方做法是把应用类设成 PyApplication，让它在 Application.onCreate 里
+        自动启动 Python 运行时。代价是——**"手机能不能跑 Python"和"App 能不能启动"被绑死了**：
+        那行代码一抛（首启解压运行时、dlopen .so、ABI 不匹配…都可能），异常发生在我们的代码
+        之前，连 try/catch 的机会都没有，用户看到的就是"一点就闪退"。
+
+        所以改成：清单不声明，MainActivity.startLocalBackend() 在**后台线程**里显式
+        `Python.start(new AndroidPlatform(this))`，整条链子包在 try/catch 里。
+        这样 Python 起不来 = 只是"本机离线后端用不了"，App 照常打开、走服务器后端。
+        打包校验里有一条断言守着这条（tools/verify_apk.sh 第 6 节）。
+    -->
+    <application
+        android:extractNativeLibs="true"
+        android:label="@string/app_name"
+        android:icon="@mipmap/ic_launcher"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true"
+        android:hardwareAccelerated="true"
+        android:allowBackup="true"
+        android:supportsRtl="true"
+        android:largeHeap="true">
+
+        <activity
+            android:name="com.nbapp.desk.MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:launchMode="singleTop"
+            android:enableOnBackInvokedCallback="false"
+            android:windowSoftInputMode="adjustResize"
+            android:configChanges="orientation|screenSize|smallestScreenSize|screenLayout|keyboardHidden|uiMode|density|fontScale"
+            android:theme="@style/AppTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <!-- 保活服务：只在 AI 干活的时候存在，任务结束/划掉 App 就撤 -->
+        <service
+            android:name="com.nbapp.desk.KeepAliveService"
+            android:exported="false"
+            android:foregroundServiceType="dataSync" />
+    </application>
+</manifest>

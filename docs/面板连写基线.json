@@ -1,0 +1,37 @@
+{
+ "note": "这些是\"关完之后同一行还干别的\"的既有写法：切屏/弹 toast/提交 promise/纯重绘。判据要求这份表**不许自己变大**。",
+ "pairs": [
+  [
+   "frontend/js/app.js",
+   "onYes"
+  ],
+  [
+   "frontend/js/app.js",
+   "return"
+  ],
+  [
+   "frontend/js/app.js",
+   "});"
+  ],
+  [
+   "frontend/js/reader.js",
+   "if"
+  ],
+  [
+   "frontend/js/reader.js",
+   "return"
+  ],
+  [
+   "frontend/js/studio.js",
+   "hap"
+  ],
+  [
+   "frontend/js/tools.js",
+   "finish"
+  ],
+  [
+   "frontend/js/tools.js",
+   "res"
+  ]
+ ]
+}

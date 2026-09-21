@@ -1,0 +1,84 @@
+{
+ "force": null,
+ "fails": [],
+ "log": [
+  {
+   "screen": "shelf",
+   "m": {
+    "skip": "这一屏没有当前书小方块"
+   }
+  },
+  {
+   "screen": "chat",
+   "m": {
+    "skip": "这一屏没有当前书小方块"
+   }
+  },
+  {
+   "screen": "lore",
+   "m": {
+    "skip": "这一屏没有当前书小方块"
+   }
+  },
+  {
+   "screen": "preset",
+   "m": {
+    "skip": "这一屏没有当前书小方块"
+   }
+  },
+  {
+   "screen": "settings",
+   "m": {
+    "skip": "这一屏没有当前书小方块"
+   }
+  },
+  {
+   "screen": "tools",
+   "m": {
+    "skip": "这一屏没有当前书小方块"
+   }
+  },
+  {
+   "stress": false,
+   "r": {
+    "vw": 390,
+    "rows": [],
+    "scrollW": 390
+   }
+  },
+  {
+   "stress": true,
+   "r": {
+    "vw": 390,
+    "rows": [],
+    "scrollW": 390
+   }
+  },
+  {
+   "leak": {
+    "msgs": 1,
+    "bad": [],
+    "unit": null
+   }
+  },
+  {
+   "mode": {
+    "from": "discuss",
+    "to": "plan",
+    "diffs": [
+     "选中态",
+     "模式说明",
+     "状态条",
+     "输入框提示"
+    ],
+    "n": 4,
+    "说明": "只出计划：主创排步骤 → 取上下文取料 → 查证核实 → 主创定稿。不写正文、不"
+   }
+  },
+  {
+   "shots": [
+    "docs/前端截图/r26-对话页-顶栏与横排.png"
+   ]
+  }
+ ]
+}

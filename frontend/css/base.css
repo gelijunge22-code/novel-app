@@ -1,0 +1,212 @@
+/* ============================================================
+   base.css — 全局重置 / 基础排版 / 外壳（顶栏、底部导航、抽屉、弹窗、书卡等通用件）
+
+   【设计变量的唯一来源是 css/tokens.css】—— 色板、7 套主题、间距节律、字号阶梯、圆角、
+   层次、层级都在那儿；这个文件**不许再定义任何色值/字号/间距 token**（要大改就改 tokens.css）。
+
+   【原生感约定】
+   1. 全局禁掉浏览器的「可选文字 / 长按菜单 / 双击缩放 / 回弹」，只允许在阅读正文和输入框里选中文字。
+   2. 所有可点元素都要有按下去的回弹反馈（.24 以下的 scale）。
+   3. 屏幕切换动画由 app.js 用 Web Animations API 驱动，这里只备好属性。
+   ============================================================ */
+
+/* ── 全局：去掉浏览器味 ── */
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+  touch-action:manipulation;          /* 禁掉双击缩放、去掉点击 300ms 延迟 */
+}html, body{height:100%;overscroll-behavior:none;overflow:hidden}/* html 必须显式上主题底：只给 body 的话，安卓 WebView 上"没被内容盖住的像素"
+   会露出 WebView 自己的白底（用户截图里弹层弧线外侧那片白就是它）。 */
+html{background:var(--paper)}body{
+  margin:0;background:var(--paper);color:var(--ink);
+  font-family:var(--ui-font);font-size:var(--t-lg);line-height:1.55;
+  overscroll-behavior:none;-webkit-font-smoothing:antialiased;
+  -webkit-user-select:none;user-select:none;      /* 界面文字不许被选中 */
+  -webkit-touch-callout:none;                     /* 禁长按弹出「复制/搜索」系统菜单 */
+  -webkit-text-size-adjust:100%;text-size-adjust:100%;
+}/* 只有这些地方允许选中文字（正文 / 输入框 / 可复制内容） */
+input, textarea, [contenteditable], .selectable, .reader-page, .reader-turn{
+  -webkit-user-select:text;user-select:text;-webkit-touch-callout:default;
+}
+.hidden{display:none !important}button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;
+  -webkit-user-select:none;user-select:none;outline:none}input, textarea, select{font:inherit;color:inherit;outline:none}img{-webkit-user-drag:none;user-drag:none;pointer-events:none}::-webkit-scrollbar{width:0;height:0}/* 所有滚动容器都不许把父级顶着回弹 */
+.shelf-list, .lore-body, .settings-body, .chat-body, .sheet-panel, .modal-panel, .reader-page{overscroll-behavior:contain;-webkit-overflow-scrolling:touch}/* ── 屏幕 ── */
+.screen{
+  position:fixed;inset:0;display:flex;flex-direction:column;
+  background:var(--paper);padding-bottom:calc(var(--tab-h) + var(--safe-b));
+}.screen.full{padding-bottom:0}/* 动画期间：新页面盖住旧页面 */
+.screen.animating{z-index:20}.screen.animating-out{z-index:19;pointer-events:none}/* will-change / translateZ 只在转场那一刻挂上。
+   常驻的话，六个全屏页面各自永远独占一个 GPU 图层（dpr3 下几十兆显存），
+   安卓 WebView 上还容易让文字发虚 —— 那是「一股网页味」的来源之一。 */
+.screen.animating, .screen.animating-out{
+  will-change:transform,opacity;backface-visibility:hidden;transform:translateZ(0);
+}/* ── 顶栏 ── */
+.topbar{
+  /* 第 46 轮：顶栏改成**可换行**的（min-height 而不是 height）——
+     切书那条长条（`.topbar > .bk-bar`，flex-basis:100%）独占第二行，
+     跟标题/按钮同在一片区域里，不另开图层，也就不会有奇怪的穿模。 */
+  display:flex;align-items:center;gap:var(--sp-2);row-gap:2px;flex-wrap:wrap;   /* token-ok: 2px 是顶栏两行之间的缝，收薄用 */
+  min-height:calc(var(--bar-h) + var(--safe-t));
+  padding:var(--safe-t) var(--sp-2) 0;background:var(--paper);flex:0 0 auto;position:relative;z-index:5;
+}/* 标题是绝对居中、不占位的，所以后面的按钮必须自己贴右边。
+   以前不给：书架顶栏的「菜单／刷新」两个图标并排挤在左边，右边整条空着，重心偏左。 */
+.topbar > .topbar-right{margin-left:auto;display:flex;align-items:center;gap:2px}/* 内容滚动时才浮出的分隔 hairline，比常驻边框更像原生 */
+.topbar::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:1px;
+  background:var(--line);opacity:0;transition:opacity .22s var(--ease);
+}.topbar.scrolled::after{opacity:1}.topbar-title{
+  /* 绝对居中：以前用 flex:1 居中，左边有返回键、右边没按钮时文字会整体偏右 */
+  /* ⚠ 第 47 轮踩到的坑（用户报「怎么把字儿给弄下来了……还穿模了」）：
+     顶栏现在是**两行**（第一行 图标+标题，第二行 切书长条 `.topbar > .bk-bar`）。
+     绝对定位**不给 top** 的时候，浏览器按"整条顶栏"的静态落点摆它 ——
+     顶栏一变成两行，标题就跟着掉到第二行，正好压在切书长条和下面的卡片上。
+     实测（logs/r47-topfix-before.json）：标题中心 y=44.6，长条 y=47.7→89.3，重叠 214px²。
+     修法：把落点**钉死在第一行的垂直中心**（safe-t + bar-h/2），跟顶栏几行无关。 */
+  position:absolute;left:50%;
+  top:calc(var(--safe-t) + var(--bar-h) / 2);transform:translate(-50%,-50%);
+  margin:0;font-size:var(--t-lg);font-weight:var(--w-semi);letter-spacing:.02em;
+  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  max-width:calc(100% - 132px);pointer-events:none;
+}/* 第 41 轮：切书入口搬回**内容流里那一行**（用户点名"改回原来的样子"），
+   顶栏里不再挂小方块 → 这条"标题要给方块让位"的规则没人用了，删掉（死代码不许留）。
+   标题回到正常的 max-width:calc(100% - 132px)（只让返回键与右上按钮）。 */.icon-btn{
+  width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
+  color:var(--ink-2);flex:0 0 auto;position:relative;overflow:hidden;
+  transition:background .16s var(--ease),color .16s var(--ease),transform .1s var(--ease);
+}.icon-btn:active{background:var(--accent-soft);color:var(--accent);transform:scale(.88)}.icon-btn.sm{width:38px;height:38px}.icon-btn.sm:active{transform:scale(.86)}.icon-btn svg{width:22px;height:22px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;display:block;pointer-events:none}.icon-btn.sm svg{width:19px;height:19px}/* ── 底部导航（实心，不用毛玻璃：WebView 上毛玻璃会顿，而且一眼看出是网页） ── */
+.tabbar{
+  position:fixed;left:0;right:0;bottom:0;z-index:30;
+  display:flex;height:calc(var(--tab-h) + var(--safe-b));padding-bottom:var(--safe-b);
+  background:var(--card);border-top:1px solid var(--line);
+  box-shadow:0 -1px 10px rgba(58,51,43,.055);
+}.tab{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;
+  gap:2px;padding-top:var(--sp-2);
+  font-size:var(--t-xs);color:var(--ink-3);letter-spacing:.03em;position:relative;
+  transition:color .18s var(--ease);
+}.tab svg{position:relative;z-index:1;width:21px;height:21px;stroke:currentColor;fill:none;
+  stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;
+  transition:stroke-width .18s var(--ease),transform .12s var(--ease);pointer-events:none}/* ── 按压反馈兜底 ──
+   铁律：任何可点的东西按下去必须有反馈。个别组件自己写了更细的，
+   这里做通用保底，避免以后新加的按钮忘了写。 */
+button, .btn, .row, .chip, .pill, .seg button, .quick button, [role="button"]{
+  transition:transform .12s var(--ease), background-color .14s var(--ease),
+             color .14s var(--ease), opacity .14s var(--ease), box-shadow .14s var(--ease);
+  -webkit-tap-highlight-color:transparent;
+}.seg button:active, .quick button:active{transform:scale(.95)}
+@media (prefers-reduced-motion: reduce){button:active, .btn:active, .tab:active, [role="button"]:active{transform:none}
+}/* 底栏 Tab：本体也要有按下去的感觉（原来只缩了图标） */
+.tab:active{transform:scale(.94)}.tab:active svg{transform:scale(.86)}.tab.active{color:var(--accent)}.tab.active svg{stroke-width:2.15}/* 选中态：图标后面一枚药丸底（Material 那种），比小横杠更像原生 */
+.tab.active::before{
+  /* 选中态要包住「图标 + 文字」——
+     原来是一枚 58x30 的小药丸，只罩住图标，文字留在外面，远看像没选中（监督人截图里点出来的）。 */
+  content:'';position:absolute;top:4px;width:64px;height:46px;border-radius:var(--radius);
+  background:var(--accent-soft);animation:tabPill .22s var(--ease);
+}
+@keyframes tabPill{from{transform:scale(.55);opacity:0}to{transform:scale(1);opacity:1}}body[data-tab="reader"] .tabbar{display:none}/* 悬浮新建按钮（原生 App 常见） */
+.fab{
+  position:fixed;right:16px;bottom:calc(var(--tab-h) + var(--safe-b) + 16px);z-index:26;
+  width:54px;height:54px;border-radius:var(--radius);
+  display:grid;place-items:center;
+  background:var(--accent);color:var(--on-accent);
+  box-shadow:0 4px 14px rgba(58,51,43,.26),0 1px 3px rgba(58,51,43,.2);
+  transition:transform .14s var(--ease),box-shadow .18s var(--ease);
+}.fab:active{transform:scale(.9);box-shadow:0 2px 8px rgba(58,51,43,.28)}.fab svg{width:24px;height:24px;stroke:currentColor;fill:none;stroke-width:2.1;
+  stroke-linecap:round;stroke-linejoin:round;pointer-events:none}body[data-tab]:not([data-tab="shelf"]) .fab{display:none}/* ── 按压反馈：波纹只出现在你手指点住的那个元素里 ──
+   以前是给「整行 / 整张卡」挂 :active，点行里一个小按钮，整行都在变色+缩放，
+   看着就像「框了一大块区域在那儿震」。现在统一成一句话：点哪儿，哪儿起一圈。 */
+.ripple{
+  position:absolute;border-radius:50%;pointer-events:none;
+  background:currentColor;
+  transform:translate(-50%,-50%) scale(.2);opacity:.15;
+  animation:rippleGo .52s cubic-bezier(.22,.61,.36,1) forwards;
+}
+@keyframes rippleGo{from{transform:translate(-50%,-50%) scale(.2);opacity:.15}to{transform:translate(-50%,-50%) scale(1);opacity:0}
+}.motion-off .ripple{display:none}
+
+/* 书架卡片入场 */
+@keyframes cardIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:none}}.book-card.enter{animation:cardIn .38s var(--ease) backwards}
+
+/* 通用小入场 */
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* 打字中（三个点） */
+@keyframes dotPulse{0%, 80%, 100%{opacity:.25;transform:translateY(0)}40%{opacity:1;transform:translateY(-3px)}}.typing{display:inline-flex;gap:var(--sp-1);align-items:center;padding:2px 0}.typing i{width:6px;height:6px;border-radius:50%;background:var(--ink-3);animation:dotPulse 1.1s infinite}.typing i:nth-child(2){animation-delay:.16s}.typing i:nth-child(3){animation-delay:.32s}/* 下拉刷新 */
+.ptr{
+  position:absolute;left:0;right:0;top:var(--bar-h);height:56px;display:grid;place-items:center;
+  color:var(--ink-3);pointer-events:none;opacity:0;transition:opacity .18s ease;
+}.ptr.on{opacity:1}.ptr .spinner{width:18px;height:18px}/* 关掉动效 */
+html.motion-off *, html.motion-off *::before, html.motion-off *::after{
+  animation-duration:.001ms !important;animation-iteration-count:1 !important;
+  transition-duration:.001ms !important;scroll-behavior:auto !important;
+}
+/* 系统级「减少动态效果」也跟着走 */
+@media (prefers-reduced-motion:reduce){html.motion-off *, html.motion-off *::before, html.motion-off *::after{animation:none !important}
+}/* ── 抽屉 / 弹窗的进出场（原生 App 的「升起 / 缩现」） ──
+   第 12 轮整理了这段：以前 .sheet / .sheet-panel / .modal / .modal-panel
+   **在同一个文件里各定义了两次**（圆角一个 20px 22px、一个 20px 20px，还左右不对称），
+   靠"谁写在后面谁赢"活着 —— 这种"两套实现并存"就是露白边、圆角不生效的温床。现在只留一处。 */
+.sheet{
+  position:fixed;inset:0;z-index:60;display:flex;align-items:flex-end;
+  background:var(--paper);              /* 弹层背后那层：不透明主题底，杜绝露白 */
+}.sheet-mask{
+  position:absolute;inset:0;background:var(--scrim);
+  opacity:0;transition:opacity var(--dur-3) var(--ease-out);
+}.sheet.sheet-open .sheet-mask{opacity:1}.sheet-panel{
+  position:relative;z-index:1;
+  width:100%;max-width:560px;margin:0 auto;max-height:90vh;overflow-y:auto;
+  -webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  background:var(--card);
+  /* 顶部两角要圆，左右**必须对称**（以前 20px 22px 是歪的）。
+     clip-path 跟 overflow:hidden 二选一：panel 自己就是滚动容器，不能用 overflow:hidden，
+     所以用 clip-path —— 它照样把内部任何内容（含 sticky 的 .sheet-head、带底色的列表行）裁进圆角里。 */
+  border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;
+  -webkit-clip-path:inset(0 round var(--radius-sheet) var(--radius-sheet) 0 0);/* token-ok: 只圆上面两个角 */
+  clip-path:inset(0 round var(--radius-sheet) var(--radius-sheet) 0 0);        /* token-ok: 同上 */
+  isolation:isolate;
+  padding-bottom:var(--safe-b);
+  transform:translateY(101%);
+  transition:transform 260ms var(--ease-out-q);
+  box-shadow:0 -10px 40px rgba(28,20,12,.30);
+  will-change:transform;
+}.sheet.sheet-open .sheet-panel{transform:none}/* 顶部抓握条：暗示「可以往下拽」（只留这一处定义；以前也是两处，粗细都不一样） */
+.sheet-grip{
+  width:40px;height:4px;border-radius:var(--radius-pill);background:var(--ink-3);opacity:.42;
+  margin:var(--sp-2) auto var(--sp-1);flex:0 0 auto;
+}.modal{
+  position:fixed;inset:0;z-index:70;display:grid;place-items:center;padding:var(--sp-5);
+  background:var(--paper);              /* 同上：弹窗背后也必须是主题底 */
+}.modal-mask{position:absolute;inset:0;background:var(--scrim);opacity:0;transition:opacity var(--dur-2) var(--ease-out)}.modal.modal-open .modal-mask{opacity:1}.modal-panel{
+  position:relative;z-index:1;
+  width:100%;max-width:420px;max-height:86vh;overflow:auto;background:var(--card);
+  border-radius:var(--radius);box-shadow:0 12px 40px rgba(30,24,18,.24);padding:var(--sp-5);
+  -webkit-clip-path:inset(0 round var(--radius));
+  clip-path:inset(0 round var(--radius));
+  transform:scale(.92);opacity:0;
+  transition:transform var(--dur-3) var(--ease-spring),opacity 170ms var(--ease-out);
+}.modal.modal-open .modal-panel{transform:none;opacity:1}/* 顶栏占位（让标题保持居中，又不放多余按钮） */
+/* 消息气泡入场用得到（panels.css 的 .msg 引用它），别删 */
+@keyframes fade{from{opacity:0}to{opacity:1}}/* 提示 */
+.toast{
+  position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%);
+  z-index:90;background:#342e26;color:#f6efe4;font-size:var(--t-base);
+  /* 原来写的是 rgba(40,34,27,.94)：**半透明**的底，对比度体检从像素里量不出"底下是什么"，
+     于是 toast 这一屏永远"量不准 = 等于没验过"（夜间体检第 19 轮报的红）。
+     现值就是那层半透明压在纸上的合成色，视觉几乎没变，但它是**不透明**的：
+     既能量，也不再依赖背后是什么。 */
+  padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-pill);max-width:80vw;text-align:center;
+  animation:toastIn .2s var(--ease);
+}
+@keyframes toastIn{from{opacity:0;transform:translate(-50%,8px)}to{opacity:1;transform:translate(-50%,0)}}/* 登录 */
+.login{position:fixed;inset:0;z-index:100;display:grid;place-items:center;background:var(--paper)}.login-card{width:min(86vw,340px);text-align:center;display:flex;flex-direction:column;gap:var(--sp-4)}.login-brand{font-family:var(--serif);font-size:var(--t-mark-3);color:var(--accent);letter-spacing:.1em}.login-sub{font-size:var(--t-md);color:var(--ink-3);letter-spacing:.24em;margin-bottom:var(--sp-3)}.login-msg{min-height:20px;font-size:var(--t-md);color:var(--danger)}/* 启动页：盖住网页加载那一瞬间，别让用户看见白屏 */
+#splash{
+  position:fixed;inset:0;z-index:200;background:var(--paper);
+  display:grid;place-items:center;transition:opacity .38s var(--ease);
+}#splash.gone{opacity:0;pointer-events:none}.splash-inner{display:flex;flex-direction:column;align-items:center;gap:var(--sp-4)}.splash-mark{font-family:var(--serif);font-size:var(--t-mark-4);color:var(--accent);letter-spacing:.08em;
+  animation:splashIn .5s var(--ease)}.splash-sub{font-size:var(--t-sm);color:var(--ink-3);letter-spacing:.34em}.splash-bar{
+  width:96px;height:2px;border-radius:2px;background:var(--line);overflow:hidden;margin-top:var(--sp-2);   /* token-ok: 2px 细线，圆角=高度一半 */
+}.splash-bar i{display:block;width:40%;height:100%;background:var(--accent);border-radius:2px;   /* token-ok: 同上，跟着 2px 的轨道 */
+  animation:splashSlide 1.1s var(--ease) infinite}
+@keyframes splashIn{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+@keyframes splashSlide{0%{transform:translateX(-100%)}100%{transform:translateX(250%)}}

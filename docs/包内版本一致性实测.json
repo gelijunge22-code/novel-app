@@ -1,0 +1,249 @@
+{
+ "at": "2026-09-20 04:47:52",
+ "total": 48,
+ "passed": 46,
+ "failed": 2,
+ "note": "本机验证不了 aiohttp/multidict/yarl/frozenlist（Android 原生轮子，x86_64 Linux 装不了）；它们只影响听书链路，脚本已验证三种 ABI 的轮子齐全且打进了 APK",
+ "items": [
+  {
+   "name": "轮子 aiohttp · arm64_v8a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 aiohttp · armeabi_v7a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 aiohttp · x86_64",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 multidict · arm64_v8a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 multidict · armeabi_v7a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 multidict · x86_64",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 yarl · arm64_v8a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 yarl · armeabi_v7a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 yarl · x86_64",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 frozenlist · arm64_v8a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 frozenlist · armeabi_v7a",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "轮子 frozenlist · x86_64",
+   "ok": true,
+   "why": "缺这个 ABI 的轮子（32 位手机会缺功能）"
+  },
+  {
+   "name": "纯 Python 轮子（任何 ABI 都能用）",
+   "ok": true,
+   "why": "一个 py3-none-any 都没有？"
+  },
+  {
+   "name": "按 APK 的版本清单装得上（--no-index，只用 apk/libs）",
+   "ok": true,
+   "why": ""
+  },
+  {
+   "name": "装出来的版本对得上：fastapi==0.115.6",
+   "ok": true,
+   "why": "实际 0.115.6"
+  },
+  {
+   "name": "装出来的版本对得上：starlette==0.41.3",
+   "ok": true,
+   "why": "实际 0.41.3"
+  },
+  {
+   "name": "装出来的版本对得上：uvicorn==0.32.1",
+   "ok": true,
+   "why": "实际 0.32.1"
+  },
+  {
+   "name": "装出来的版本对得上：httpx==0.28.1",
+   "ok": true,
+   "why": "实际 0.28.1"
+  },
+  {
+   "name": "装出来的版本对得上：httpcore==1.0.7",
+   "ok": true,
+   "why": "实际 1.0.7"
+  },
+  {
+   "name": "装出来的版本对得上：h11==0.14.0",
+   "ok": true,
+   "why": "实际 0.14.0"
+  },
+  {
+   "name": "装出来的版本对得上：anyio==4.7.0",
+   "ok": true,
+   "why": "实际 4.7.0"
+  },
+  {
+   "name": "装出来的版本对得上：sniffio==1.3.1",
+   "ok": true,
+   "why": "实际 1.3.1"
+  },
+  {
+   "name": "装出来的版本对得上：idna==3.10",
+   "ok": true,
+   "why": "实际 3.10"
+  },
+  {
+   "name": "装出来的版本对得上：certifi==2024.8.30",
+   "ok": true,
+   "why": "实际 2024.8.30"
+  },
+  {
+   "name": "装出来的版本对得上：click==8.1.7",
+   "ok": true,
+   "why": "实际 8.1.7"
+  },
+  {
+   "name": "装出来的版本对得上：typing_extensions==4.12.2",
+   "ok": true,
+   "why": "实际 4.12.2"
+  },
+  {
+   "name": "装出来的版本对得上：python-multipart==0.0.20",
+   "ok": true,
+   "why": "实际 0.0.20"
+  },
+  {
+   "name": "装出来的版本对得上：tabulate==0.9.0",
+   "ok": true,
+   "why": "实际 0.9.0"
+  },
+  {
+   "name": "装出来的版本对得上：attrs==24.2.0",
+   "ok": true,
+   "why": "实际 24.2.0"
+  },
+  {
+   "name": "装出来的版本对得上：aiosignal==1.3.1",
+   "ok": true,
+   "why": "实际 1.3.1"
+  },
+  {
+   "name": "装出来的版本对得上：async-timeout==4.0.3",
+   "ok": true,
+   "why": "实际 4.0.3"
+  },
+  {
+   "name": "装出来的版本对得上：pydantic==1.10.18",
+   "ok": true,
+   "why": "实际 1.10.18"
+  },
+  {
+   "name": "pydantic 是 1.x（Android 上跑不了 2.x 的编译内核）",
+   "ok": true,
+   "why": "1.10.18"
+  },
+  {
+   "name": "后端在这套版本下起得来",
+   "ok": true,
+   "why": "python 3.11.15 port 52301"
+  },
+  {
+   "name": "health",
+   "ok": true,
+   "why": "200"
+  },
+  {
+   "name": "本地口令登录（App 里那一步握手）",
+   "ok": true,
+   "why": "{'ok': True, 'local': True, 'user': {'username': 'admin', 'role': 'admin'}}"
+  },
+  {
+   "name": "建书",
+   "ok": true,
+   "why": "{'ok': True, 'slug': '包内版本一致性', 'title': '包内版本一致性', 'projectRoot': '包内版本一致性'}"
+  },
+  {
+   "name": "导入一章",
+   "ok": true,
+   "why": "{'ok': True, 'path': 'manuscript/001-第001章-测.md', 'words': 104}"
+  },
+  {
+   "name": "读回书目",
+   "ok": true,
+   "why": "{'slug': '包内版本一致性', 'title': '包内版本一致性', 'chapters': [{'path': 'manuscript/第001章-未命名.md', 'name': '第001章-未命名', 'words': 0"
+  },
+  {
+   "name": "质检报告（本地跑规则，不联网）",
+   "ok": true,
+   "why": "{'items': [], 'latest': None, 'book': {'slug': '包内版本一致性', 'chapters': [{'path': 'manuscript/001-第001章-测.md', 'name': '00"
+  },
+  {
+   "name": "规则表读得到（≥300 条）",
+   "ok": true,
+   "why": "568"
+  },
+  {
+   "name": "统计",
+   "ok": true,
+   "why": "{'slug': '包内版本一致性', 'title': '包内版本一致性', 'totalWords': 104, 'chapters': 2, 'avgPerChapter': 52, 'todayWords': 0, 'daysWri"
+  },
+  {
+   "name": "世界引擎",
+   "ok": true,
+   "why": "{'slug': '包内版本一致性', 'kinds': ['character', 'place', 'faction', 'item', 'system', 'concept', 'creature'], 'counts': {'mom"
+  },
+  {
+   "name": "导出 Markdown",
+   "ok": true,
+   "why": "{'_text': 'PK\\x03\\x04\\x14\\x00\\x00\\x08\\x08\\x00%4]D]\\x19\\x00\\x00\\x00\\x16\\x00\\x00\\x"
+  },
+  {
+   "name": "版本接口",
+   "ok": true,
+   "why": "{'versionLabel': '小说 App 自研后端 1.0.0', 'versionKind': 'release', 'githubUrl': ''}"
+  },
+  {
+   "name": "APK 里有 lib/arm64_v8a/（0 个 .so）",
+   "ok": false,
+   "why": "这个 ABI 没打进去"
+  },
+  {
+   "name": "APK 里有 lib/armeabi_v7a/（0 个 .so）",
+   "ok": false,
+   "why": "这个 ABI 没打进去"
+  },
+  {
+   "name": "APK 里有 lib/x86_64/（8 个 .so）",
+   "ok": true,
+   "why": "这个 ABI 没打进去"
+  }
+ ]
+}

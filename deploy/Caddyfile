@@ -1,0 +1,34 @@
+# 小说 App · 部署用的 Caddy 片段（这份是仓库里的"真源"，/etc/caddy/Caddyfile 里是同一份）
+#
+# /nbapp/*  —— 老的「手机写作台」反代（8890）。**不许动**，用户在用。
+# /novel/*  —— 2026-09-20 新加的：反代到自研后端（novel-app，127.0.0.1:8899）。
+#              App 的默认服务器地址就是 http://<本机公网IP>/novel/。
+#              为什么加它：手机里跑 Python（Chaquopy）在无真机条件下没法验证闭环，
+#              改成服务器后端后才"立刻可用"；App 仍然把前端整包内嵌（打开不是网页）。
+#
+# 改完记得：sudo systemctl reload caddy
+:80 {
+	# 小说 App 自研后端（novel-app）：前端 + 245 个接口 + 引擎全在这一份里
+	handle_path /novel/* {
+		reverse_proxy 127.0.0.1:8899 {
+			# SSE（AI 流式输出 / 多 Agent 进度）不能被缓冲，否则前端收不到增量
+			flush_interval -1
+			transport http {
+				read_timeout 600s
+				write_timeout 600s
+			}
+		}
+	}
+	redir /novel /novel/ 302
+
+	# 手机写作台（反代到本机 8890）—— 老服务，别动
+	handle_path /nbapp/* {
+		reverse_proxy 127.0.0.1:8890 {
+			flush_interval -1
+		}
+	}
+	redir /nbapp /nbapp/ 302
+
+	root * /usr/share/caddy
+	file_server
+}

@@ -1,0 +1,54 @@
+{
+ "at": "2026-09-21 09:44:46",
+ "force": null,
+ "before": {
+  "tabbarH": 50,
+  "tabFont": 11,
+  "tabPadTop": 8,
+  "rdFbH": 48,
+  "rdFbFont": 11,
+  "tBase": 15,
+  "settingsH3": 13,
+  "toolGap": 12,
+  "hostBand": 42
+ },
+ "after": {
+  "tabbarH": 50,
+  "tabFont": "11px",
+  "tabPadTop": "8px",
+  "tBase": "13.8px",
+  "settingsH3": "11.96px",
+  "toolGap": null,
+  "rdFbH": 48,
+  "rdFbFont": "11px",
+  "rdQuickH3": null,
+  "hosts": [
+   {
+    "sel": "#shelf-book",
+    "h": 0
+   },
+   {
+    "sel": "#preset-book",
+    "h": 0
+   },
+   {
+    "sel": "#lore-book",
+    "h": 0
+   },
+   {
+    "sel": "#tools-book",
+    "h": 0
+   }
+  ],
+  "topbars": [
+   {
+    "id": "screen-settings",
+    "h": 89
+   }
+  ],
+  "rdFootH": 116,
+  "tmd": 11.96,
+  "sp3": 11.04
+ },
+ "bad": []
+}

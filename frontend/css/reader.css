@@ -1,0 +1,386 @@
+/* ============================================================
+   reader.css — 书架卡片 + 阅读器（纸质感 / 仿真翻页 / 抽屉 / 编辑）
+   只负责 #screen-shelf 与 #screen-reader 相关样式。
+   ============================================================ */
+
+/* ══════════════════════ 二、阅读器外壳 ══════════════════════ */
+#screen-reader{padding-bottom:0;background:var(--paper);overflow:hidden}.reader-head{
+  display:flex;align-items:center;gap:var(--sp-1);flex:0 0 auto;
+  height:calc(50px + var(--safe-t));padding:var(--safe-t) var(--sp-2) 0;
+  background:var(--paper);position:relative;z-index:6;
+  transition:opacity .22s ease;
+}.reader-head-title{
+  flex:1;min-width:0;font-size:var(--t-base);font-weight:var(--w-medium);color:var(--ink-2);
+  text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  letter-spacing:.02em;
+}.reader-head-title .cn{color:var(--ink-3);font-size:var(--t-sm);margin-right:var(--sp-2);font-variant-numeric:tabular-nums}.reader-stage{
+  position:relative;flex:1 1 auto;min-height:0;overflow:hidden;background:var(--paper);
+}#reader-page{
+  position:absolute;inset:0;overflow:hidden;background:var(--paper);z-index:0;
+}/* 纸张质感：极淡的大块明暗，不要规则条纹（规则条纹一眼就是 CSS 平铺） */
+#reader-page::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:3;
+  background:
+    radial-gradient(130% 90% at 8% 4%,rgba(120,96,60,.030),rgba(0,0,0,0) 62%),
+    radial-gradient(120% 80% at 96% 98%,rgba(120,96,60,.036),rgba(0,0,0,0) 58%);
+}html[data-theme="night"] #reader-page::after{mix-blend-mode:screen;opacity:.5}.reader-strip{
+  position:relative;width:100%;height:100%;
+  will-change:transform;transform:translate3d(0,0,0);
+}.reader-cols{
+  width:100%;height:100%;
+  font-size:var(--fs);line-height:var(--lh);
+  color:var(--ink);text-align:justify;text-justify:inter-ideograph;
+  word-wrap:break-word;overflow-wrap:break-word;
+  -webkit-column-fill:auto;column-fill:auto;
+}.reader-root-sans .reader-cols, .reader-root-sans .reader-head-title{font-family:var(--ui-font)}.reader-root-serif .reader-cols{font-family:var(--serif)}/* 正文排版：段落之间不留空行、无 Markdown 符号、首行缩进 2em */
+.reader-cols p{
+  margin:0 0 var(--para-gap);text-indent:2em;
+  text-align:justify;text-justify:inter-ideograph;
+}.reader-cols p.rd-quote{
+  text-indent:0;padding-left:1em;color:var(--ink-2);
+  border-left:2px solid var(--line);
+}.reader-cols .rd-h{
+  text-indent:0;text-align:center;font-weight:var(--w-semi);font-size:1.06em;
+  margin:.35em 0 calc(var(--para-gap) * 1.15);letter-spacing:.04em;
+}.reader-cols h1.rd-h{font-size:1.2em}.reader-cols .rd-hr{
+  border:0;height:1.15em;margin:0 0 var(--para-gap);
+  background:radial-gradient(circle at 50% 50%,var(--ink-3) 0 1.6px,transparent 1.7px) no-repeat center/7px 7px;
+  opacity:.45;
+}.reader-cols strong{font-weight:var(--w-semi)}.reader-cols em{font-style:normal;opacity:.92}.reader-foot{
+  display:flex;flex-direction:column;gap:var(--sp-1);flex:0 0 auto;
+  padding:var(--sp-2) var(--sp-3) calc(var(--sp-2) + max(var(--safe-b),var(--sp-2)));
+  background:var(--paper);position:relative;z-index:6;
+  transition:opacity .22s ease;
+}/* 上一行：进度。左右两端是「上一章 / 下一章」—— 用户要的"一定会用到的直接露出来" */
+.rd-foot-prog{display:flex;align-items:center;gap:var(--sp-2)}.rd-nav{
+  flex:0 0 auto;min-width:64px;height:40px;padding:0 var(--sp-3);
+  border-radius:var(--radius-sm);background:var(--paper-2);color:var(--ink-2);
+  font-size:var(--t-md);font-family:inherit;
+  transition:transform .1s var(--ease),background .16s var(--ease),color .16s var(--ease);
+}.rd-nav:active{transform:scale(.94);background:var(--accent-soft);color:var(--accent)}/* 下一行：常用的七个，一律 48 高（手指点得中） */
+.rd-foot-acts{display:flex;align-items:stretch;gap:var(--sp-1)}.rd-fb{
+  flex:1;min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;
+  height:48px;border-radius:var(--radius-sm);position:relative;
+  font-size:var(--t-xs);color:var(--ink-2);letter-spacing:.02em;
+  transition:background .15s ease,color .15s ease,transform .1s var(--ease);
+}.rd-fb:active{background:var(--accent-soft);transform:scale(.94)}.rd-fb svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;pointer-events:none}.rd-fb span{pointer-events:none;white-space:nowrap}/* 听书开着 / 正在准备：底色块 + 加粗描边 + 呼吸小点，一眼看得出到底开没开 */
+.rd-fb.tts-on{color:var(--accent);background:var(--accent-soft);font-weight:var(--w-medium)}.rd-fb.tts-on svg{stroke-width:2.2}.rd-fb.tts-on::after{
+  content:'';position:absolute;top:3px;right:9px;width:5px;height:5px;border-radius:50%;
+  background:var(--accent);animation:ttsDot 1.4s ease-in-out infinite;
+}
+@keyframes ttsDot{0%, 100%{opacity:.25;transform:scale(.75)}50%{opacity:1;transform:scale(1.2)}}/* 正在准备第一段音频：转一圈告诉用户「在动了」，别让它像点坏了一样 */
+.rd-fb.tts-busy{color:var(--accent);opacity:.8}.rd-fb.tts-busy svg{animation:spin 1.1s linear infinite}.icon-btn.tts-on{color:var(--accent);background:var(--accent-soft)}/* 进度条：横在「上一章 / 下一章」中间 */
+.scrub{
+  -webkit-appearance:none;appearance:none;flex:1;min-width:0;height:30px;background:transparent;
+}.scrub::-webkit-slider-runnable-track{height:6px;border-radius:var(--radius-pill);background:var(--accent-soft)}.scrub::-webkit-slider-thumb{
+  -webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:var(--accent);
+  margin-top:calc(-1 * var(--sp-2));box-shadow:0 1px 4px rgba(0,0,0,.22);
+}.scrub::-moz-range-track{height:6px;border-radius:var(--radius-pill);background:var(--accent-soft)}.scrub::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:var(--accent)}.reader-bar-val{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums;
+  min-width:38px;text-align:right;flex:0 0 auto}/* 沉浸态：顶栏/底栏**真正让出空间**，不是只变透明。
+   只把 opacity 归零的话它们还占着流里的高度，正文就只占中间那一截，
+   上下各留一条空带（用户原话：「上下的就变成白的了，很丑」）。
+   所以这里连高度/内边距一起收掉；reader.js 的 showChrome/hideChrome 会跟着重排一次，
+   让正文按新的可用高度重新分页、铺满整屏（分页模式页高按当前可见高度重算）。 */
+#screen-reader.chrome-off .reader-head, #screen-reader.chrome-off .reader-foot{
+  opacity:0;pointer-events:none;
+  height:0;padding-top:0;padding-bottom:0;overflow:hidden;
+}
+/* 沉浸态：**正文自己让开刘海与 home 条**。
+   只把顶栏/底栏收成 0 的话，正文会顶到屏幕最上沿 —— 无刘海机器上看不出来
+   （--safe-t/--safe-b 就是 0），刘海机器上第一行字正好压在摄像头那一条里
+   （正跑 tools/e2e-safearea.js 时抓到的：p 的 top=22 < 安全区 47）。
+   顶上/底下露出来的是 #screen-reader 自己的纸色底（不是白带），
+   所以**不会**回到用户第 24 轮点名的"上下一条白带"。
+   ❌ 走过一次弯路：把顶栏收成"刘海那一条"（height:var(--safe-t)）——
+   顶栏里那些透明但仍在盒子里的按钮/标题就被判成"伸进刘海"，判据依旧报红。 */
+#screen-reader.chrome-off #reader-page{top:var(--safe-t);bottom:max(var(--safe-b),var(--sp-2))}
+/* ══════════════════════ 三、翻页动画 ══════════════════════ */
+.reader-turn{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  perspective:1700px;perspective-origin:50% 46%;
+}/* ── 骨架屏（书架首屏用，替掉转圈） ── */
+.skel-card{
+  display:flex;gap:var(--sp-4);align-items:center;
+  background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  padding:var(--sp-4);margin-bottom:var(--sp-3);
+  box-shadow:var(--shadow);animation:skelIn .3s var(--ease) backwards;
+}.skel-cover{width:58px;height:80px;border-radius:var(--radius-xs);flex:0 0 auto}.skel-lines{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-2)}.skel-lines i{display:block;height:11px;border-radius:var(--radius-xs)}.skel-lines i.w70{width:70%}.skel-lines i.w45{width:45%}.skel-lines i.w90{width:90%}.skel-cover, .skel-lines i{
+  background:linear-gradient(90deg,var(--paper-2) 0%,rgba(255,255,255,.55) 50%,var(--paper-2) 100%);
+  background-size:220% 100%;
+  animation:shimmer 1.35s linear infinite;
+}
+@keyframes shimmer{from{background-position:120% 0}to{background-position:-120% 0}}
+@keyframes skelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}/* ── 削页式仿真翻页 ──
+   .peel 盖在上面（印着当前页），用 clip-path 从右往左被削掉；底下是真正的下一页。
+   折痕的光影抄 StPageFlip 的软页做法：两段式渐变 + 跟着折痕走 + 被同一个多边形裁切。
+   内阴影：暗→亮→暗 三段，制造「纸面弯起来」的错觉；外阴影：折痕往右投的柔和暗带。 */
+.peel{
+  position:absolute;inset:0;z-index:3;background:var(--paper);
+  will-change:clip-path;-webkit-clip-path:polygon(0 0,100% 0,100% 100%,0 100%);
+}.peel > *{position:absolute;inset:0}/* 被削走那页：越靠近折痕越暗（纸在弯） */
+.peel::after{
+  content:'';position:absolute;inset:0;pointer-events:none;z-index:5;
+  background:linear-gradient(90deg,
+     rgba(28,20,12,0) 0%,
+     rgba(28,20,12,0) calc(100% - 110px),
+     rgba(28,20,12,.07) calc(100% - 70px),
+     rgba(28,20,12,.22) calc(100% - 30px),
+     rgba(28,20,12,.46) 100%);
+  opacity:var(--edge,0);
+}/* inner：折痕左侧，暗→亮→暗，像纸卷起来的受光 */
+.peel-inner{
+  position:absolute;top:0;bottom:0;left:0;width:0;z-index:4;pointer-events:none;opacity:0;
+  background:linear-gradient(to left,
+     rgba(28,20,12,.46)   0%,
+     rgba(28,20,12,.28)   2.5%,
+     rgba(28,20,12,.085)  9%,
+     rgba(28,20,12,.005) 21%,
+     rgba(28,20,12,.035) 35%,
+     rgba(28,20,12,0)    100%);
+}/* outer：折痕往右的投影 + 一道纸边高光 */
+.peel-outer{
+  position:absolute;top:0;bottom:0;left:0;width:140px;z-index:4;pointer-events:none;opacity:0;
+  background:linear-gradient(to right,
+     rgba(28,20,12,.58)   0%,
+     rgba(255,255,255,.66) 1.6%,
+     rgba(255,255,255,.26) 5%,
+     rgba(28,20,12,.16)  12%,
+     rgba(28,20,12,.05)  42%,
+     rgba(28,20,12,0)   100%);
+}.flip{
+  position:absolute;inset:0;transform-style:preserve-3d;-webkit-transform-style:preserve-3d;
+  transform-origin:left center;will-change:transform;backface-visibility:visible;
+}
+.flip-face{
+  position:absolute;inset:0;overflow:hidden;background:var(--paper);
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+}.flip-face > *{position:absolute;inset:0}
+
+#screen-reader.turning .reader-head, #screen-reader.turning .reader-foot{opacity:0}/* ══════════════════════ 四、底部面板里的目录 / 书签 / 笔记 ══════════════════════ */
+.rd-toc-group{
+  padding:var(--sp-3) var(--sp-5) var(--sp-1);font-size:var(--t-sm);color:var(--ink-3);letter-spacing:.08em;
+}.rd-toc-item{
+  display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-5);
+  border-bottom:1px solid var(--line);
+}.rd-toc-item .nm{
+  flex:1;min-width:0;font-size:var(--t-base);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}.rd-toc-item .wd{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums}.rd-toc-item.cur{background:var(--accent-soft)}.rd-toc-item.cur .nm{color:var(--accent);font-weight:var(--w-semi)}.rd-toc-empty{padding:var(--sp-8) var(--sp-5);text-align:center;color:var(--ink-3);font-size:var(--t-md);line-height:1.9}.rd-toc-mark{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) var(--sp-4) var(--sp-2) var(--sp-5);border-bottom:1px solid var(--line)}.rd-toc-mark .tx{flex:1;min-width:0;font-size:var(--t-md);color:var(--ink-2);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rd-toc-mark .pc{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums}.rd-toc-mark .del{width:34px;height:34px;display:grid;place-items:center;color:var(--ink-3)}.rd-toc-mark .del svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}/* 面板里的控件**直接吃全站那套**（.settings-group / .settings-row / .seg / .stepper 都在
+   base.css，圆角与间距节距也由那边统一）—— 这里只给一个容器，不再自己写一份 padding/字号。
+   用户原话："点开设置之后，UI 界面要统一要好看"：
+   以前 .rd-set 自带 h3 letter-spacing、settings-row 自带 flex-wrap，看着就跟别处不像。 */
+.rd-hint{padding:var(--sp-2) var(--sp-5) 0;font-size:var(--t-sm);color:var(--ink-3);line-height:1.7}.rd-act{
+  flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-1);height:56px;
+  padding:var(--sp-2) var(--sp-1);border-radius:var(--radius);background:var(--paper-2);font-size:var(--t-sm);color:var(--ink-2);
+  transition:transform .1s var(--ease),background .16s var(--ease);
+}.rd-act:active{background:var(--accent-soft)}.rd-act svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round}.rd-act.on{background:var(--accent);color:var(--on-accent)}/* ══════════════════════ 五、编辑本章 ══════════════════════ */
+.rd-editor{display:flex;flex-direction:column;height:100%}.rd-editor .row-title2{font-size:var(--t-lg);font-weight:var(--w-semi);flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rd-editor-head{display:flex;align-items:center;gap:var(--sp-2);padding:0 2px var(--sp-3)}.rd-editor textarea{
+  width:100%;height:min(58vh,460px);min-height:200px;resize:none;
+  font-family:var(--serif);font-size:var(--t-base);line-height:1.85;
+  padding:var(--sp-3);border-radius:var(--radius-sm);border:1px solid var(--line);
+  background:var(--paper);color:var(--ink);outline:none;
+  -webkit-overflow-scrolling:touch;
+}.rd-editor textarea:focus{border-color:var(--accent)}.rd-editor-foot{display:flex;gap:var(--sp-3);align-items:center;padding-top:var(--sp-3)}.rd-editor-info{flex:1;font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums}/* ══════════════════════ 六、滚动模式 ══════════════════════ */
+#screen-reader.mode-scroll #reader-page{overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch}#screen-reader.mode-scroll .reader-strip{width:100%;height:auto;min-height:100%;transform:none !important}#screen-reader.mode-scroll .reader-cols{width:100%;height:auto;column-width:auto !important;
+  column-count:auto !important}#screen-reader.mode-scroll .reader-cols{padding-bottom:var(--sp-6)}
+
+/* 窄屏兜底 */
+/* ───────────────阅读器底部面板：#rd-quick（第 40 轮 · 几乎霸占整屏 + 整块一起滚）───────────────
+   用户原话（第 40 轮，一字不改）：
+     「现在点开书里的设置是长这样的，说不上来的丑，因为它**上面那一块就是可以点的那些什么排版啊、背景啊
+       之类的是固定在那里的**，**你想划的话，只能划他们下面的那些什么正文字体这里才能划**，
+       **上面这是不能滑的**，所以就导致你**看东西划东西的时候很难受**，
+       **还不如改成原来的那种——就是点开设置会几乎霸占整个屏幕**，然后**不会那么拥挤**，
+       **看不了正文也行**，就这样吧。」
+   所以这一轮改了**三条**（每一条都有能报红的判据，见 tools/e2e-readerquick.js）：
+     ① **高度 ≥85% 屏高**（现在 `height:92%`）——不再是"下面一小条"，空间放开就不挤了；
+     ② **一个滚动容器装全部内容**：抓手条 + 7 格 + 内容**全在 `.rd-quick-scroll` 里一起滚**，
+        没有"上固定下滚动"两层。只有**.rd-quick-bar 吸顶**（它是"关掉它"那条：下拉 + 右上角 ×，
+        滚下去也得找得到；全站其它弹层同样是吸顶头，比如 #rd-toc 的 .rd-toc-head）；
+     ③ **7 格改成 3 列等宽网格 + 每格带图标**（以前是 flex 折行：第一列略宽、最后一个「分享」被
+        flex-grow 撑成整行、还只有大字没有图标 —— "空、信息层级弱"）。
+   前几轮定下的红线**一条都没退**（判据照样量）：
+     · 外观 = 旧版（`af9c0f1`）：没有「阅读设置」标题、没有底部「完成」大白按钮、7 格；
+     · 里面**不写第二套视觉**：卡片/分段/步进器还是 components.css 的
+       `.settings-group / .settings-row / .seg / .stepper`；`.rd-qbtn` 只吃 `.seg button` 那一条共用规则，
+       这里**只负责"怎么摆"**；
+     · 底用 `--paper`（不是 `--card`），面板里的卡片才跟设置页长得一样；
+     · 「目录」那一格点下去开的是**独立**的 #rd-toc，不是面板里的内容。 */
+.rd-quick{
+  position:absolute;left:0;right:0;bottom:0;z-index:var(--z-panel);
+  height:92%;                           /* 几乎霸占整屏（≥85% 才达标，e2e-readerquick 会量） */
+  display:flex;flex-direction:column;min-height:0;
+  background:var(--paper);
+  border-top:var(--hair) solid var(--line);
+  border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;
+  box-shadow:var(--elev-3);
+  transform:translateY(101%);
+  transition:transform var(--dur-3) var(--ease),opacity var(--dur-2) var(--ease);
+  overflow:hidden;                      /* 圆角真的裁出来，内部任何东西盖不住 */
+}
+.rd-quick.on{transform:translateY(0)}
+.rd-quick.hidden{display:none}
+
+/* **唯一的那一个滚动容器**：抓手条 + 页签网格 + 内容全在里面，一起滚。
+   左右内边距也放在这一层 —— 页签网格和下面的卡片因此共用同一条左/右基准线（判据量误差 0）。 */
+.rd-quick-scroll{
+  flex:1 1 auto;min-height:0;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:0 var(--sp-4) calc(var(--sp-4) + var(--safe-b));
+}
+
+/* 抓手那一条（吸顶）：中间一根抓手（拖它往下 = 收起），右边一个关闭键（44×44，够大够好点）。
+   **没有标题**（旧版就是这样）。`touch-action:none`：这条上的手指由"下拉收起"自己处理，
+   别让滚动容器把事件抢走（不然往下拖就变成"把内容滚回去"了）。 */
+.rd-quick-bar{
+  position:sticky;top:0;z-index:var(--z-sticky);
+  display:flex;align-items:center;padding:var(--sp-1) 0;
+  background:var(--paper);                 /* 吸顶要有底色，不然内容会从它下面透出来 */
+  touch-action:none;
+}
+.rd-quick-grab{
+  position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);
+  width:36px;height:4px;border-radius:var(--radius-pill);background:var(--line);
+}
+.rd-quick-bar .icon-btn{margin-left:auto}
+
+/* 7 格：**3 列等宽网格**（`minmax(0,1fr)` = 每一列像素级一样宽，判据量误差 0）。
+   每一格 = 图标 + 两个字；「分享」跟别的格子**同一套尺寸**（以前它被撑成整行，一个字孤零零居中）。 */
+.rd-quick-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--sp-2);padding:0 0 var(--sp-3)}
+.rd-qbtn{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-1);
+  min-height:var(--hit);padding:var(--sp-2) var(--sp-1);
+}
+.rd-qbtn svg{width:20px;height:20px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;pointer-events:none}
+.rd-qbtn span{pointer-events:none;white-space:nowrap}
+
+/* 内容体：**自己不再滚**（滚动交给上面那一个容器），左右内边距也不写在这儿
+   —— 两处都写就是双份内边距，页签网格跟卡片就对不齐了。 */
+.rd-quick-body{padding:0;background:var(--paper)}
+/* 听书那页的动作按钮（开始朗读 / 记一笔 / 加书签 / 听书自检） */
+.rd-quick-acts{display:flex;gap:var(--sp-2);padding:var(--sp-2) 0 0}
+.rd-quick-acts .rd-act{flex:1;background:var(--card);border-radius:var(--radius);padding:var(--sp-3) var(--sp-1)}
+.rd-quick-acts .rd-act.on{background:var(--accent);color:var(--on-accent)}
+
+/* ─────────────── 目录：#rd-toc（第 2 屏 · 独立成块）───────────────
+   用户原话：「点开目录之后，只是相当于在设置里面点开了目录一样，并没有那种简洁的感觉，
+             而且很乱，最主要的是那个地方还有点挡着的感觉」。
+   所以：它**不是**设置面板里的一个页签 —— 是一块从底下升起的高面板（占 72% 屏高，
+   上面留出正文当背景），结构同样是三段式：固定头（书名 + 共几章 + 关闭）/ 独立滚动体 /
+   固定底（回到当前章 · 新建一章）。一行一章，**只有章号 + 章名**，当前章高亮。 */
+.rd-toc{position:absolute;inset:0;z-index:var(--z-sheet);display:flex;flex-direction:column;justify-content:flex-end}
+.rd-toc.hidden{display:none}
+/* 蒙层：用户第 19 轮看到过"面板外还露着正文残字，干扰"——这里铺到满屏，压住正文 */
+.rd-toc-scrim{
+  position:absolute;inset:0;background:var(--scrim);
+  opacity:0;transition:opacity var(--dur-3) var(--ease);
+}
+.rd-toc.on .rd-toc-scrim{opacity:1}
+.rd-toc-panel{
+  position:relative;display:flex;flex-direction:column;min-height:0;
+  max-height:72%;height:72%;
+  background:var(--paper);
+  border-radius:var(--radius-sheet) var(--radius-sheet) 0 0;
+  box-shadow:var(--elev-3);
+  padding-bottom:var(--safe-b);
+  transform:translateY(101%);opacity:.6;
+  transition:transform var(--dur-3) var(--ease-out-q),opacity var(--dur-2) var(--ease);
+}
+.rd-toc.on .rd-toc-panel{transform:translateY(0);opacity:1}
+/* 固定头：书名（左）+ 关闭（右）；「共 58 章」是信息不是说明文，放标题右边一行 */
+.rd-toc-head{
+  flex:0 0 auto;display:flex;align-items:center;gap:var(--sp-3);
+  padding:var(--sp-4) var(--sp-4) var(--sp-3);
+  border-bottom:var(--hair) solid var(--line);
+}
+.rd-toc-headmain{flex:1;min-width:0;display:flex;align-items:baseline;gap:var(--sp-2)}
+.rd-toc-title{margin:0;font-size:var(--t-lg);font-weight:var(--w-semi);color:var(--ink);letter-spacing:normal}
+.rd-toc-sub{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* 独立滚动体：一行一章，行高 52（手指点得中），只在文字上留白，问题头留一行 padding */
+.rd-toc-body{flex:1 1 auto;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;padding:var(--sp-2) 0 var(--sp-4)}
+.rd-toc-item{
+  display:flex;align-items:center;gap:var(--sp-3);
+  width:100%;min-height:52px;padding:var(--sp-2) var(--sp-4);      /* token-ok: 52px 是列表行高不是间距 */
+  border:0;background:transparent;color:var(--ink);
+  font-family:inherit;font-size:var(--t-base);text-align:left;line-height:1.5;
+  transition:background .16s var(--ease);
+}
+.rd-toc-item:active{background:var(--paper-2)}
+.rd-toc-item .no{
+  flex:0 0 auto;min-width:34px;font-size:var(--t-sm);color:var(--ink-3);   /* token-ok: 34px = 三位章号宽度 */
+  font-variant-numeric:tabular-nums;text-align:right;
+}
+.rd-toc-item .nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.rd-toc-item.cur{background:var(--accent-soft)}
+.rd-toc-item.cur .no{color:var(--accent)}
+.rd-toc-item.cur .nm{color:var(--accent);font-weight:var(--w-semi)}
+/* 固定底：两个动作并排（回到当前章 / 新建一章）—— 固定区，滚列表时不动 */
+.rd-toc-foot{flex:0 0 auto;display:flex;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);
+  border-top:var(--hair) solid var(--line)}
+/* ══════════ 新功能 ③ 小批注 / ④ 点一下看设定（第 19 轮）══════════ */
+/* 批注：面板里的分段小标题 + "加一条"按钮 */
+.rd-qsec{
+  margin:var(--sp-3) 0 var(--sp-2);padding:0 var(--sp-1);font-size:var(--t-sm);color:var(--ink-3);letter-spacing:.06em;
+}.rd-addm{
+  display:flex;align-items:center;justify-content:center;gap:var(--sp-2);width:100%;
+  padding:var(--sp-3);border-radius:var(--radius-sm);border:1px dashed var(--line);
+  background:var(--paper-2);color:var(--ink-2);font-size:var(--t-md);
+  transition:transform .1s var(--ease),background .16s var(--ease);
+}.rd-addm:active{transform:scale(.98);background:var(--accent-soft)}.rd-addm svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}/* 正文里标出来的设定名：**淡淡的**，不打扰阅读；点一下才出卡片 */
+.rd-term{
+  border-bottom:1px dashed var(--line-2);
+  color:inherit;
+}.reader-page .rd-term{border-bottom-color:var(--accent-soft)}/* 设定卡（底部弹层里那张） */
+.rd-termcard{padding:0 var(--sp-4) calc(var(--safe-b) + var(--sp-4))}.tc-kind{
+  display:inline-block;margin-bottom:var(--sp-2);padding:2px var(--sp-2);border-radius:var(--radius-pill);
+  background:var(--accent-soft);color:var(--accent);font-size:var(--t-sm);
+}.tc-line{margin:var(--sp-2) 0;font-size:var(--t-base);line-height:1.7;color:var(--ink)}.tc-line b{display:inline-block;min-width:56px;margin-right:var(--sp-2);color:var(--ink-3);font-weight:var(--w-medium);font-size:var(--t-md)}.tc-fact{
+  margin:var(--sp-1) 0;padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-sm);
+  background:var(--card);color:var(--ink-2);font-size:var(--t-md);line-height:1.7;
+}
+
+/* ══════════════════════ 四·二、书本菜单（书卡右上角三个点打开的那一层） ══════════════════════
+   三段式：固定头（书名 + 右上角 ×）/ 信息行 / 操作区（一行一件事 + 右侧说明 + ›）。
+   以前这一层**一条 CSS 都没有**：`.rd-menu-head` 不存在 → 标题和 × 平铺、
+   × 落到了弹层左边缘（量出来 左=0）；信息行跟操作行的间距跟行间距一样 → 糊成一堆；
+   没有分隔线也没有箭头 → 看不出哪行能点。 */
+.rd-menu-head{padding:var(--sp-4) var(--page-x) var(--sp-2)}
+.rd-menu-head .rd-menu-title{
+  flex:1;min-width:0;font-size:var(--t-lg);font-weight:var(--w-semi);color:var(--ink);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rd-menu-body{padding-bottom:var(--sp-2)}
+.rd-menu-body .rd-toc-group{padding:var(--sp-1) var(--page-x) var(--sp-5);letter-spacing:0}
+.rd-menu-rows .rd-toc-item{
+  display:flex;align-items:center;gap:var(--sp-3);
+  padding:var(--sp-4) var(--page-x);border-bottom:1px solid var(--line);
+}
+.rd-menu-rows .rd-toc-item:first-child{border-top:1px solid var(--line)}
+.rd-menu-rows .rd-toc-item .nm{
+  flex:0 0 5.6em;min-width:0;font-size:var(--t-base);font-weight:var(--w-medium);
+  color:var(--ink);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rd-menu-rows .rd-toc-item .wd{
+  flex:1;min-width:0;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.rd-menu-rows .rd-toc-item .go{flex:0 0 auto;display:grid;place-items:center;color:var(--ink-3)}
+.rd-menu-rows .rd-toc-item .go svg{
+  width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round;
+}
+.rd-menu-rows .rd-toc-item:active{background:var(--paper-2)}
+/* 危险操作单独一组：跟上面拉开、加一条分隔、颜色走 token（不再手写内联 style="color:var(--danger)"），
+   底部留安全区 —— 以前这一行是直接贴在屏幕最下沿的。 */
+.rd-menu-danger{
+  margin-top:var(--sp-5);border-top:1px solid var(--line);
+  padding-bottom:calc(var(--safe-b) + var(--sp-4));
+}
+.rd-menu-danger .rd-toc-item{border-top:0;border-bottom:0}
+.rd-menu-danger .rd-toc-item .nm,.rd-menu-danger .rd-toc-item .go{color:var(--danger)}

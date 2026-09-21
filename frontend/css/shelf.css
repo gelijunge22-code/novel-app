@@ -1,0 +1,105 @@
+/* ============================================================
+   shelf.css — 第 1 屏「书架」（第 20 轮「前端大改」第一屏）
+
+   改前的问题（本文件是"改后"）：
+     · 书卡是**文字块 + 一小条封面**：书名/字数/进度/按钮挤在一行里，主次不清；
+       封面小到看不出是哪本书，用户划过去只能靠读字。
+     · 加载中**什么都不显示**（白屏等 2 秒），出错时把 e.message 直接糊上去，
+       用户看到的就是"卡住了"或"坏了"。
+     · 书架自己的 padding/字号跟设置页、工具页都不一样 —— 一眼看出是"几个页面拼的"。
+
+   改后：
+     · 封面当主角（88×118），书名是第二眼，字数是辅助信息；正在写的那本有明确标记。
+     · 三态齐全：骨架屏（取数据时）/ 出错（人话 + 重试）/ 空（告诉你去哪儿建）。
+     · 尺寸全部走 tokens.css 的变量，和别屏同一套节律。
+   ============================================================ */
+
+#screen-shelf .shelf-list, .shelf-list{
+  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;
+  padding:var(--sp-3) var(--page-x) calc(var(--sp-8) + var(--tab-h) + var(--safe-b));
+  display:flex;flex-direction:column;gap:var(--sp-3);
+  animation:uiFade .18s var(--ease-out) both;
+}
+
+/* ── 书卡：封面 + 信息，两栏 ───────────────────────────────── */
+.book-card{
+  display:flex;align-items:stretch;gap:var(--sp-3);
+  padding:var(--sp-3);border-radius:var(--radius);background:var(--card);
+  box-shadow:var(--elev-1);border:var(--hair) solid transparent;
+  position:relative;overflow:hidden;
+  transition:transform .14s var(--ease),box-shadow .18s var(--ease),border-color .18s var(--ease);
+}
+.book-card:active{transform:scale(.985)}
+/* 点下去到翻页之间要去取第一章（几百毫秒），这段时间卡片得有个「被按住」的样子，
+   否则用户会以为没点着、再点一次 */
+.book-card.press{transform:scale(.97)}
+.book-card.opening{transform:scale(.972);opacity:.68;
+  transition:transform .13s var(--ease-out),opacity .13s var(--ease-out)}
+.book-card.opening .book-prog-bar i{opacity:.5}
+.book-card.cur{border-color:var(--accent)}
+
+/* 封面：整张卡的视觉主角。首字打底，有真封面就盖上去 */
+.book-spine{
+  position:relative;flex:0 0 auto;width:88px;height:118px;   /* token-ok: 封面尺寸 88×118 */
+  border-radius:var(--radius-xs);overflow:hidden;
+  background:linear-gradient(150deg,hsl(var(--h,30) 26% 62%),hsl(var(--h,30) 30% 42%));
+  display:grid;place-items:center;color:#fbf6ec;font-family:var(--serif);
+  font-size:var(--t-2xl);letter-spacing:.04em;
+  box-shadow:0 2px 6px rgba(40,32,24,.18);
+}
+.book-spine::before{content:'';position:absolute;left:7px;top:0;bottom:0;width:1px;
+  background:rgba(255,255,255,.22);z-index:2}   /* token-ok: 书脊那道 1px 高光 */
+.book-cover{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:3;
+  animation:coverIn .3s var(--ease) both}
+@keyframes coverIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
+
+.book-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:var(--sp-2)}
+/* 书名独占一行：字号往回收一档（用户原话：「整体的字要像第二个要稍微变小一点」），
+   长书名**换行**最多两行 —— 以前是单行省略号，「一个很长的书名·第二部·外传（同人）」只能放出 82%，
+   被切掉小半截（用户点名的那条）。封面尺寸一个像素都不动。 */
+.book-title{
+  display:block;min-width:0;
+  font-size:var(--t-base);font-weight:var(--w-semi);color:var(--ink);
+  line-height:1.35;
+}
+.book-title .bt-txt{
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;
+  overflow:hidden;overflow-wrap:anywhere;
+}
+.book-cur{
+  flex:0 0 auto;font-size:var(--t-xs);font-weight:var(--w-semi);color:var(--accent);
+  background:var(--accent-soft);border-radius:var(--radius-pill);padding:var(--sp-1) var(--sp-2);
+}
+.book-meta{display:flex;align-items:baseline;gap:var(--sp-2);font-size:var(--t-sm);color:var(--ink-2);
+  font-variant-numeric:tabular-nums}
+.book-meta .bm-txt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.book-prog{display:flex;align-items:center;gap:var(--sp-2)}
+.book-prog-bar{flex:1;height:6px;border-radius:var(--radius-pill);background:var(--paper-2);   /* token-ok: 6px 细进度条 */
+  box-shadow:inset 0 0 0 1px var(--line-2);overflow:hidden}
+.book-prog-bar i{display:block;height:100%;border-radius:var(--radius-pill);
+  background:var(--accent);transition:width .3s var(--ease)}
+.book-prog-txt{font-size:var(--t-sm);line-height:1;color:var(--ink-2);white-space:nowrap;
+  font-variant-numeric:tabular-nums}
+.book-cta{flex:0 0 auto;font-size:var(--t-md);color:var(--accent);font-weight:var(--w-medium)}
+.book-more{position:absolute;right:var(--sp-1);top:var(--sp-1)}   /* 更多：卡片右上角，不要挤在文字那一行 */
+
+/* ── 数据是旧的（连不上服务器）时顶上那条：说得清、点得动 ──── */
+.shelf-stale{
+  display:flex;align-items:center;gap:var(--sp-2);
+  padding:var(--sp-3) var(--sp-4);border-radius:var(--radius-sm);
+  background:var(--card);border:var(--hair) solid var(--line);color:var(--ink-2);
+  font-size:var(--t-md);text-align:left;
+}
+.shelf-stale-dot{flex:0 0 auto;width:8px;height:8px;border-radius:var(--radius-pill);background:var(--warn)}   /* token-ok: 8px 圆点 */
+.shelf-stale b{margin-left:auto;flex:0 0 auto;font-size:var(--t-md);font-weight:var(--w-semi);color:var(--accent)}
+
+/* ── 三态：骨架 / 出错 / 空 ─────────────────────────────────── */
+.shelf-skel{display:flex;flex-direction:column;gap:var(--sp-3)}
+.shelf-skel .sk-card{padding:var(--sp-3)}
+.shelf-skel .sk-thumb{width:88px;height:118px}   /* token-ok: 跟封面同尺寸，骨架才不会跳一下 */
+
+@media (max-width:359px){
+  .book-spine{width:72px;height:98px;font-size:var(--t-xl)}   /* token-ok: 窄屏封面缩一档 */
+  .shelf-skel .sk-thumb{width:72px;height:98px}   /* token-ok: 同上 */
+  .book-title{font-size:var(--t-base)}
+}

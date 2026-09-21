@@ -1,0 +1,59 @@
+{
+ "at": "2026-09-20 02:29:59",
+ "applied": true,
+ "aliveBooks": [
+  "example-book"
+ ],
+ "tables": [
+  {
+   "table": "audit",
+   "keep_as_log": true,
+   "orphanSlugs": 94,
+   "orphanRows": 338
+  },
+  {
+   "table": "chapter",
+   "keep_as_log": false,
+   "orphanSlugs": 3,
+   "orphanRows": 3
+  },
+  {
+   "table": "chat_session",
+   "keep_as_log": false,
+   "orphanSlugs": 3,
+   "orphanRows": 3
+  },
+  {
+   "table": "job",
+   "keep_as_log": true,
+   "orphanSlugs": 10,
+   "orphanRows": 23
+  },
+  {
+   "table": "notification",
+   "keep_as_log": true,
+   "orphanSlugs": 31,
+   "orphanRows": 37
+  },
+  {
+   "table": "orchestra_run",
+   "keep_as_log": false,
+   "orphanSlugs": 3,
+   "orphanRows": 3
+  },
+  {
+   "table": "revision",
+   "keep_as_log": false,
+   "orphanSlugs": 3,
+   "orphanRows": 6
+  },
+  {
+   "table": "trace",
+   "keep_as_log": true,
+   "orphanSlugs": 43,
+   "orphanRows": 82
+  }
+ ],
+ "orphanRowsDeletable": 15,
+ "note": "keep_as_log=True 的是留痕表（审计/任务/通知/改动留痕），故意不删"
+}

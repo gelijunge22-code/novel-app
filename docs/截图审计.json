@@ -1,0 +1,401 @@
+{
+ "at": "2026-09-21 07:53:12",
+ "force": false,
+ "dir": "/home/ubuntu/novel-app/docs/前端截图",
+ "files": 769,
+ "sizeMB": 86.5,
+ "uniqueMd5": 636,
+ "dupGroupsAllowed（返回键这类，本来就该一样）": {
+  "5c4fe4e2": [
+   "r10-tool-backup.png",
+   "tool12-backup.png"
+  ]
+ },
+ "dupGroupsProblem（**同一批次**里两张一样 = 那一步没生效）": {
+  "0544d6d0": [
+   "r19sa-反证-clip-reader.png",
+   "r19sa-反证-nopad-reader.png",
+   "r19sa-反证-pad0-reader.png",
+   "r19sa-反证-trap-reader.png"
+  ],
+  "1295b283": [
+   "r19sa-反证-pad0-shelf.png",
+   "r19sa-反证-trap-shelf.png"
+  ],
+  "4364e259": [
+   "r29old-tool-backup-empty.png",
+   "r29old-tool-backup-error.png"
+  ]
+ },
+ "dupGroupsWaived（逐组核销过，理由见 docs/截图重复核销.json）": {
+  "0544d6d0": [
+   "r19sa-反证-clip-reader.png",
+   "r19sa-反证-nopad-reader.png",
+   "r19sa-反证-pad0-reader.png",
+   "r19sa-反证-trap-reader.png"
+  ],
+  "1295b283": [
+   "r19sa-反证-pad0-shelf.png",
+   "r19sa-反证-trap-shelf.png"
+  ],
+  "4364e259": [
+   "r29old-tool-backup-empty.png",
+   "r29old-tool-backup-error.png"
+  ]
+ },
+ "dupGroupsUnwaived（**没核销 = 问题**）": {},
+ "dupGroupsCrossRound（不同轮同一屏，正常）": {
+  "2cd828e2": [
+   "j1-①-故事线-反证.png",
+   "j1-①-故事线.png"
+  ],
+  "a8c2c817": [
+   "j1-④-点一下看设定-反证.png",
+   "j1-④-点一下看设定.png"
+  ],
+  "7af44918": [
+   "probe-rdshell-chromeON.png",
+   "rd1-reader-阅读.png"
+  ],
+  "5ab94fb6": [
+   "r10-settings.png",
+   "ui-01-设置-主题网格.png"
+  ],
+  "1f399959": [
+   "r10-tool-about.png",
+   "tool12-about.png"
+  ],
+  "85bf5797": [
+   "r10-tool-cover.png",
+   "tool12-cover.png"
+  ],
+  "b43495a7": [
+   "r10-tool-files.png",
+   "tool12-files.png"
+  ],
+  "29b7a520": [
+   "r10-tool-history.png",
+   "tool12-history.png"
+  ],
+  "c0b7b27d": [
+   "r10-tool-jobs.png",
+   "tool12-jobs.png"
+  ],
+  "038fe501": [
+   "r10-tool-memory.png",
+   "tool12-memory.png"
+  ],
+  "36343264": [
+   "r10-tool-models.png",
+   "tool12-models.png"
+  ],
+  "0b8994f0": [
+   "r10-tool-profiles.png",
+   "tool12-profiles.png"
+  ],
+  "7f14d24c": [
+   "r10-tool-sessions.png",
+   "tool12-sessions.png"
+  ],
+  "40b782a0": [
+   "r10-tool-skills.png",
+   "tool12-skills.png"
+  ],
+  "cc51db6b": [
+   "r10-tool-users.png",
+   "tool12-users.png"
+  ],
+  "36bd9522": [
+   "r11-fm-05-设定.png",
+   "r9-tab-设定.png"
+  ],
+  "026d1fbd": [
+   "r11-fm-08-导出.png",
+   "r9-tool-export.png"
+  ],
+  "f5231808": [
+   "r11-fm-10-断网写正文的提示.png",
+   "r9-tool-write.png"
+  ],
+  "dd9b6041": [
+   "r12-当前书-书架.png",
+   "r14-全新打开-登录后书架.png"
+  ],
+  "5239849b": [
+   "r17-切书-01-顶栏小方块.png",
+   "r19-02-登录后书架-日间.png",
+   "r19ui-02-登录后书架.png",
+   "r27-layout-02-登录后书架.png",
+   "r30f-02-登录后书架.png"
+  ],
+  "dd129d03": [
+   "r19-03-设置-日间.png",
+   "r19ui-03-设置.png",
+   "r27-layout-03-设置.png"
+  ],
+  "0763c8de": [
+   "r19-04-设定-日间.png",
+   "r19ui-04-设定.png",
+   "r27-layout-04-设定.png",
+   "r30-设定.png"
+  ],
+  "5fb11aaf": [
+   "r19-overlay-弹层-切书书单-日间.png",
+   "r19ui-overlay-弹层-切书书单.png",
+   "r27-layout-overlay-弹层-切书书单.png"
+  ],
+  "649b68c4": [
+   "r19-overlay-弹层-确认弹窗-日间.png",
+   "r19ui-overlay-弹层-确认弹窗.png",
+   "r27-layout-overlay-弹层-确认弹窗.png"
+  ],
+  "fb38a7c7": [
+   "r19-overlay-弹层-章节长按菜单-日间.png",
+   "r19ui-overlay-弹层-章节长按菜单.png",
+   "r27-layout-overlay-弹层-章节长按菜单.png"
+  ],
+  "1d2e8b59": [
+   "r19-preset-预设-日间.png",
+   "r19ui-preset-预设.png",
+   "r27-layout-preset-预设.png",
+   "r28-空间-改前-preset.png",
+   "r28-空间-改后-preset.png",
+   "r30-预设.png"
+  ],
+  "7a14e9a6": [
+   "r19-rdquick-底部面板-书签-日间.png",
+   "r19ui-rdquick-底部面板-书签.png",
+   "r27-layout-rdquick-底部面板-书签.png"
+  ],
+  "d622b25d": [
+   "r19-rdquick-底部面板-听书-日间.png",
+   "r19ui-rdquick-底部面板-听书.png",
+   "r27-layout-rdquick-底部面板-听书.png",
+   "r28-空间-改后-bookset-tts.png",
+   "r30-书里的设置-听书.png"
+  ],
+  "1f0542c9": [
+   "r19-rdquick-底部面板-排版-日间.png",
+   "r19ui-rdquick-底部面板-排版.png",
+   "r27-layout-rdquick-底部面板-排版.png",
+   "r28-空间-改后-bookset-type.png",
+   "r30-书里的设置.png"
+  ],
+  "a24a688a": [
+   "r19-rdquick-底部面板-笔记-日间.png",
+   "r19ui-rdquick-底部面板-笔记.png",
+   "r27-layout-rdquick-底部面板-笔记.png"
+  ],
+  "e7e58b66": [
+   "r19-rdquick-底部面板-背景-日间.png",
+   "r19ui-rdquick-底部面板-背景.png",
+   "r27-layout-rdquick-底部面板-背景.png",
+   "r28-空间-改后-bookset-theme.png"
+  ],
+  "b9c8be6d": [
+   "r19-rdtoc-目录-日间.png",
+   "r19ui-rdtoc-目录.png",
+   "r27-layout-rdtoc-目录.png",
+   "r30-目录.png"
+  ],
+  "bdfa1497": [
+   "r19-reader-阅读-日间.png",
+   "r25-沉浸态-02-沉浸.png",
+   "r30-阅读器-沉浸态.png"
+  ],
+  "cfd1f757": [
+   "r19-toast-提示条-日间.png",
+   "r19ui-toast-提示条.png",
+   "r27-layout-toast-提示条.png"
+  ],
+  "7540ece7": [
+   "r19-tool-工具-cover-日间.png",
+   "r19ui-tool-工具-cover.png"
+  ],
+  "c15b12bf": [
+   "r19-tool-工具-export-日间.png",
+   "r19ui-tool-工具-export.png",
+   "r27-layout-tool-工具-export.png"
+  ],
+  "2a68f8ba": [
+   "r19-tool-工具-files-日间.png",
+   "r19ui-tool-工具-files.png"
+  ],
+  "5672ffe2": [
+   "r19-tool-工具-history-日间.png",
+   "r19ui-tool-工具-history.png",
+   "r29old-tool-history-empty.png"
+  ],
+  "2d97d33b": [
+   "r19-tool-工具-jobs-日间.png",
+   "r19ui-tool-工具-jobs.png",
+   "r29old-tool-jobs-empty.png"
+  ],
+  "0b2ce170": [
+   "r19-tool-工具-lint-日间.png",
+   "r19ui-tool-工具-lint.png",
+   "r27-layout-tool-工具-lint.png"
+  ],
+  "e06c2546": [
+   "r19-tool-工具-listen-日间.png",
+   "r19ui-tool-工具-listen.png",
+   "r27-layout-tool-工具-listen.png"
+  ],
+  "09183650": [
+   "r19-tool-工具-material-日间.png",
+   "r19ui-tool-工具-material.png",
+   "r27-layout-tool-工具-material.png"
+  ],
+  "726a1332": [
+   "r19-tool-工具-memory-日间.png",
+   "r19ui-tool-工具-memory.png",
+   "r29old-tool-memory-empty.png"
+  ],
+  "7122ad5a": [
+   "r19-tool-工具-models-日间.png",
+   "r19ui-tool-工具-models.png",
+   "r27-layout-tool-工具-models.png"
+  ],
+  "afb8dcc5": [
+   "r19-tool-工具-notes-日间.png",
+   "r19ui-tool-工具-notes.png",
+   "r29old-tool-notes-empty.png"
+  ],
+  "34596ee9": [
+   "r19-tool-工具-order-日间.png",
+   "r19ui-tool-工具-order.png",
+   "r27-layout-tool-工具-order.png"
+  ],
+  "293e8c7e": [
+   "r19-tool-工具-plot-日间.png",
+   "r19ui-tool-工具-plot.png",
+   "r27-layout-tool-工具-plot.png"
+  ],
+  "9047774b": [
+   "r19-tool-工具-profiles-日间.png",
+   "r19ui-tool-工具-profiles.png",
+   "r27-layout-tool-工具-profiles.png"
+  ],
+  "c9488fcd": [
+   "r19-tool-工具-prompt-日间.png",
+   "r19ui-tool-工具-prompt.png"
+  ],
+  "39eeae7b": [
+   "r19-tool-工具-refs-日间.png",
+   "r19ui-tool-工具-refs.png",
+   "r27-layout-tool-工具-refs.png"
+  ],
+  "24b99f6d": [
+   "r19-tool-工具-sessions-日间.png",
+   "r19ui-tool-工具-sessions.png"
+  ],
+  "65a6aab0": [
+   "r19-tool-工具-skills-日间.png",
+   "r19ui-tool-工具-skills.png"
+  ],
+  "4b21e66e": [
+   "r19-tool-工具-stats-日间.png",
+   "r19ui-tool-工具-stats.png",
+   "r27-layout-tool-工具-stats.png"
+  ],
+  "cd7b614b": [
+   "r19-tool-工具-story-日间.png",
+   "r19ui-tool-工具-story.png",
+   "r27-layout-tool-工具-story.png"
+  ],
+  "a3c6e77b": [
+   "r19-tool-工具-sync-日间.png",
+   "r19ui-tool-工具-sync.png"
+  ],
+  "21b31938": [
+   "r19-tool-工具-term-日间.png",
+   "r19ui-tool-工具-term.png",
+   "r27-layout-tool-工具-term.png"
+  ],
+  "f6597efa": [
+   "r19-tool-工具-world-日间.png",
+   "r19ui-tool-工具-world.png",
+   "r27-layout-tool-工具-world.png"
+  ],
+  "6fb5b543": [
+   "r19-tool-工具-write-日间.png",
+   "r19ui-tool-工具-write.png",
+   "r27-layout-tool-工具-write.png"
+  ],
+  "f0e7a4ea": [
+   "r19-tools-宫格-日间.png",
+   "r19ui-tools-宫格.png",
+   "r27-layout-tools-宫格.png",
+   "r30-工具宫格.png"
+  ],
+  "7434cfc9": [
+   "r19st-preset-error.png",
+   "r29old-preset-error.png"
+  ],
+  "971a6520": [
+   "r19st-preset-loading.png",
+   "r29old-preset-loading.png"
+  ],
+  "49588316": [
+   "r19st-shelf-empty.png",
+   "r29old-shelf-empty.png",
+   "r29st-shelf-empty.png"
+  ],
+  "45a82e67": [
+   "r19st-shelf-error.png",
+   "r29old-shelf-error.png",
+   "r29st-shelf-error.png"
+  ],
+  "e107faba": [
+   "r19st-shelf-loading.png",
+   "r29old-shelf-loading.png",
+   "r29st-shelf-loading.png"
+  ],
+  "a984d1ac": [
+   "r19st-tool-models-empty.png",
+   "r29old-tool-models-empty.png"
+  ],
+  "b09ad18c": [
+   "r19st-tool-models-error.png",
+   "r29old-tool-models-error.png"
+  ],
+  "8b138920": [
+   "r19ui-reader-阅读.png",
+   "r25-沉浸态-01-有栏.png",
+   "r27-layout-reader-阅读.png",
+   "r30-阅读器-正文.png"
+  ],
+  "5e4ba7f1": [
+   "r19ui-tool-工具-users.png",
+   "r27-layout-tool-工具-users.png"
+  ],
+  "bd757cf7": [
+   "r23-设置-搬回-01-总览.png",
+   "r30-大设置.png",
+   "r30f-03-设置.png"
+  ],
+  "22c362df": [
+   "r27-layout-tool-工具-history.png",
+   "r29st-tool-history-empty.png"
+  ],
+  "2d707ea1": [
+   "r27-layout-tool-工具-jobs.png",
+   "r29st-tool-jobs-empty.png"
+  ],
+  "c2453525": [
+   "r27-layout-tool-工具-memory.png",
+   "r29st-tool-memory-empty.png"
+  ],
+  "07e88dc1": [
+   "r27-layout-tool-工具-notes.png",
+   "r29st-tool-notes-empty.png"
+  ],
+  "9b41560d": [
+   "r28-空间-改前-shelf.png",
+   "r30-书架.png"
+  ]
+ },
+ "wasteDirs": [],
+ "badFiles": [],
+ "cleaned": null
+}

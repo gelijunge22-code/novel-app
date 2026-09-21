@@ -1,0 +1,101 @@
+{
+ "force": null,
+ "checks": [
+  {
+   "name": "① 有栏时：正文没被顶栏/底栏压住",
+   "ok": true,
+   "detail": "head.b=50 cols=50…720 foot.t=728"
+  },
+  {
+   "name": "② 沉浸态：顶栏让出高度（height≈0）",
+   "ok": true,
+   "detail": "chromeOff=true head.h=0"
+  },
+  {
+   "name": "③ 沉浸态：底栏让出高度（height≈0）",
+   "ok": true,
+   "detail": "foot.h=0"
+  },
+  {
+   "name": "④ 沉浸态：正文铺满整屏（stage ≥ 98% 视口高）",
+   "ok": true,
+   "detail": "vh=844 stage.h=844 cols.h=836"
+  },
+  {
+   "name": "⑤ 切回有栏：高度还原（不被上一步卡住）",
+   "ok": true,
+   "detail": "on.stage.h=678 off.stage.h=844"
+  }
+ ],
+ "on": {
+  "vh": 844,
+  "vw": 390,
+  "chromeOff": false,
+  "head": {
+   "t": 0,
+   "b": 50,
+   "h": 50,
+   "opacity": 1,
+   "pos": "relative"
+  },
+  "stage": {
+   "t": 50,
+   "b": 728,
+   "h": 678,
+   "opacity": 1,
+   "pos": "relative"
+  },
+  "foot": {
+   "t": 728,
+   "b": 844,
+   "h": 116,
+   "opacity": 1,
+   "pos": "relative"
+  },
+  "cols": {
+   "t": 50,
+   "b": 720,
+   "h": 670,
+   "opacity": 1,
+   "pos": "static"
+  },
+  "paper": "#f3ead9",
+  "readerBg": "rgb(243, 234, 217)"
+ },
+ "off": {
+  "vh": 844,
+  "vw": 390,
+  "chromeOff": true,
+  "head": {
+   "t": 0,
+   "b": 0,
+   "h": 0,
+   "opacity": 0,
+   "pos": "relative"
+  },
+  "stage": {
+   "t": 0,
+   "b": 844,
+   "h": 844,
+   "opacity": 1,
+   "pos": "relative"
+  },
+  "foot": {
+   "t": 844,
+   "b": 844,
+   "h": 0,
+   "opacity": 0,
+   "pos": "relative"
+  },
+  "cols": {
+   "t": 0,
+   "b": 836,
+   "h": 836,
+   "opacity": 1,
+   "pos": "static"
+  },
+  "paper": "#f3ead9",
+  "readerBg": "rgb(243, 234, 217)"
+ },
+ "fails": []
+}

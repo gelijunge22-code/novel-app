@@ -1,0 +1,74 @@
+{
+ "at": "2026-09-20 01:54:58",
+ "book": "example-book",
+ "total": 13,
+ "passed": 13,
+ "failed": 0,
+ "items": [
+  {
+   "name": "起始能读到书级预设",
+   "ok": true,
+   "extra": ""
+  },
+  {
+   "name": "文风选项里有内置范文",
+   "ok": true,
+   "extra": "['', '克制白描.md', '强节奏网文.md', '细腻情绪.md', '第一人称.md', '第三人称限制视角.md']"
+  },
+  {
+   "name": "参考写法选项里有内置范文",
+   "ok": true,
+   "extra": ""
+  },
+  {
+   "name": "预览接口能取到中文范文",
+   "ok": true,
+   "extra": "status=200"
+  },
+  {
+   "name": "预览不存在的资源 → 404 且说人话",
+   "ok": true,
+   "extra": ""
+  },
+  {
+   "name": "保存书级预设",
+   "ok": true,
+   "extra": "{\"ok\":true,\"profileKey\":\"writer\",\"scope\":\"book\",\"slug\":\"example-book\",\"resourcesWritten\":["
+  },
+  {
+   "name": "写作上下文接口 200",
+   "ok": true,
+   "extra": "status=200"
+  },
+  {
+   "name": "文风范文正文真的进了提示词",
+   "ok": true,
+   "extra": ""
+  },
+  {
+   "name": "参考写法范文正文真的进了提示词",
+   "ok": true,
+   "extra": "命中前 80 字：参考写法（第一人称.md）：\\n# 第一人称（例子）\\n\\n我不记得那天早上有没有下雪，只记得我一直在数台阶。\\n\\n一共三十七级。数到第三十级的时候，我听见屋里有人在笑，笑声很轻，像怕被人发现。我在第三十七级站住了，手心里全是汗，把袖口攥"
+  },
+  {
+   "name": "书里自己改过的那份优先（提示词跟着变）",
+   "ok": true,
+   "extra": ""
+  },
+  {
+   "name": "收尾：书级预设删回原样",
+   "ok": true,
+   "extra": "{\"ok\":true,\"removed\":true,\"backup\":\"preset-example-book-1789840498.jso"
+  },
+  {
+   "name": "收尾：值回到默认（没选文风）",
+   "ok": true,
+   "extra": ""
+  },
+  {
+   "name": "收尾：自测复制进书里的资源文件已删",
+   "ok": true,
+   "extra": ""
+  }
+ ]
+}

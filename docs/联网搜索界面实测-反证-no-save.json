@@ -1,0 +1,107 @@
+{
+ "at": "2026-09-21T01:44:54.167Z",
+ "force": "no-save",
+ "steps": [
+  {
+   "step": "甲0 大设置页里**没有**联网开关/「允许上网」；只留一行「去对话设置」的指路",
+   "expect": "大设置里搜不到「允许上网」，也没有 data-webset；但有一行指路按钮",
+   "res": {
+    "有允许上网字样": false,
+    "有联网开关": false,
+    "有旧挂点": false,
+    "指路按钮": true
+   },
+   "ok": true
+  },
+  {
+   "step": "甲 「对话」页的设置里有「联网搜索」，开关初值 = 后端状态",
+   "expect": "有这一节；界面开关的 on/off 跟 /config/web 一致",
+   "res": {
+    "shown": true,
+    "has": true,
+    "title": "联网搜索",
+    "uiOn": false,
+    "apiOn": false,
+    "rows": 2
+   },
+   "ok": true
+  },
+  {
+   "step": "乙 点开关真的改到后端（不是只改样式）",
+   "expect": "后端 enabled 跟着翻过来",
+   "res": {
+    "was": false,
+    "now": false,
+    "changed": false
+   },
+   "ok": false
+  },
+  {
+   "step": "戊 走界面加站点 → 读回来还在（含搜索地址模板）",
+   "expect": "hosts 里出现 127.0.0.1，且 search 模板没被吞掉",
+   "res": {
+    "err": "没有「加一个站点」"
+   },
+   "ok": false
+  },
+  {
+   "step": "丙 开着时「搜一句」：界面摆出真搜到的条目",
+   "expect": "结果列表里 ≥1 条（这台机器上来自判据自己加的假站）",
+   "res": {
+    "text": "还没打开「允许上网」，所以这一次没有联网。",
+    "items": 0
+   },
+   "ok": false
+  },
+  {
+   "step": "丁 关着的时候「搜一句」：说人话 + 假站零请求",
+   "expect": "界面写\"这一次没有联网\"；假站请求数不增加",
+   "res": {
+    "text": "还没打开「允许上网」，所以这一次没有联网。",
+    "on": false,
+    "hitsBefore": 0,
+    "hitsAfter": 0
+   },
+   "ok": true
+  },
+  {
+   "step": "己 开关点一下能变、能存住：刷新整个页面之后状态还是那个",
+   "expect": "点完 = 后端 = 刷新后界面（三者一致）",
+   "res": {
+    "点完": {
+     "点前": false,
+     "想让它是": true,
+     "后端": false
+    },
+    "刷新后": {
+     "shown": true,
+     "刷新后界面": false,
+     "刷新后后端": false
+    }
+   },
+   "ok": false
+  },
+  {
+   "step": "收尾 跑完把联网设置还原成用户原来的样子（自己加的假站必须清掉）",
+   "expect": "enabled 与自建站点列表都跟跑之前一致",
+   "res": {
+    "back": {
+     "enabled": false,
+     "mine": []
+    },
+    "want": []
+   },
+   "ok": true
+  }
+ ],
+ "fails": [
+  "乙 点了开关界面变了、后端没动：{\"was\":false,\"now\":false,\"changed\":false}",
+  "戊 加完读不回来：{\"err\":\"没有「加一个站点」\"}（这类\"存了读不到\"以前就真出过）",
+  "丙 界面上没摆出结果：{\"text\":\"还没打开「允许上网」，所以这一次没有联网。\",\"items\":0}",
+  "己 开关存不住：{\"点完\":{\"点前\":false,\"想让它是\":true,\"后端\":false},\"刷新后\":{\"shown\":true,\"刷新后界面\":false,\"刷新后后端\":false}}"
+ ],
+ "restore": {
+  "enabled": false,
+  "mine": []
+ }
+}

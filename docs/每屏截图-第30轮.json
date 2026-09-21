@@ -1,0 +1,143 @@
+{
+ "at": "2026-09-21T02:24:13.968Z",
+ "book": "example-book",
+ "partial": false,
+ "only": [],
+ "shots": [
+  {
+   "name": "书架",
+   "why": "书架首页：顶栏 + 书卡 + 底栏",
+   "gate": "当前屏=shelf",
+   "gate_ok": true,
+   "md5": "444e8e0d",
+   "bytes": 86046,
+   "ink": 0.2273,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "阅读器-正文",
+   "why": "阅读器：顶栏 + 正文 + 底栏",
+   "gate": "当前屏=reader",
+   "gate_ok": true,
+   "md5": "8b138920",
+   "bytes": 379625,
+   "ink": 0.1022,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "阅读器-沉浸态",
+   "why": "顶栏/底栏收起后：正文要撑满，上下不许露白带",
+   "gate": "当前屏=reader",
+   "gate_ok": true,
+   "md5": "bdfa1497",
+   "bytes": 427702,
+   "ink": 0.0924,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "目录",
+   "why": "目录：一行一章 + 固定头/固定底（不跟\"排版\"挤一个页签）",
+   "gate": "当前屏=reader",
+   "gate_ok": true,
+   "md5": "b9c8be6d",
+   "bytes": 132727,
+   "ink": 0.3884,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "书里的设置",
+   "why": "阅读器底部面板「排版」页（不是目录！）",
+   "gate": "当前屏=reader",
+   "gate_ok": true,
+   "md5": "89adf1d8",
+   "bytes": 256326,
+   "ink": 0.2948,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "书里的设置-听书",
+   "why": "底部面板的听书页（动作按钮在最上面）",
+   "gate": "当前屏=reader",
+   "gate_ok": true,
+   "md5": "a95baa29",
+   "bytes": 259674,
+   "ink": 0.2781,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "大设置",
+   "why": "全站设置页（外观 / 动效 / 翻页 / 听书）",
+   "gate": "当前屏=settings",
+   "gate_ok": true,
+   "md5": "6fa3b4ad",
+   "bytes": 111387,
+   "ink": 0.4012,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "对话",
+   "why": "AI 对话：模式行 + 消息 + 输入框",
+   "gate": "当前屏=chat",
+   "gate_ok": true,
+   "md5": "0c787e1b",
+   "bytes": 163512,
+   "ink": 0.3288,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "工具宫格",
+   "why": "工具宫格",
+   "gate": "当前屏=tools",
+   "gate_ok": true,
+   "md5": "6bccd7fa",
+   "bytes": 121065,
+   "ink": 0.4434,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "预设",
+   "why": "预设页",
+   "gate": "当前屏=preset",
+   "gate_ok": true,
+   "md5": "66cf2569",
+   "bytes": 141577,
+   "ink": 0.471,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "设定",
+   "why": "设定（世界引擎）页",
+   "gate": "当前屏=lore",
+   "gate_ok": true,
+   "md5": "841e36aa",
+   "bytes": 150846,
+   "ink": 0.1953,
+   "blank": false,
+   "retries": 0
+  },
+  {
+   "name": "夜间-书架",
+   "why": "夜间主题下的书架",
+   "gate": "当前屏=shelf",
+   "gate_ok": true,
+   "md5": "0925fac1",
+   "bytes": 84911,
+   "ink": 0.2483,
+   "blank": false,
+   "retries": 0
+  }
+ ],
+ "dupes": [],
+ "bad": [],
+ "errors": []
+}

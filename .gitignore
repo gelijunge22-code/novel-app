@@ -1,0 +1,62 @@
+# 数据与运行产物一律不进 git（用户的稿子和密钥都在里面）
+*.pyc
+__pycache__/
+apk/*.apk
+apk/assets/www/
+apk/build/
+apk/keystore.jks
+apk/keystore.txt
+data/
+docs/前端截图/
+logs/
+ref/_fetched/
+server/config.json
+server/venv/
+# 打包生成物别进 git（build.sh 每次都会重新生成；进库就等于两套实现并存）
+apk/.gradle/
+apk/assets/seed.zip
+apk/src/main/python/server/
+apk/libs/
+apk/build-report.txt
+apk/apk-version.json
+
+# 仓库根目录的 config.json（如果哪天有人把密钥放这儿）也别进库
+config.json
+
+# 内部工作文件（讲参考项目、含书稿数据的实测报告）—— 只在本地，绝不进公开仓库
+docs/_dev/
+ref/
+AGENTS.md
+GOAL.md
+DONE.md
+tools/_dev/
+docs/_dev/
+ref/
+# 开源前撤出：参考项目文件 / 内部脚本 / 内部军规
+ref/
+AGENTS.md
+GOAL.md
+DONE.md
+server/migrate_nb.py
+tools/fetch_refs.sh
+tools/fetch_refs2.sh
+tools/fetch_schema.sh
+tools/fetch_trees.sh
+tools/get_schema.sh
+tools/survey_backend.sh
+tools/survey2.sh
+tools/net_diag.sh
+tools/setup.sh
+tools/audit1.sh
+tools/audit3.sh
+tools/status5.sh
+tools/verify_deliverables.sh
+*.mp3
+*.wav
+*.m4a
+# 调试截图不进仓库（会带出书名像素 + 体积大）
+docs/**/*.png
+docs/*.png
+
+# Android SDK 路径是每台机器自己的，不进仓库（build.sh 会按 ANDROID_HOME 现写）
+apk/local.properties

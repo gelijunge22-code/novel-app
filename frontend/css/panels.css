@@ -1,0 +1,224 @@
+/* ============================================================
+   panels.css — 「AI 对话」与「设定」两个面板的样式
+   依赖 base.css 的变量（--paper/--card/--ink/--accent/--safe-* 等）。
+   目标视口 390×844：所有长文本都要能换行，页面不出现横向滚动。
+   ============================================================ */
+
+/* ══════════════════════════ 对话 ══════════════════════════ */
+
+/* 展开态那一行：**干活方式 + 轮次胶囊并排**（放不下才换行，不许把胶囊挤成"3+1"） */
+.cd-line{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2);padding:0 var(--page-x) var(--sp-2)}
+.cd-line .mode-row, .cd-line .run-row{padding:0;background:transparent;flex:0 0 auto}
+/* ── 顶上的控制块 = 一个「抽屉」（第 42 批：用户原话「做成抽屉式的行不行？太丑了」）──
+   收起态只占一行（摘要 + 箭头）；展开态最多 44vh、而且**它自己也滚得动**。
+   为什么：监督人量过，原来这一整块固定吃 **35% 屏高**（298px），消息区只剩一半。
+   收起后：顶栏 52 + 当前书 42 + 抽屉头 44 ≈ 138px → 消息区 ≥70% 屏高。 */
+.chat-drawer{flex:0 0 auto;background:var(--paper);border-bottom:1px solid var(--line)}
+.cd-head{
+  display:flex;align-items:center;gap:var(--sp-2);width:100%;min-height:var(--hit);
+  padding:0 var(--page-x);text-align:left;background:transparent;
+  color:var(--ink-2);font-size:var(--t-sm);
+}.cd-sum{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.cd-chev{
+  flex:0 0 auto;width:8px;height:8px;margin-right:var(--sp-1);
+  border-right:2px solid var(--ink-3);border-bottom:2px solid var(--ink-3);
+  transform:rotate(45deg);transition:transform .18s var(--ease);
+}.chat-drawer.open .cd-chev{transform:rotate(-135deg)}
+.cd-body{
+  display:none;max-height:min(44vh,330px);overflow-y:auto;overscroll-behavior:contain;
+  padding-bottom:var(--sp-2);
+}.chat-drawer.open .cd-body{display:block}
+/* 顶栏下面的一条状态（人格 / 模型 / 状态），由 chat.js 注入 */
+.chat-strip{
+  /* 第 45 轮：**改成能换行**（原来 nowrap+overflow:hidden）。
+     用户原话：「底下就只能露出来 ge 了，全都看不清」——实测 4 个胶囊在 390 宽下被这一行
+     按比例挤扁（模型那枚只剩 56px，`某模型` 被切到只剩「ge…」），
+     而且里面那个 `<b>` 连 `min-width:0` 都没有，于是**被压到 12px 装 2 个汉字 → 字被硬切一半**。
+     现在：胶囊按**自己内容的宽度**排，排不下就整体换到下一行（抽屉 body 本来就能滚），
+     单枚超过一行宽时由 `<b>` 的省略号兜底（min-width:0 才真的出得来省略号）。 */
+  display:flex;align-items:center;gap:var(--sp-1) var(--sp-2);flex-wrap:wrap;
+  padding:0 var(--page-x) var(--sp-2);background:var(--paper);flex:0 0 auto;
+}.chat-strip .pk{
+  display:flex;align-items:center;gap:var(--sp-1);flex:0 1 auto;min-width:0;max-width:100%;
+  font-size:var(--t-sm);color:var(--ink-2);background:var(--card);
+  border:1px solid var(--line);border-radius:var(--radius-pill);padding:var(--sp-1) var(--sp-3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}.chat-strip .pk svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}.chat-strip .pk b{font-weight:var(--w-medium);flex:0 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}.chat-strip .grow{flex:1;min-width:0}.chat-strip .st{font-size:var(--t-sm);color:var(--ink-3);flex:0 0 auto}.chat-strip .st.run{color:var(--accent)}.chat-strip .st.err{color:var(--danger)}/* 消息区 */
+.chat-body{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;
+  padding:var(--sp-2) var(--page-x) var(--sp-4);display:flex;flex-direction:column;gap:var(--sp-3);
+  scroll-behavior:smooth;
+}.msg{display:flex;flex-direction:column;max-width:100%;animation:fade .16s ease}.msg.me{align-items:flex-end}.msg.ai{align-items:flex-start}.msg.center{align-items:center}.bubble{
+  max-width:88%;padding:var(--sp-3) var(--sp-3);border-radius:var(--radius);background:var(--card);
+  box-shadow:var(--shadow);font-size:var(--t-base);line-height:1.72;
+  white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;overflow:hidden;
+}.msg.me .bubble{
+  background:var(--accent);color:var(--on-accent);border-bottom-right-radius:5px;
+  box-shadow:0 2px 8px rgba(140,106,74,.22);
+}.msg.ai .bubble{border-bottom-left-radius:5px}.msg.err .bubble{outline:1px solid var(--danger);outline-offset:-1px}
+/* 「这一轮为什么没出字」——以前这种情况界面上什么都没有，用户只能干等（会话 160 实测）。
+   现在描红 + 写原因 + 给两个动作（重试 / 换个模型）。所有间距字号都走全站标尺。 */
+.msg.err .bubble .live-err{margin-top:var(--sp-2);padding-top:var(--sp-2);border-top:1px solid var(--danger-line)}
+.live-err .why{font-size:var(--t-md);font-weight:var(--w-semi);color:var(--danger)}
+.live-err .det{margin-top:var(--sp-1);font-size:var(--t-sm);color:var(--ink-3);line-height:var(--lh-base)}
+.live-err .acts{display:flex;gap:var(--sp-2);margin-top:var(--sp-2)}
+/* 「模型还没出字」的等待提示（看门狗，30 秒没第一个字才出现；一有字就撤掉）——
+   不是错误（不报红），但必须**看得见**：用户报的"发出去出不了字"最难受的就是干等。 */
+.live-wait{
+  margin-top:var(--sp-2);padding-top:var(--sp-2);border-top:1px dashed var(--line);
+  font-size:var(--t-sm);color:var(--ink-2);line-height:var(--lh-base);
+  display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2);
+}.bubble .h{font-weight:var(--w-semi);color:var(--accent)}.msg.me .bubble .h{color:var(--on-accent)}.bubble code{
+  font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:var(--t-md);
+  background:var(--accent-soft);border-radius:var(--radius-xs);padding:1px var(--sp-1);word-break:break-all;
+}.bubble strong{font-weight:var(--w-semi)}.bubble em{font-style:normal;color:var(--ink-2)}/* 光标（流式中） */
+.caret{
+  display:inline-block;width:6px;height:15px;margin-left:2px;vertical-align:-2px;
+  background:var(--accent);animation:blink 1s steps(1,end) infinite;
+}
+@keyframes blink{50%{opacity:0}}/* 工具调用小条 */
+.chip-row{display:flex;flex-wrap:wrap;gap:var(--sp-1);margin-top:var(--sp-2);max-width:88%}.tool-chip{
+  display:inline-flex;align-items:center;gap:var(--sp-1);max-width:100%;
+  font-size:var(--t-sm);line-height:1.4;color:var(--ink-2);
+  background:var(--accent-soft);border:1px solid var(--line);
+  border-radius:var(--radius-pill);padding:var(--sp-1) var(--sp-3);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}.tool-chip .nm{flex:0 1 auto;overflow:hidden;text-overflow:ellipsis}.tool-chip .ag{color:var(--ink-3);flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis}.tool-chip.run{color:var(--accent)}.tool-chip.run .nm::after{content:"";display:inline-block;width:5px;height:5px;margin-left:var(--sp-1);
+  border-radius:50%;background:currentColor;animation:pulse 1s ease-in-out infinite}.tool-chip.done{opacity:.72}.tool-chip.err{color:var(--danger);border-color:var(--danger-line)}
+@keyframes pulse{50%{opacity:.25}}/* 消息时间戳 / 流式状态 */
+.msg-meta{
+  font-size:var(--t-xs);color:var(--ink-3);margin-top:var(--sp-1);padding:0 var(--sp-1);
+  letter-spacing:.02em;font-variant-numeric:tabular-nums;
+}.msg.me .msg-meta{text-align:right}.msg.live .bubble{box-shadow:var(--shadow),0 0 0 1px var(--accent-soft)}.msg.sending{opacity:.62}/* 系统 / 提示行 */
+.msg-sys{
+  font-size:var(--t-sm);color:var(--ink-3);line-height:1.6;padding:0 var(--sp-2);
+  word-break:break-word;white-space:pre-wrap;max-width:100%;
+}.msg-sys .toggle{color:var(--accent);margin-left:var(--sp-1)}/* 空态 */
+.chat-empty{padding:var(--sp-12) var(--sp-5);text-align:center;color:var(--ink-3);font-size:var(--t-base);line-height:1.9}.chat-empty .big{font-size:var(--t-base);color:var(--ink-2);margin-bottom:var(--sp-2)}/* 底部输入 */
+.chat-compose{
+  flex:0 0 auto;display:flex;align-items:flex-end;gap:var(--sp-2);
+  padding:var(--sp-1) var(--page-x);border-top:1px solid var(--line);
+  background:var(--card);
+}.chat-compose .icon-btn{flex:0 0 auto;margin-bottom:var(--sp-1)}.chat-input{
+  flex:1;min-width:0;min-height:42px;max-height:140px;resize:none;
+  padding:var(--sp-3) var(--sp-3);border-radius:var(--radius);background:var(--paper);
+  border:1px solid var(--line);outline:none;line-height:1.5;font-size:var(--t-base);
+  overflow-y:auto;
+}.chat-input:focus{border-color:var(--accent)}.btn-send{
+  flex:0 0 auto;width:42px;height:42px;padding:0;border:0;border-radius:50%;
+  background:var(--accent);color:var(--on-accent);display:grid;place-items:center;
+  transition:opacity .15s,transform .1s,background .15s;
+}.btn-send:active{transform:scale(.94)}.btn-send:disabled{opacity:.4}.btn-send.stop{background:var(--danger)}/* 纸飞机的重心天生偏左，图标往右挪 1px 视觉上才真正居中 */
+.btn-send svg{width:20px;height:20px;transform:translateX(1px);
+  stroke:currentColor;fill:none;stroke-width:1.9;
+  stroke-linecap:round;stroke-linejoin:round;display:block}.btn-send[data-icon="stop"] svg{transform:none}/* ── 抽屉里的通用小块 ── */
+.sheet-head{
+  display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-4) var(--sp-4) var(--sp-2);
+  position:sticky;top:0;background:var(--card);z-index:3;
+}.sheet-head h3{margin:0;font-size:var(--t-base);font-weight:var(--w-semi);flex:1;min-width:0;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.sheet-note{font-size:var(--t-sm);color:var(--ink-3);padding:0 var(--sp-4) var(--sp-3);line-height:1.6}.sheet-acts{display:flex;gap:var(--sp-2);flex-wrap:wrap;padding:var(--sp-2) var(--sp-4) var(--sp-3)}
+/* 会话行 */
+.sess{display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--line)}.sess.on{background:var(--accent-soft)}.sess .main{flex:1;min-width:0}.sess .t{font-size:var(--t-base);font-weight:var(--w-medium);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.sess .s{font-size:var(--t-sm);color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:var(--sp-1)}.sess .tag{flex:0 0 auto;font-size:var(--t-xs);color:var(--ink-3);
+  border:1px solid var(--line);border-radius:var(--radius-xs);padding:2px var(--sp-2)}.sess .tag.run{color:var(--accent);border-color:currentColor}.sess .more{flex:0 0 auto;width:32px;height:32px;border-radius:50%;display:grid;place-items:center;color:var(--ink-3)}.sess .more svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.7}.sess .more:active{background:var(--paper-2)}/* 选择器（人格 / 模型） */
+.picker-search{padding:0 var(--sp-4) var(--sp-3)}.picker-item{display:flex;align-items:flex-start;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--line)}.picker-item.on{background:var(--accent-soft)}.picker-item .nm{flex:1;min-width:0}.picker-item .nm b{display:block;font-size:var(--t-base);font-weight:var(--w-medium);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.picker-item .desc{font-size:var(--t-sm);color:var(--ink-3);line-height:1.55;margin-top:var(--sp-1);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.picker-item .ck{flex:0 0 auto;color:var(--accent);font-size:var(--t-sm);padding-top:2px}.picker-empty{padding:var(--sp-6) var(--sp-5);text-align:center;color:var(--ink-3);font-size:var(--t-md)}/* 快捷指令 */
+.quick{display:flex;flex-direction:column}.quick button{
+  display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);
+  border-top:1px solid var(--line);text-align:left;
+}.quick button .qt{flex:1;min-width:0}.quick button .qt b{display:block;font-size:var(--t-base);font-weight:var(--w-medium)}.quick button .qt span{display:block;font-size:var(--t-sm);color:var(--ink-3);margin-top:2px;
+  line-height:1.5;word-break:break-word}.quick button svg{width:19px;height:19px;stroke:var(--ink-3);fill:none;stroke-width:1.6;
+  stroke-linecap:round;stroke-linejoin:round;flex:0 0 auto}.quick button:active{background:var(--paper-2)}/* ══════════════════════════ 设定 ══════════════════════════ */
+.lore-body{
+  flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;
+  -webkit-overflow-scrolling:touch;padding-bottom:var(--sp-3);
+}.lore-group{background:var(--card);border-radius:var(--radius);margin:var(--sp-2) var(--sp-3);overflow:hidden;box-shadow:var(--shadow)}.lore-gh{
+  display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);
+  font-size:var(--t-md);color:var(--ink-2);
+}.lore-gh .cnt{font-size:var(--t-sm);color:var(--ink-3)}.lore-gh .grow{flex:1}.lore-gh svg{width:16px;height:16px;stroke:var(--ink-3);fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round;transition:transform .18s}.lore-group.closed .lore-gh svg{transform:rotate(-90deg)}.lore-group.closed .lore-item{display:none}.lore-item{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);border-top:1px solid var(--line)}.lore-item .nm{flex:1;min-width:0}.lore-item .nm b{display:block;font-size:var(--t-base);font-weight:var(--w-normal);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lore-item .nm span{display:block;font-size:var(--t-xs);color:var(--ink-3);margin-top:2px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.lore-item .go{flex:0 0 auto;color:var(--ink-3);display:grid;place-items:center}.lore-item .go svg{width:15px;height:15px;stroke:currentColor;fill:none;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}/* 搜索结果 */
+.hit{padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line);background:var(--card)}.hit .hp{font-size:var(--t-sm);color:var(--ink-3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hit .ht{font-size:var(--t-md);line-height:1.65;margin-top:var(--sp-1);color:var(--ink);
+  word-break:break-word;overflow-wrap:anywhere}.hit .ht mark{background:var(--accent-soft);color:var(--accent);border-radius:3px;padding:0 2px}/* token-ok: 行内高亮块，不是按钮 */
+.hit .ln{font-size:var(--t-xs);color:var(--ink-3);margin-right:var(--sp-2)}/* 设定编辑器（覆盖在 #screen-lore 上的整屏层） */
+.lore-editor{
+  position:absolute;inset:0;z-index:20;display:flex;flex-direction:column;
+  background:var(--paper);
+}.ed-head{
+  display:flex;align-items:center;gap:var(--sp-1);flex:0 0 auto;
+  height:calc(52px + var(--safe-t));padding:var(--safe-t) var(--sp-2) 0;
+  border-bottom:1px solid var(--line);
+}.ed-title{
+  flex:1;min-width:0;font-size:var(--t-base);font-weight:var(--w-semi);text-align:center;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;padding:0 var(--sp-1);
+}.ed-title .sub{display:block;font-size:var(--t-xs);font-weight:var(--w-normal);color:var(--ink-3);margin-top:1px}.ed-area{
+  flex:1;min-height:0;width:100%;resize:none;border:0;outline:none;
+  background:var(--paper);color:var(--ink);
+  padding:var(--sp-4) var(--sp-4) calc(var(--sp-4) + var(--safe-b));
+  font-family:var(--serif);font-size:var(--t-lg);line-height:1.85;
+  white-space:pre-wrap;word-break:break-word;overflow-wrap:anywhere;
+}.ed-foot{
+  flex:0 0 auto;display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;
+  padding:var(--sp-2) var(--sp-4) calc(var(--sp-2) + var(--safe-b));border-top:1px solid var(--line);
+  background:var(--card);font-size:var(--t-sm);color:var(--ink-3);
+}.ed-foot .grow{flex:1;min-width:0}.ed-foot .dirty{color:var(--accent);font-weight:var(--w-semi)}.ed-foot .btn{padding:var(--sp-2) var(--sp-4);font-size:var(--t-base)}/* ── 多 Agent 编排：模式胶囊 + 角色徽章（第 9 轮）─────────────────────────
+   规矩跟全站一致：颜色只用 base.css 的变量，圆角/间距跟现有 pill 一套，
+   不给容器加 :active（水波纹只落在手指点住的那个按钮上）。 */
+.mode-row{
+  display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;   /* 放不下就换行 —— 两头都不许被切 */
+  padding:0 var(--page-x) var(--sp-2);background:var(--paper);flex:0 0 auto;
+}.mode-row .mode-lab{
+  font-size:var(--t-sm);color:var(--ink-3);flex:0 0 auto;letter-spacing:.02em;
+}.mode-row .mode-seg{
+  display:flex;gap:0;background:var(--paper-2);border-radius:var(--radius-sm);padding:2px;
+  border:1px solid var(--line-2);flex:0 0 auto;
+  /* 名字再长也不许被切：先限宽，再横向滚动（滚动条全站已经隐藏）。
+     以前这里既没有 max-width 也没有滚动，比 390 宽就直接顶出屏幕，右头被切。 */
+  max-width:100%;overflow-x:auto;overscroll-behavior-x:contain;
+}.mode-btn{
+  appearance:none;border:0;background:transparent;color:var(--ink-2);
+  font:inherit;font-size:var(--t-md);line-height:1;padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-xs);
+  white-space:nowrap;transition:background .14s ease,color .14s ease;
+}.mode-btn.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow);font-weight:var(--w-semi)}
+/* 模式说明行：一句话说清"现在会怎么干活"（讨论=先商量不落笔 / 计划=只出计划 / 执行=直接改稿）。
+   文字来自后端 orchestra.modes[].desc，不在这儿另编。 */
+.mode-hint{
+  padding:0 var(--page-x) var(--sp-2);background:var(--paper);flex:0 0 auto;
+  font-size:var(--t-sm);color:var(--ink-3);line-height:1.5;
+}
+.mode-hint:empty{display:none}/* 编排进度行（多 Agent 真跑起来时才出现）：跟 .mode-row 一套间距与配色，
+   每棒一个胶囊，跑完的转次要色、正在跑的那个用强调色 —— 一眼看出"现在轮到谁"。
+   用 flex-wrap 而不是横向滚动：390 宽下宁可换行，也不许撑出横向滚动条。 */
+.run-row{
+  display:flex;align-items:center;gap:var(--sp-2);flex-wrap:wrap;
+  padding:0 var(--page-x) var(--sp-2);background:var(--paper);flex:0 0 auto;
+}.run-row .run-lab{font-size:var(--t-sm);color:var(--ink-3);letter-spacing:.02em;flex:0 0 auto}.run-step{
+  font-size:var(--t-sm);line-height:1;color:var(--ink-3);
+  background:var(--paper-2);border:1px solid var(--line-2);border-radius:var(--radius-pill);padding:var(--sp-1) var(--sp-2);
+  white-space:nowrap;transition:background .14s ease,color .14s ease;
+}.run-step.now{color:var(--accent);background:var(--accent-soft);border-color:transparent}.run-step.done{color:var(--ink-2)}.role-badge{
+  display:inline-flex;align-items:center;gap:var(--sp-2);margin:0 0 var(--sp-1);   /* 不留 2px 随手偏移：跟气泡文字同一左基准线 */
+  font-size:var(--t-sm);color:var(--ink-3);
+}.role-badge .rn{
+  color:var(--accent);font-weight:var(--w-semi);
+  background:var(--accent-soft);border-radius:var(--radius-pill);padding:2px var(--sp-2);
+}.role-badge .rt{color:var(--ink-3)}/* 只挑刺的徽章用危险色（它本来就是"找毛病"），取料的两个用次要色 —— 都用全站变量 */
+.role-badge[data-role="critic"] .rn{color:var(--danger);background:var(--danger-soft)}.role-badge[data-role="retriever"] .rn, .role-badge[data-role="researcher"] .rn{color:var(--ink-2);background:var(--line-2)}/* ══════════ 常用指令条（第 19 轮新功能 ②：一键把话说完）══════════
+   长在对话框上面：一排"你自己攒的指令"，点一条就发出去。
+   横滑、不换行；高 36px，热区靠 padding 撑到 44。 */
+.chat-quick{padding:0 0 var(--sp-2);flex:0 0 auto}.chat-quick.hidden{display:none}.chat-quick .cq-scroll{
+  display:flex;gap:var(--sp-2);overflow-x:auto;padding:0 var(--page-x);-webkit-overflow-scrolling:touch;
+  scrollbar-width:none;
+  /* 右边缘渐隐 = "还能往右滑"（用户：「不要一头被切」） */
+  -webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%);
+  mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 28px),transparent 100%);
+}.chat-quick .cq-scroll::-webkit-scrollbar{display:none}.cq-chip{
+  flex:0 0 auto;display:inline-flex;align-items:center;gap:var(--sp-1);
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-pill);border:1px solid var(--line);
+  background:var(--card);color:var(--ink-2);font-size:var(--t-md);white-space:nowrap;
+  transition:transform .1s var(--ease),background .16s var(--ease),color .16s var(--ease);
+}.cq-chip:active{transform:scale(.95);background:var(--accent-soft);color:var(--accent)}.cq-chip.add{border-style:dashed;color:var(--ink-3)}.cq-chip svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8}.cq-hint{padding:var(--sp-2) var(--sp-4);font-size:var(--t-sm);color:var(--ink-3);display:block}

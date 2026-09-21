@@ -1,0 +1,25 @@
+{
+ "at": "2026-09-20 02:30:50",
+ "total": 3,
+ "ok": 3,
+ "items": [
+  {
+   "step": "① 基线",
+   "exit": 0,
+   "ok": true,
+   "tail": "报告：docs/测试残留检查.json"
+  },
+  {
+   "step": "② 塞一行孤儿 → 判据必须报",
+   "exit": 1,
+   "ok": true,
+   "tail": "报告：docs/测试残留检查.json"
+  },
+  {
+   "step": "③ 撤掉那行 → 回到全绿",
+   "exit": 0,
+   "ok": true,
+   "tail": "报告：docs/测试残留检查.json"
+  }
+ ]
+}

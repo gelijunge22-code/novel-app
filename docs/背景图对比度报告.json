@@ -1,0 +1,228 @@
+{
+ "at": "2026-09-21 09:18:59",
+ "force": null,
+ "surfaces": [
+  {
+   "id": "ubg-shelf",
+   "file": "docs/前端截图/r43-ubg-ok-black-shelf.png",
+   "nText": 7,
+   "minPx": 3.21,
+   "minText": "斗",
+   "worst": {
+    "限": 4.5,
+    "类型": "正文",
+    "字号": 20,
+    "找到了字色": true
+   },
+   "bgSample": [
+    216,
+    200,
+    184
+   ],
+   "fails": [],
+   "warns": [
+    "斗（正文 20px，限 4.5:1）—— 压在图上的字看不清；但**基线（没铺图）也过不了**（基线 3.21:1）→ 是取色口径的问题，不是这张背景图的锅"
+   ],
+   "unmeasurable": 0,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-shelf.png",
+   "basePx": 3.21,
+   "baseBgSample": [
+    248,
+    232,
+    216
+   ],
+   "diffPct": 61.63
+  },
+  {
+   "id": "ubg-chat",
+   "file": "docs/前端截图/r43-ubg-ok-black-chat.png",
+   "nText": 5,
+   "minPx": 3.45,
+   "minText": "昨天 20:17",
+   "worst": {
+    "限": 3.0,
+    "类型": "次要小字",
+    "字号": 11,
+    "找到了字色": true
+   },
+   "bgSample": [
+    216,
+    200,
+    184
+   ],
+   "fails": [],
+   "warns": [
+    "只量到 5 个文字节点（< 6）—— 这一屏没量到东西，绿了也不算；基线这一屏同样只量到 5 个 → 是这一屏本来就没几个字"
+   ],
+   "unmeasurable": 0,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-chat.png",
+   "basePx": 4.55,
+   "baseBgSample": [
+    248,
+    232,
+    216
+   ],
+   "diffPct": 63.54
+  },
+  {
+   "id": "ubg-lore",
+   "file": "docs/前端截图/r43-ubg-ok-black-lore.png",
+   "nText": 27,
+   "minPx": 5.1,
+   "minText": "2",
+   "worst": {
+    "限": 3.0,
+    "类型": "次要小字",
+    "字号": 12,
+    "找到了字色": true
+   },
+   "bgSample": [
+    248,
+    248,
+    232
+   ],
+   "fails": [],
+   "warns": [],
+   "unmeasurable": 1,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-lore.png",
+   "basePx": 5.1,
+   "baseBgSample": [
+    248,
+    248,
+    232
+   ],
+   "diffPct": 12.05
+  },
+  {
+   "id": "ubg-preset",
+   "file": "docs/前端截图/r43-ubg-ok-black-preset.png",
+   "nText": 27,
+   "minPx": 2.11,
+   "minText": "保存",
+   "worst": {
+    "限": 4.5,
+    "类型": "正文",
+    "字号": 14,
+    "找到了字色": true
+   },
+   "bgSample": [
+    248,
+    248,
+    232
+   ],
+   "fails": [],
+   "warns": [
+    "保存（正文 14px，限 4.5:1）—— 压在图上的字看不清；但**基线（没铺图）也过不了**（基线 2.11:1）→ 是取色口径的问题，不是这张背景图的锅"
+   ],
+   "unmeasurable": 0,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-preset.png",
+   "basePx": 2.11,
+   "baseBgSample": [
+    248,
+    248,
+    232
+   ],
+   "diffPct": 23.22
+  },
+  {
+   "id": "ubg-settings",
+   "file": "docs/前端截图/r43-ubg-ok-black-settings.png",
+   "nText": 37,
+   "minPx": 3.51,
+   "minText": "背景",
+   "worst": {
+    "限": 3.0,
+    "类型": "次要小字",
+    "字号": 13,
+    "找到了字色": true
+   },
+   "bgSample": [
+    248,
+    248,
+    232
+   ],
+   "fails": [],
+   "warns": [],
+   "unmeasurable": 4,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-settings.png",
+   "basePx": 1.21,
+   "baseBgSample": [
+    248,
+    248,
+    232
+   ],
+   "diffPct": 24.63
+  },
+  {
+   "id": "ubg-tools",
+   "file": "docs/前端截图/r43-ubg-ok-black-tools.png",
+   "nText": 32,
+   "minPx": 3.51,
+   "minText": "书稿",
+   "worst": {
+    "限": 3.0,
+    "类型": "次要小字",
+    "字号": 13,
+    "找到了字色": true
+   },
+   "bgSample": [
+    248,
+    248,
+    232
+   ],
+   "fails": [],
+   "warns": [],
+   "unmeasurable": 0,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-tools.png",
+   "basePx": 4.55,
+   "baseBgSample": [
+    248,
+    248,
+    232
+   ],
+   "diffPct": 31.69
+  },
+  {
+   "id": "ubg-tool",
+   "file": "docs/前端截图/r43-ubg-ok-black-tool.png",
+   "nText": 0,
+   "minPx": null,
+   "minText": "",
+   "worst": null,
+   "bgSample": [
+    248,
+    248,
+    232
+   ],
+   "fails": [],
+   "warns": [
+    "只量到 0 个文字节点（< 6）—— 这一屏没量到东西，绿了也不算；基线这一屏同样只量到 0 个 → 是这一屏本来就没几个字"
+   ],
+   "unmeasurable": 0,
+   "baseFile": "docs/前端截图/r43-ubg-ok-base-tool.png",
+   "basePx": null,
+   "baseBgSample": [
+    248,
+    248,
+    232
+   ],
+   "diffPct": 31.69
+  }
+ ],
+ "fails": [],
+ "warns": [
+  "ubg-shelf：斗（正文 20px，限 4.5:1）—— 压在图上的字看不清；但**基线（没铺图）也过不了**（基线 3.21:1）→ 是取色口径的问题，不是这张背景图的锅",
+  "ubg-chat：只量到 5 个文字节点（< 6）—— 这一屏没量到东西，绿了也不算；基线这一屏同样只量到 5 个 → 是这一屏本来就没几个字",
+  "ubg-preset：保存（正文 14px，限 4.5:1）—— 压在图上的字看不清；但**基线（没铺图）也过不了**（基线 2.11:1）→ 是取色口径的问题，不是这张背景图的锅",
+  "ubg-tool：只量到 0 个文字节点（< 6）—— 这一屏没量到东西，绿了也不算；基线这一屏同样只量到 0 个 → 是这一屏本来就没几个字"
+ ],
+ "summary": {
+  "surfaces": 7,
+  "bad": 0,
+  "warned": 4,
+  "textNodes": 135,
+  "worst": 2.11,
+  "基线也没过（口径问题）": 4
+ },
+ "ok": true
+}

@@ -1,0 +1,181 @@
+/* ============================================================
+   preset.css — 「预设」页（类酒馆：写作人设 / 文风 / 尺度 / 模型参数）
+   ============================================================ */
+
+.preset-body{
+  flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  overscroll-behavior:contain;
+  /* 底部要同时让开「保存条」和「底部导航」，否则最后一项被压住 */
+  padding:var(--sp-3) var(--sp-3) calc(var(--tab-h) + var(--safe-b) + var(--sp-16));
+}
+
+/* 顶部：三个身份（正文写作 / 主创 / 资产助手），等宽 */
+/* 三个身份（正文写作 / 主创 / 资产助手…）等宽。
+   角色一多，一行挤不下 —— 以前是 flex:1 + nowrap + ellipsis，于是每个只剩 36px，
+   「正文写作」被切成「正文写…」（用户原话：「完全看不到，全这种字全都超了」）。
+   现在放不下就**换行**（一行最多 3 个），字一个都不许切。 */
+.preset-seg{display:flex;flex-wrap:wrap;gap:var(--sp-2);padding:2px 2px var(--sp-3)}
+.preset-seg button{
+  flex:1 1 calc(33.333% - var(--sp-2));min-width:0;
+  border:1px solid var(--line);background:var(--card);color:var(--ink-2);
+  font:inherit;font-size:var(--t-md);font-weight:var(--w-semi);letter-spacing:.01em;
+  padding:var(--sp-3) var(--sp-2);border-radius:var(--radius);cursor:pointer;
+  white-space:normal;overflow-wrap:anywhere;
+  transition:transform .12s ease,background .16s ease,color .16s ease,border-color .16s ease;
+}
+.preset-seg button:active{transform:scale(.95)}
+.preset-seg button.on{
+  background:var(--accent);border-color:var(--accent);color:var(--on-accent);
+}
+
+/* 分组卡片 */
+.pcard{
+  background:var(--card);border-radius:var(--radius);
+  box-shadow:var(--shadow);margin-bottom:var(--sp-3);overflow:hidden;
+}
+.pcard-hd{
+  padding:var(--sp-3) var(--sp-4) 0;display:flex;align-items:baseline;gap:var(--sp-2);justify-content:space-between;
+}
+.pcard-hd h3{margin:0;font-size:var(--t-base);font-weight:var(--w-bold);color:var(--ink)}
+.pcard-hd .hint{font-size:var(--t-sm);color:var(--ink-3);font-weight:var(--w-normal)}
+.pcard-bd{padding:var(--sp-3) var(--sp-4) var(--sp-4)}
+
+/* 单个字段 */
+.pfield{padding:var(--sp-3) 0;border-top:1px solid var(--line-2)}
+.pfield:first-child{border-top:0;padding-top:2px}
+.pfield-lb{display:flex;align-items:center;gap:var(--sp-2);font-size:var(--t-md);font-weight:var(--w-semi);color:var(--ink)}
+.pfield-lb .tag{
+  font-size:var(--t-xs);font-weight:var(--w-medium);color:var(--ink-3);border:1px solid var(--line);
+  padding:1px var(--sp-2);border-radius:var(--radius-xs);letter-spacing:.02em;
+}
+.pfield-ds{font-size:var(--t-sm);line-height:1.55;color:var(--ink-3);margin:var(--sp-1) 0 0}
+.pfield-ct{margin-top:var(--sp-2)}
+
+.pinput,.ptextarea{
+  width:100%;box-sizing:border-box;font:inherit;font-size:var(--t-base);line-height:1.62;
+  color:var(--ink);background:var(--paper-2,#f6efe2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-3) var(--sp-3);
+  -webkit-user-select:text;user-select:text;
+  transition:border-color .15s ease,box-shadow .15s ease;
+}
+.pinput:focus,.ptextarea:focus{
+  outline:none;border-color:var(--accent);
+  box-shadow:0 0 0 3px color-mix(in srgb,var(--accent) 14%,transparent);
+}
+.ptextarea{resize:vertical;min-height:88px;font-family:var(--font-read,system-ui);}
+.pinput::placeholder,.ptextarea::placeholder{color:var(--ink-3);opacity:.75}
+
+/* 分段单选 */
+.pradio{display:flex;gap:var(--sp-2);flex-wrap:wrap;background:var(--paper-2,#f6efe2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-1)}
+.pradio button{
+  flex:1 1 0;min-width:74px;border:0;background:transparent;color:var(--ink-2);
+  font:inherit;font-size:var(--t-md);font-weight:var(--w-semi);padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs);cursor:pointer;
+  transition:background .16s ease,color .16s ease,transform .1s ease;
+}
+.pradio button:active{transform:scale(.96)}
+/* 标签长的单选（如「短（2000 字上下）」＝11 个字）：竖排一行一个、左对齐。
+   横排时 flex 会给成 ~100px 宽 → 折成 2~3 行，正是用户点名的"被挤成两行"。 */
+.pradio-list{flex-direction:column}
+/* 竖排变体只改"排布"（一行一个、左对齐、撑满），**内边距跟横排保持一模一样** ——
+   以前这里单独写了 padding:var(--sp-3)，于是同一族控件里有的 16px 有的 24px，
+   正是用户说的"一部分 UI 太大、跟别处不一个尺寸"（DOM 判据 tools/e2e-layout.js 的"同类同尺寸"抓到的）。 */
+.pradio-list button{flex:0 0 auto;width:100%;min-width:0;text-align:left}
+.pradio button.on{background:var(--accent);color:var(--on-accent);box-shadow:0 1px 4px rgba(60,50,40,.18)}
+.pradio button.on small{color:rgba(255,255,255,.78)}
+.pradio button small{display:block;font-weight:var(--w-normal);font-size:var(--t-xs);color:var(--ink-3);margin-top:2px}
+
+/* 可选预设（文风 / 人设）：一行「当前值 + 箭头」 */
+.ppick{
+  width:100%;display:flex;align-items:center;gap:var(--sp-3);text-align:left;
+  font:inherit;color:var(--ink);background:var(--paper-2,#f6efe2);
+  border:1px solid var(--line);border-radius:var(--radius);padding:var(--sp-3) var(--sp-3);cursor:pointer;
+  transition:transform .12s ease,border-color .16s ease;
+}
+.ppick:active{border-color:var(--accent)}
+.ppick .txt{flex:1;min-width:0}
+.ppick .txt b{display:block;font-size:var(--t-md);font-weight:var(--w-semi);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ppick .txt span{display:block;font-size:var(--t-xs);color:var(--ink-3);margin-top:var(--sp-1);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ppick .chev{flex:0 0 auto;color:var(--ink-3);display:flex}
+.ppick.empty .txt b{color:var(--ink-3);font-weight:var(--w-medium)}
+
+/* 底部保存条：常驻（未改动时保存键是灰的），别让用户找 */
+.preset-save{
+  position:fixed;left:0;right:0;bottom:calc(var(--tab-h) + var(--safe-b));z-index:25;
+  padding:var(--sp-3) var(--sp-4);
+  background:var(--card);
+  border-top:1px solid var(--line);
+  box-shadow:0 -2px 12px rgba(40,32,24,.06);
+  display:flex;align-items:center;gap:var(--sp-3);
+}
+.preset-save .msg{flex:1;min-width:0;font-size:var(--t-sm);color:var(--ink-3);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.preset-save .btn{flex:0 0 auto;padding:var(--sp-3) var(--sp-6)}
+
+/* 选择面板里的列表 */
+.pk-list{list-style:none;margin:0;padding:0}
+.pk-list li{
+  padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line-2);cursor:pointer;
+  display:flex;align-items:center;gap:var(--sp-3);
+  transition:background .14s ease;
+}
+.pk-list li.on{color:var(--accent);font-weight:var(--w-semi)}
+.pk-list li .t{flex:1;min-width:0;font-size:var(--t-base);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.pk-list li .s{font-size:var(--t-xs);color:var(--ink-3);flex:0 0 auto}
+.pk-search{
+  position:sticky;top:0;z-index:2;padding:var(--sp-3) var(--sp-3);
+  background:var(--card);border-bottom:1px solid var(--line-2);
+}
+.pk-search input{
+  width:100%;box-sizing:border-box;font:inherit;font-size:var(--t-base);
+  background:var(--paper-2,#f6efe2);border:1px solid var(--line);border-radius:var(--radius-xs);
+  padding:var(--sp-2) var(--sp-3);color:var(--ink);-webkit-user-select:text;user-select:text;
+}
+.pk-search input:focus{outline:none;border-color:var(--accent)}
+.pk-preview{
+  font-size:var(--t-sm);line-height:1.75;color:var(--ink-2);white-space:pre-wrap;
+  padding:var(--sp-4) var(--sp-4) var(--sp-8);-webkit-user-select:text;user-select:text;
+}
+
+/* 加载态 */
+.preset-loading{padding:var(--sp-10) 0;text-align:center;color:var(--ink-3);font-size:var(--t-md)}
+
+/* ── 作用域切换：这套预设是「这一本书的」还是「所有书默认的」 ──
+   平台的设计是全局一套 + 每本书可单独覆盖；不把这个摆出来，
+   用户会以为改了 A 书把 B 书也改了。 */
+.preset-scope{padding:var(--sp-3) var(--sp-4) var(--sp-1);flex:none}
+.preset-scope[hidden]{display:none}
+.pseg{
+  display:flex;gap:var(--sp-1);padding:var(--sp-1);border-radius:var(--radius-sm);
+  background:var(--fill-2);border:1px solid var(--line-1);
+}
+.pseg button{
+  flex:1;border:0;background:transparent;color:var(--ink-2);
+  font-size:var(--t-md);font-weight:var(--w-semi);padding:var(--sp-2) 0;border-radius:var(--radius-xs);
+  transition:transform .12s var(--ease),background-color .18s var(--ease),color .18s var(--ease);
+}
+.pseg button.on{
+  background:var(--card);color:var(--ink-1);
+  box-shadow:0 1px 3px rgba(28,20,12,.10),0 4px 12px rgba(28,20,12,.06);
+}
+.pseg button:active{transform:scale(.96)}
+.pseg-hint{
+  margin:var(--sp-2) 0 0;font-size:var(--t-sm);line-height:1.5;color:var(--ink-3);
+}
+.pseg-hint b{color:var(--ink-2);font-weight:var(--w-semi)}
+.plink{
+  border:0;background:none;padding:0 2px;margin:0;font:inherit;font-size:var(--t-sm);
+  color:var(--accent,#8a5a2b);text-decoration:underline;text-underline-offset:2px;
+  transition:transform .12s var(--ease),opacity .18s var(--ease);
+}
+.plink:active{transform:scale(.96);opacity:.6}
+
+/* ── 会自己长高的多行框（单行框放长文会横向滚走） ── */
+.ptextarea.pgrow{
+  field-sizing:content;            /* 新版 Chromium/WebView 原生支持 */
+  min-height:44px;max-height:42vh;resize:none;overflow-y:auto;
+  line-height:1.55;
+}

@@ -1,0 +1,548 @@
+{
+ "at": "2026-09-20 07:54:38",
+ "base": "http://127.0.0.1:8899",
+ "total": 60,
+ "bad": 0,
+ "rows": [
+  {
+   "group": "A-空书",
+   "name": "空书·book 详情",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 5
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·质检报告",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 4
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·质检扫描全书",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 5
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·统计",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 4
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·导出 Markdown",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 4
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·导出整包",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 4
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·世界总览",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 2
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·世界回溯",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 2
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·世界审计",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 2
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·剧情总览",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 6
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·待兑现伏笔",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 24
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·出场统计",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 8
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·节奏曲线",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 3
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·声音报告",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 3
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·一致性体检",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 6
+  },
+  {
+   "group": "A-空书",
+   "name": "空书·搜索",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": 2
+  },
+  {
+   "group": "B-中文",
+   "name": "中文书名建书（含空格与 #）",
+   "ok": true,
+   "detail": "没拿到 slug",
+   "detailFull": "没拿到 slug",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "B-中文",
+   "name": "中文章名新建",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": 4
+  },
+  {
+   "group": "B-中文",
+   "name": "中文章名读回（内容一致）",
+   "ok": true,
+   "detail": "内容不对：# 风雪\n\n“走。”沈岩说。\n",
+   "detailFull": "内容不对：# 风雪\n\n“走。”沈岩说。\n",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "B-中文",
+   "name": "中文章名写入",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": 3
+  },
+  {
+   "group": "B-中文",
+   "name": "搜索命中中文内容",
+   "ok": true,
+   "detail": "一条都没搜到",
+   "detailFull": "一条都没搜到",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "B-中文",
+   "name": "中文章名改名",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "B-中文",
+   "name": "中文书名导出 Markdown",
+   "ok": true,
+   "detail": "导出是空的",
+   "detailFull": "导出是空的",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "B-中文",
+   "name": "导入时文件名带空格",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "写章节：../../../../etc/passwd（不许落到书目录外面）",
+   "ok": true,
+   "detail": "真写到书外面去了",
+   "detailFull": "真写到书外面去了",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "写章节：..%2f..%2fetc%2fpasswd（不许落到书目录外面）",
+   "ok": true,
+   "detail": "真写到书外面去了",
+   "detailFull": "真写到书外面去了",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "写章节：manuscript/../../../etc/passwd（不许落到书目录外面）",
+   "ok": true,
+   "detail": "真写到书外面去了",
+   "detailFull": "真写到书外面去了",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "写章节：/etc/passwd（不许落到书目录外面）",
+   "ok": true,
+   "detail": "真写到书外面去了",
+   "detailFull": "真写到书外面去了",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "写章节：manuscript/..\\..\\win.ini（不许落到书目录外面）",
+   "ok": true,
+   "detail": "真写到书外面去了",
+   "detailFull": "真写到书外面去了",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "/etc/passwd 没被改写",
+   "ok": true,
+   "detail": "系统文件被写了！",
+   "detailFull": "系统文件被写了！",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "C-穿越",
+   "name": "相对上级目录（data/books/../）不许落盘",
+   "ok": true,
+   "detail": "真写到了书目录外面：../evil-slug-escape.txt",
+   "detailFull": "真写到了书目录外面：../evil-slug-escape.txt",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "D-超长",
+   "name": "30 万字一章（240000 字）建得下",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": 36
+  },
+  {
+   "group": "D-超长",
+   "name": "读回来长度一致",
+   "ok": true,
+   "detail": "长度 240000 != 240000",
+   "detailFull": "长度 240000 != 240000",
+   "status": null,
+   "ms": 7
+  },
+  {
+   "group": "D-超长",
+   "name": "30 万字扫质检不超时（<20s）",
+   "ok": true,
+   "detail": "耗时 378ms",
+   "detailFull": "耗时 378ms",
+   "status": null,
+   "ms": 378
+  },
+  {
+   "group": "D-超长",
+   "name": "超长正文（20 万字）不炸",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": 4
+  },
+  {
+   "group": "D-超长",
+   "name": "8000 字书名：要么收下要么说人话",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "E-并发",
+   "name": "16 路同时写不同章：0 个 500 / DB locked",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "E-并发",
+   "name": "16 章全都出现在书目里（没丢）",
+   "ok": true,
+   "detail": "丢了：",
+   "detailFull": "丢了：",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "E-并发",
+   "name": "8 路同时写同一章：0 个 500",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "E-并发",
+   "name": "同一章最后是一个完整版本（不是半个文件）",
+   "ok": true,
+   "detail": "内容：第 6 版\n",
+   "detailFull": "内容：第 6 版\n",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "E-并发",
+   "name": "读写混合 24 路：0 个 500",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "book 详情（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "质检报告（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "世界总览（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "章节读（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "不存在的章（书是真的）（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "导出（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "F-不存在",
+   "name": "写章节（要 4xx 说人话，不许 500）",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 404,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "建书：空 body",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 400,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "建书：title 是数组",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 400,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "建书：title 是对象",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 400,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "写章：content 是数字",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "写章：path 是空",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 400,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "世界实体：name 是数字",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": null
+  },
+  {
+   "group": "G-类型",
+   "name": "时刻：date 是数组",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": 200,
+   "ms": null
+  },
+  {
+   "group": "H-类型",
+   "name": "错类型字段不许把服务打成 5xx（170 次请求）",
+   "ok": true,
+   "detail": "0 处：",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "Z-收尾",
+   "name": "模糊测试建的 12 本书全进回收站，架上一本不剩",
+   "ok": true,
+   "detail": "还剩：",
+   "detailFull": "还剩：",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "Z-收尾",
+   "name": "删测试书 zz-edge-0920-075437",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "Z-收尾",
+   "name": "删测试书 书名带空格-与-井号-测试",
+   "ok": true,
+   "detail": "",
+   "detailFull": "",
+   "status": null,
+   "ms": null
+  },
+  {
+   "group": "Z-收尾",
+   "name": "书架上没留任何自测书",
+   "ok": true,
+   "detail": "剩下：",
+   "detailFull": "剩下：",
+   "status": null,
+   "ms": null
+  }
+ ]
+}

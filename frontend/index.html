@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="zh-CN" class="theme-paper" data-theme="paper">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#f3ead9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no,email=no,address=no">
+<title>书</title>
+<base href="./">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/decor.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/shelf.css">
+<link rel="stylesheet" href="css/reader.css">
+<link rel="stylesheet" href="css/panels.css">
+<link rel="stylesheet" href="css/preset.css">
+<link rel="stylesheet" href="css/tools.css">
+</head>
+<body>
+
+<!-- ───────────────────────── 启动页（盖住网页加载那一瞬间） ───────────────────────── -->
+<div id="splash">
+  <div class="splash-inner">
+    <div class="splash-mark">书</div>
+    <div class="splash-sub">手 机 写 作 台</div>
+    <div class="splash-bar"><i></i></div>
+  </div>
+</div>
+
+<!-- ───────────────────────── 登录 ───────────────────────── -->
+<div id="login" class="login hidden">
+  <div class="login-card">
+    <div class="login-brand">书</div>
+    <div class="login-sub">手机写作台</div>
+    <input id="login-pass" class="input" type="password" inputmode="text" placeholder="密码" autocomplete="current-password">
+    <button id="login-go" class="btn btn-primary">进入</button>
+    <button id="login-retry" class="btn btn-ghost hidden">重试连接</button>
+    <div id="login-msg" class="login-msg"></div>
+  </div>
+</div>
+
+<!-- ───────────────────────── 书架 ───────────────────────── -->
+<section id="screen-shelf" class="screen">
+  <header class="topbar">
+    <button id="btn-shelf-menu" class="icon-btn" aria-label="设置" data-icon="menu"></button>
+    <h1 class="topbar-title">书架</h1>
+    <div class="topbar-right">
+      <button id="btn-shelf-search" class="icon-btn" aria-label="搜书" data-icon="search"></button>
+      <button id="btn-shelf-refresh" class="icon-btn" aria-label="刷新" data-icon="refresh"></button>
+    </div>
+  </header>
+  <div id="shelf-book" class="bk-bar-host"></div>
+  <div id="shelf-searchbar" class="searchbar hidden">
+    <input id="shelf-q" class="input" type="search" placeholder="搜书名 / 标签 / 章节名" autocomplete="off">
+    <button id="btn-shelf-q-close" class="icon-btn sm" data-icon="close" aria-label="收起搜索"></button>
+  </div>
+  <div id="shelf-list" class="shelf-list"></div>
+  <button id="btn-shelf-new" class="fab" data-icon="plus" aria-label="新建作品"></button>
+  <input type="file" id="cover-input" accept="image/*" hidden>
+</section>
+
+<!-- ───────────────────────── 阅读 ───────────────────────── -->
+<section id="screen-reader" class="screen full hidden">
+  <!-- 顶栏只有「返回 + 书名」：用户点名把右上角那个「三个点」**彻底去掉** ——
+       阅读时要用到的东西全部搬到屏幕底下（常驻一排 + 一个底部小面板），
+       不再有"点开整屏、把字盖住"的第二套入口。 -->
+  <div id="reader-head" class="reader-head">
+    <button class="icon-btn" data-icon="back" data-act="reader-back" aria-label="返回"></button>
+    <div id="reader-head-title" class="reader-head-title"></div>
+    <span class="bar-spacer"></span>
+  </div>
+  <div id="reader-stage" class="reader-stage">
+    <div id="reader-page" class="reader-page"></div>
+    <div id="reader-turn" class="reader-turn" aria-hidden="true"></div>
+  </div>
+  <!-- 阅读时常驻的一排：**一定会用到的直接露出来**，不用点开设置找。
+       点屏幕中间出来/收起（跟主流小说 App 一样），左右两端是翻页。 -->
+  <div id="reader-foot" class="reader-foot">
+    <div class="rd-foot-prog">
+      <button class="rd-nav" data-act="rd-prev" aria-label="上一章">上一章</button>
+      <input id="reader-scrub" class="scrub" type="range" min="0" max="100" value="0">
+      <span id="reader-scrub-val" class="reader-bar-val">0%</span>
+      <button class="rd-nav" data-act="rd-next" aria-label="下一章">下一章</button>
+    </div>
+    <div class="rd-foot-acts">
+      <button class="rd-fb" data-icon="list" data-act="rd-toc" aria-label="目录"><span>目录</span></button>
+      <button class="rd-fb" data-icon="sound" data-act="toggle-tts" aria-label="听书"><span>听书</span></button>
+      <button class="rd-fb" data-icon="bookmark" data-act="rd-mark" aria-label="加书签"><span>书签</span></button>
+      <button class="rd-fb" data-icon="note" data-act="rd-note" aria-label="记一笔"><span>记一笔</span></button>
+      <button class="rd-fb" data-icon="minus" data-act="rd-fs-down" aria-label="字号小一点"><span>字小</span></button>
+      <button class="rd-fb" data-icon="plus" data-act="rd-fs-up" aria-label="字号大一点"><span>字大</span></button>
+      <button class="rd-fb" data-icon="settings" data-act="reader-quick" aria-label="设置"><span>设置</span></button>
+    </div>
+  </div>
+  <!-- 底部面板（用户点名：从右上角三个点搬到下面、只占一小块、一边调一边看得到正文）
+       **外观 = 旧版**（用户原话：「现在点开书的那个设置还是太丑了，甚至不如以前的，不如变回以前的」）：
+       抓手 + 关闭键**同一行**（没有「阅读设置」标题）、页签是 **3 列等宽网格**（带图标）、**底部没有「完成」**。
+       第 40 轮用户又点名：**面板要"几乎霸占整屏"、整块内容一起滚**（"看不了正文也行"）→ 见下面的 #rd-quick-scroll。
+       两条不变的红线：① 里面**不写第二套控件**（排版/背景那些就是设置页同一套 .settings-* / .seg / .stepper）；
+       ② 「目录」这一格打开的是**独立**的 #rd-toc（用户点名要目录独立；别把它塞回面板里当页签内容）。
+       收起四条路：抓手下拉、点正文、右上角关闭键、手机返回键。 -->
+  <div id="rd-quick" class="rd-quick hidden" role="dialog" aria-label="阅读设置">
+    <!-- **一个滚动容器装全部内容**（用户点名："上面那一块（排版/背景……）是固定在那里的，你想划的话
+         只能划他们下面的……还不如改成原来的那种——点开设置会几乎霸占整个屏幕"）：
+         抓手那一条 + 7 格 + 内容全在 #rd-quick-scroll 里一起滚，**没有"上固定下滚动"两层**。
+         只有抓手那一条吸顶 —— 它上面挂着「关掉它」（下拉 + 右上角 ×），滚下去也得找得到。 -->
+    <div class="rd-quick-scroll" id="rd-quick-scroll">
+      <div class="rd-quick-bar">
+        <span class="rd-quick-grab" aria-hidden="true"></span>
+        <button class="icon-btn" data-icon="close" data-act="reader-quick-close" aria-label="收起设置"></button>
+      </div>
+      <div class="rd-quick-tabs" role="tablist">
+        <button class="rd-qbtn on" data-q="type" data-icon="sliders" role="tab" aria-selected="true"><span>排版</span></button>
+        <button class="rd-qbtn" data-q="theme" data-icon="warm" role="tab" aria-selected="false"><span>背景</span></button>
+        <button class="rd-qbtn" data-q="tts" data-icon="sound" role="tab" aria-selected="false"><span>听书</span></button>
+        <button class="rd-qbtn" data-q="toc" data-icon="list" role="tab" aria-selected="false"><span>目录</span></button>
+        <button class="rd-qbtn" data-q="mark" data-icon="bookmark" role="tab" aria-selected="false"><span>书签</span></button>
+        <button class="rd-qbtn" data-q="note" data-icon="note" role="tab" aria-selected="false"><span>笔记</span></button>
+        <button class="rd-qbtn" data-q="share" data-icon="share" role="tab" aria-selected="false"><span>分享</span></button>
+      </div>
+      <div class="rd-quick-body" id="rd-quick-body"></div>
+    </div>
+  </div>
+
+  <!-- 目录：**独立的一整块**（用户点名：「点开目录之后，只是相当于在设置里面点开了目录一样，
+       并没有那种简洁的感觉，而且很乱，最主要的是那个地方还有点挡着的感觉」）。
+       规矩：① 不是设置里的一个页签；② 一行一章，**只有章号 + 章名**（当前章高亮），
+       列表里不放任何说明文字；③ 固定头 + 独立滚动体 + 固定底，谁也不压谁；
+       ④ 收起时不留任何遮挡。改章名 / 删除仍然是**长按一行**（那是章一级的操作，跟着章走）。 -->
+  <div id="rd-toc" class="rd-toc hidden" role="dialog" aria-label="目录">
+    <div class="rd-toc-scrim" data-act="rd-toc-close"></div>
+    <div class="rd-toc-panel">
+      <header class="rd-toc-head">
+        <div class="rd-toc-headmain">
+          <h3 class="rd-toc-title">目录</h3>
+          <span class="rd-toc-sub" id="rd-toc-sub"></span>
+        </div>
+        <button class="icon-btn sm" data-icon="close" data-act="rd-toc-close" aria-label="收起目录"></button>
+      </header>
+      <div class="rd-toc-body" id="rd-toc-body"></div>
+      <footer class="rd-toc-foot">
+        <button class="btn btn-block sm" data-toc="here">回到当前章</button>
+        <button class="btn btn-block sm btn-soft" data-toc="new">新建一章</button>
+      </footer>
+    </div>
+  </div>
+</section>
+
+<!-- ───────────────────────── 对话 ───────────────────────── -->
+<section id="screen-chat" class="screen hidden">
+  <header class="topbar">
+    <button class="icon-btn" data-icon="back" data-act="chat-back" aria-label="返回"></button>
+    <h1 id="chat-title" class="topbar-title">对话</h1>
+    <div class="topbar-right">
+      <button class="icon-btn" data-icon="more" data-act="chat-menu" aria-label="设置"></button>
+    </div>
+  </header>
+  <div id="chat-book" class="bk-bar-host"></div>
+  <div id="chat-body" class="chat-body"></div>
+  <div id="chat-compose" class="chat-compose">
+    <button id="chat-plus" class="icon-btn sm" data-icon="plus" aria-label="更多"></button>
+    <textarea id="chat-input" class="chat-input" rows="1" placeholder="说点什么…"></textarea>
+    <button id="chat-send" class="btn btn-send" data-icon="send" aria-label="发送"></button>
+  </div>
+</section>
+
+<!-- ───────────────────────── 设定 ───────────────────────── -->
+<section id="screen-lore" class="screen hidden">
+  <header class="topbar">
+    <button class="icon-btn" data-icon="back" data-act="lore-back" aria-label="返回"></button>
+    <h1 class="topbar-title">设定</h1>
+    <div class="topbar-right">
+      <button class="icon-btn" data-icon="search" data-act="lore-search" aria-label="搜索"></button>
+    </div>
+  </header>
+  <div id="lore-searchbar" class="searchbar hidden">
+    <input id="lore-q" class="input" type="search" placeholder="搜设定、找章节、查人名…">
+  </div>
+  <div id="lore-book" class="bk-bar-host"></div>
+  <div id="lore-body" class="lore-body"></div>
+</section>
+
+<!-- ───────────────────────── 预设（酒馆式：人设 / 文风 / 尺度 / 模型参数） ───────────────────────── -->
+<section id="screen-preset" class="screen hidden">
+  <header class="topbar">
+    <button class="icon-btn" data-icon="back" data-act="preset-back" aria-label="返回"></button>
+    <h1 class="topbar-title">预设</h1>
+    <div class="topbar-right"></div>
+  </header>
+  <div id="preset-book" class="bk-bar-host"></div>
+  <div id="preset-scope" class="preset-scope" hidden></div>
+  <div id="preset-body" class="preset-body"></div>
+  <div id="preset-save" class="preset-save">
+    <span class="msg">改完记得保存</span>
+    <button class="btn btn-primary" data-save>保存</button>
+  </div>
+</section>
+
+<!-- ───────────────────────── 设置 ───────────────────────── -->
+<section id="screen-settings" class="screen hidden">
+  <header class="topbar">
+    <button class="icon-btn" data-icon="back" data-act="settings-back" aria-label="返回"></button>
+    <h1 class="topbar-title">设置</h1>
+  </header>
+  <div id="settings-body" class="settings-body"></div>
+</section>
+
+<!-- ───────────────────────── 工具（原网页的全部能力都搬到这儿） ───────────────────────── -->
+<section id="screen-tools" class="screen hidden">
+  <header class="topbar">
+    <button class="icon-btn" data-icon="back" data-act="tools-back" aria-label="返回"></button>
+    <h1 class="topbar-title">工具</h1>
+    <div class="topbar-right"></div>
+  </header>
+  <div id="tools-book" class="bk-bar-host"></div>
+  <div id="tools-body" class="tools-body"></div>
+</section>
+
+<!-- 通用详情容器：每件工具往这里画自己的界面，顶部标题栏共用 -->
+<section id="screen-tool" class="screen hidden">
+  <header class="topbar">
+    <button class="icon-btn" data-icon="back" data-act="tool-back" aria-label="返回"></button>
+    <h1 id="tool-title" class="topbar-title">—</h1>
+    <div id="tool-actions" class="topbar-right"></div>
+  </header>
+  <div id="tool-body" class="tool-body"></div>
+</section>
+
+<!-- ───────────────────────── 底部导航 ───────────────────────── -->
+<nav id="tabbar" class="tabbar">
+  <button class="tab active" data-tab="shelf" data-icon="book">书架</button>
+  <button class="tab" data-tab="preset" data-icon="sliders">预设</button>
+  <button class="tab" data-tab="lore" data-icon="layers">设定</button>
+  <button class="tab" data-tab="chat" data-icon="chat">对话</button>
+  <button class="tab" data-tab="tools" data-icon="grid">工具</button>
+</nav>
+
+<!-- ───────────────────────── 通用抽屉 / 提示 ───────────────────────── -->
+<div id="sheet" class="sheet hidden"><div class="sheet-panel" id="sheet-panel"></div></div>
+<div id="modal" class="modal hidden"><div class="modal-mask"></div><div class="modal-panel" id="modal-panel"></div></div>
+<div id="toast" class="toast hidden"></div>
+
+<script src="js/api.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+<script src="js/ui.js"></script>
+<script src="js/websearch.js"></script>
+<script src="js/bookctx.js"></script>
+<script src="js/appearance.js"></script>
+<script src="js/reader.js"></script>
+<script src="js/chat.js"></script>
+<script src="js/lore.js"></script>
+<script src="js/preset.js"></script>
+<script src="js/tools.js"></script>
+<script src="js/voice-try.js"></script>
+<script src="js/outline.js"></script>
+<script src="js/studio.js"></script>
+<script src="js/authoring.js"></script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+{
+ "at": "2026-09-20T23:18:05.369Z",
+ "force": "notype",
+ "steps": [
+  {
+   "step": "甲 界面里发一句话（请只回四个字：测试通过）",
+   "expect": "90 秒内出字，或给出看得见的原因/等待提示",
+   "res": {
+    "sid": 235,
+    "model": "渠道-shim/[渠道]某模型",
+    "txt": 4,
+    "errSeen": "",
+    "waitSeen": "",
+    "status": "讨论 · 不动文件",
+    "streamed": false,
+    "mode": "stream",
+    "distinctLens": 1,
+    "distinctSeen": [
+     4
+    ],
+    "frameCount": 2,
+    "frameLens": [
+     4
+    ],
+    "growMs": 1459,
+    "samples": [
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     0,
+     4
+    ],
+    "msgs": 10,
+    "detail": "测试通过"
+   },
+   "ok": true
+  },
+  {
+   "step": "乙 逐字显现（用户看到的\"一个字一个字出\"）",
+   "expect": "页内 20 毫秒采样里出现 ≥3 个不同字数，且渲染帧 ≥2",
+   "res": {
+    "mode": "stream",
+    "distinctLens": 1,
+    "distinctSeen": [
+     4
+    ],
+    "frameCount": 2,
+    "frameLens": [
+     4
+    ],
+    "growMs": 1459,
+    "txt": 4
+   },
+   "ok": false
+  },
+  {
+   "step": "丙 模型报错时界面显示原因 + 重试",
+   "expect": "出现红框、写明原因、有重试按钮",
+   "res": {
+    "box": true,
+    "why": "模型调用失败：渠道返回 500（判据用的一句话）",
+    "retry": true,
+    "html": "模型调用失败：渠道返回 500（判据用的一句话）重试换个模型"
+   },
+   "ok": true
+  },
+  {
+   "step": "丁 空回复必须吭声",
+   "expect": "出现\"模型没有返回内容\"",
+   "res": {
+    "boxes": 2,
+    "silent": true,
+    "text": "模型没有返回内容渠道这次没有吐正文（可能不支持这个模型 / 上下文太长 / 网络在中间断了）。点「重试」再来一次，或点「换个模型」。重试换个模型"
+   },
+   "ok": true
+  }
+ ],
+ "fails": [
+  "乙 没看到逐字显现：采样到 1 个不同字数（4）、渲染帧 2 —— 字是一次蹦出来的"
+ ]
+}

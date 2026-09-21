@@ -1,0 +1,387 @@
+{
+ "at": "2026-09-20 01:55:26",
+ "base": "http://127.0.0.1:8899",
+ "scratchBook": "声音实测-0920-015526",
+ "total": 21,
+ "passed": 21,
+ "failed": 0,
+ "report": {
+  "slug": "声音实测-0920-015526",
+  "score": 72,
+  "grade": "要改",
+  "bands": [
+   {
+    "min": 90,
+    "name": "干净"
+   },
+   {
+    "min": 75,
+    "name": "还行"
+   },
+   {
+    "min": 0,
+    "name": "要改"
+   }
+  ],
+  "people": [
+   {
+    "name": "主角",
+    "entityId": 223,
+    "hasProfile": true,
+    "voice": {
+     "tone": "话多，爱追问，爱翻旧账",
+     "sentence": "绵长",
+     "catchphrases": [
+      "我早说过"
+     ],
+     "emotion": 8
+    },
+    "fingerprint": {
+     "lines": 10,
+     "chars": 141,
+     "avgLen": 14.1,
+     "avgSentLen": 10.8,
+     "askRatio": 0.2,
+     "exclaimRatio": 0.0,
+     "ellipsisRatio": 0.0,
+     "dashRatio": 0.0,
+     "topWords": [
+      "我早",
+      "早说",
+      "你非",
+      "非要",
+      "没用",
+      "嗯嗯"
+     ]
+    },
+    "samples": [
+     {
+      "line": "我还没数完。",
+      "path": "manuscript/第001章-雪.md",
+      "lineNo": 4
+     },
+     {
+      "line": "你总说没用。上回你说没用，我差点没命。",
+      "path": "manuscript/第001章-雪.md",
+      "lineNo": 6
+     },
+     {
+      "line": "我早说过。",
+      "path": "manuscript/第002章-少一块.md",
+      "lineNo": 3
+     },
+     {
+      "line": "你就不能多说两个字？每次都嗯嗯嗯，我跟你说话像对着一堵墙。",
+      "path": "manuscript/第002章-少一块.md",
+      "lineNo": 5
+     },
+     {
+      "line": "你说什么？",
+      "path": "manuscript/第003章-翻车.md",
+      "lineNo": 2
+     },
+     {
+      "line": "我早说过，这事没那么简单，你非要去。",
+      "path": "manuscript/第004章-路人也话多.md",
+      "lineNo": 6
+     }
+    ],
+    "issues": [
+     {
+      "level": "warn",
+      "key": "sentence_mismatch",
+      "text": "档案写「绵长」，实际平均每句 14.1 字，读起来是「中等」",
+      "advice": "按档案改台词，或者把档案改成实际的"
+     }
+    ]
+   },
+   {
+    "name": "沈岩",
+    "entityId": 222,
+    "hasProfile": true,
+    "voice": {
+     "tone": "冷硬，能说两个字不说三个字",
+     "sentence": "短促",
+     "catchphrases": [
+      "嗯",
+      "没用"
+     ],
+     "banned": [
+      "亲爱的",
+      "咱们聊聊"
+     ],
+     "emotion": 2,
+     "samples": [
+      "墙不会救你。"
+     ]
+    },
+    "fingerprint": {
+     "lines": 6,
+     "chars": 51,
+     "avgLen": 8.5,
+     "avgSentLen": 6.3,
+     "askRatio": 0.0,
+     "exclaimRatio": 0.0,
+     "ellipsisRatio": 0.0,
+     "dashRatio": 0.0,
+     "topWords": [
+      "咱们",
+      "上回"
+     ]
+    },
+    "samples": [
+     {
+      "line": "数那个没用。天黑前不出林子，咱们都得留在这儿。",
+      "path": "manuscript/第001章-雪.md",
+      "lineNo": 5
+     },
+     {
+      "line": "上回是上回。",
+      "path": "manuscript/第001章-雪.md",
+      "lineNo": 7
+     },
+     {
+      "line": "看见了吧。",
+      "path": "manuscript/第002章-少一块.md",
+      "lineNo": 2
+     },
+     {
+      "line": "嗯。",
+      "path": "manuscript/第002章-少一块.md",
+      "lineNo": 4
+     },
+     {
+      "line": "墙不会救你。",
+      "path": "manuscript/第002章-少一块.md",
+      "lineNo": 6
+     },
+     {
+      "line": "亲爱的，咱们聊聊。",
+      "path": "manuscript/第003章-翻车.md",
+      "lineNo": 1
+     }
+    ],
+    "issues": [
+     {
+      "level": "warn",
+      "key": "banned_used",
+      "text": "他说了忌用词「亲爱的」：亲爱的，咱们聊聊。（manuscript/第003章-翻车.md 第 1 行）",
+      "advice": "改成他的说法，或者把这条从他档案里去掉"
+     },
+     {
+      "level": "warn",
+      "key": "banned_used",
+      "text": "他说了忌用词「咱们聊聊」：亲爱的，咱们聊聊。（manuscript/第003章-翻车.md 第 1 行）",
+      "advice": "改成他的说法，或者把这条从他档案里去掉"
+     }
+    ]
+   },
+   {
+    "name": "路人甲",
+    "entityId": 224,
+    "hasProfile": true,
+    "voice": {
+     "tone": "和主角一模一样",
+     "sentence": "绵长",
+     "catchphrases": [
+      "我早说过"
+     ],
+     "emotion": 8
+    },
+    "fingerprint": {
+     "lines": 5,
+     "chars": 74,
+     "avgLen": 14.8,
+     "avgSentLen": 13.8,
+     "askRatio": 0.0,
+     "exclaimRatio": 0.0,
+     "ellipsisRatio": 0.0,
+     "dashRatio": 0.0,
+     "topWords": [
+      "我早",
+      "早说"
+     ]
+    },
+    "samples": [
+     {
+      "line": "我早说过，这事没那么简单，你不信。",
+      "path": "manuscript/第004章-路人也话多.md",
+      "lineNo": 1
+     },
+     {
+      "line": "我早说过，天黑前得回去，你不听。",
+      "path": "manuscript/第004章-路人也话多.md",
+      "lineNo": 2
+     },
+     {
+      "line": "我早说过，他靠不住，你看吧。",
+      "path": "manuscript/第004章-路人也话多.md",
+      "lineNo": 3
+     },
+     {
+      "line": "我早说过，木牌少一块就要出事。",
+      "path": "manuscript/第004章-路人也话多.md",
+      "lineNo": 4
+     },
+     {
+      "line": "我早说过，别往林子里走。",
+      "path": "manuscript/第004章-路人也话多.md",
+      "lineNo": 5
+     }
+    ],
+    "issues": []
+   }
+  ],
+  "pairs": [
+   {
+    "a": "主角",
+    "b": "路人甲",
+    "similarity": 0.945,
+    "shared": [
+     "我早",
+     "早说"
+    ],
+    "why": "平均句长 14.1 / 14.8 字，用词重叠 2 个"
+   }
+  ],
+  "stats": {
+   "characters": 3,
+   "withProfile": 3,
+   "withSamples": 3,
+   "dialogueLines": 21,
+   "worstSimilarity": 0.945,
+   "issues": 3
+  },
+  "advice": [
+   "「主角」和「路人甲」像一个模子刻的（像度 94%）：平均句长 14.1 / 14.8 字，用词重叠 2 个"
+  ]
+ },
+ "items": [
+  {
+   "name": "字段定义拿得到，且含腔调/口头禅/忌用词",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "存档案：返回净化后的内容（空字段不留）",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "第二个人也能存",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "按角色抽出他的台词（不是全抽）",
+   "ok": true,
+   "why": "抽到 5 条",
+   "data": null
+  },
+  {
+   "name": "台词带出处（哪一章第几行）",
+   "ok": true,
+   "why": "[{\"line\": \"数那个没用。天黑前不出林子，咱们都得留在这儿。\", \"path\": \"manuscript/第001章-雪.md\", \"lineNo\": 5}, {\"line\": \"上回是上回。\", \"path\": \"manuscript/第001章-雪.md\", \"lineNo\": 7}]",
+   "data": null
+  },
+  {
+   "name": "抽出来的都是沈岩说的（没有把主角的话算给他）",
+   "ok": true,
+   "why": "[\"数那个没用。天黑前不出林子，咱们都得留在这儿。\", \"上回是上回。\", \"看见了吧。\", \"嗯。\", \"墙不会救你。\"]",
+   "data": null
+  },
+  {
+   "name": "候选口头禅是从他台词里数出来的",
+   "ok": true,
+   "why": "[\"上回\"]",
+   "data": null
+  },
+  {
+   "name": "有台词指纹（句长/问句率/常用词）",
+   "ok": true,
+   "why": "{\"lines\": 5, \"chars\": 42, \"avgLen\": 8.4, \"avgSentLen\": 6.0, \"askRatio\": 0.0, \"exclaimRatio\": 0.0, \"ellipsisRatio\": 0.0, \"dashRatio\": 0.0, \"topWords\": [\"上回\"]}",
+   "data": null
+  },
+  {
+   "name": "说了忌用词会被挑出来（带原句）",
+   "ok": true,
+   "why": "[{\"level\": \"warn\", \"key\": \"banned_used\", \"text\": \"他说了忌用词「亲爱的」：亲爱的，咱们聊聊。（manuscript/第003章-翻车.md 第 1 行）\", \"advice\": \"改成他的说法，或者把这条从他档案里去掉\"}, {\"level\": \"warn\", \"key\": \"banned_used\", \"text\": \"他说了忌用词「咱们聊聊」：亲爱的，咱们聊聊。（manuscript/第003章-翻车.md 第 1 行）\", \"advice\": \"改成他的说法，或者把这条从他档案里去掉\"}]",
+   "data": null
+  },
+  {
+   "name": "整本报告：有评分 + 等级（和质检同一套阈值）",
+   "ok": true,
+   "why": "72 / 要改",
+   "data": null
+  },
+  {
+   "name": "报告里每个角色都有指纹与问题清单",
+   "ok": true,
+   "why": "人数 3",
+   "data": null
+  },
+  {
+   "name": "挑出了像一个模子刻的两个角色",
+   "ok": true,
+   "why": "[{\"a\": \"主角\", \"b\": \"路人甲\", \"similarity\": 0.945, \"shared\": [\"我早\", \"早说\"], \"why\": \"平均句长 14.1 / 14.8 字，用词重叠 2 个\"}]",
+   "data": null
+  },
+  {
+   "name": "报告用大白话说清该改什么",
+   "ok": true,
+   "why": "[\"「主角」和「路人甲」像一个模子刻的（像度 94%）：平均句长 14.1 / 14.8 字，用词重叠 2 个\"]",
+   "data": null
+  },
+  {
+   "name": "没建档案的角色在报告里说得出来",
+   "ok": true,
+   "why": "[\"主角\", \"沈岩\", \"路人甲\"]",
+   "data": null
+  },
+  {
+   "name": "小抄带上了两个人的腔调与口头禅",
+   "ok": true,
+   "why": "【出场角色的说话方式（台词要照这个分得开，别所有人一个腔）】\n· 沈岩：腔调：冷硬，能说两个字不说三个字；句长：短促；口头禅：嗯／没用；忌用：亲爱的／咱们聊聊；情绪外露：2/10；代表台词：「墙不会救你。」\n· 主角：腔调：话多，爱追问，爱翻旧账；句长：绵长；口头禅：我早说过；情绪外露：8/10",
+   "data": null
+  },
+  {
+   "name": "写正文的提示词里真的有「说话方式」这一段",
+   "ok": true,
+   "why": "提示词长度 1827",
+   "data": null
+  },
+  {
+   "name": "空数据：不存在的人返回空档案而不是报错",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "中文/符号名存得进去",
+   "ok": true,
+   "why": "200",
+   "data": null
+  },
+  {
+   "name": "错误参数（没名字）被 400 拒掉并说清原因",
+   "ok": true,
+   "why": "400 {'detail': '得先说是谁（name 不能空）'}",
+   "data": null
+  },
+  {
+   "name": "只清档案不删人（实体还在，档案空了）",
+   "ok": true,
+   "why": "{}",
+   "data": null
+  },
+  {
+   "name": "测试书进回收站（不留垃圾）",
+   "ok": true,
+   "why": "{\"ok\": true, \"trashedTo\": \"/home/ubuntu/novel-app/data/trash/book-声音实测-0920-015526-1789840526\"}",
+   "data": null
+  }
+ ]
+}

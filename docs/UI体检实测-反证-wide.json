@@ -1,0 +1,94 @@
+{
+ "at": "2026-09-20T07:19:31.910Z",
+ "base": "http://127.0.0.1:8899/",
+ "force": "wide",
+ "surfaces": [
+  {
+   "id": "chat",
+   "root": "#screen-chat+#tabbar",
+   "shot": "r19ui-05-对话.png",
+   "res": {
+    "root": "#screen-chat+#tabbar",
+    "checked": 400,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  },
+  {
+   "id": "reader",
+   "root": "#screen-reader+#tabbar",
+   "shot": "r19ui-reader-阅读.png",
+   "res": {
+    "root": "#screen-reader+#tabbar",
+    "checked": 162,
+    "overflow": [
+     {
+      "el": "div#__uichk-wide",
+      "left": 0,
+      "right": 600,
+      "W": 390,
+      "txt": ""
+     }
+    ],
+    "wrap": [],
+    "hot": [],
+    "center": [],
+    "anim": [],
+    "radius": []
+   },
+   "notes": [
+    "溢出 1 处"
+   ],
+   "bad": 1
+  }
+ ],
+ "fails": [],
+ "flat": {
+  "wrap": [],
+  "hot": [],
+  "overflow": [
+   {
+    "surface": "chat",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   },
+   {
+    "surface": "reader",
+    "el": "div#__uichk-wide",
+    "left": 0,
+    "right": 600,
+    "W": 390,
+    "txt": ""
+   }
+  ],
+  "center": [],
+  "anim": []
+ },
+ "sum": {
+  "wrap": 0,
+  "hot": 0,
+  "overflow": 2,
+  "center": 0,
+  "anim": 0
+ },
+ "ok": false
+}

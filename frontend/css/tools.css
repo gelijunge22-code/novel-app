@@ -1,0 +1,270 @@
+/* ============================================================
+   tools.css — 「工具」区：把原网页的全部能力搬进 App 之后用的样式
+   风格跟着 base.css 的纸质感走：卡片 --card、描边 --line、圆角 --radius。
+   这里只放通用件（宫格、列表行、表单、空态、标签），
+   具体工具的界面全部复用这些，别各自造轮子。
+   ============================================================ */
+
+.tools-body, .tool-body{
+  flex:1;min-height:0;overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:var(--sp-4) var(--sp-4) calc(var(--tab-h) + var(--safe-b) + var(--sp-6));
+  overscroll-behavior:contain;
+}.tool-body{padding-bottom:calc(var(--tab-h) + var(--safe-b) + var(--sp-6))}/* 这一屏有吸底主操作条时要再多留一截，否则最后一行会被那条压住
+   （听书面板最后一行音色"晓北·女声"以前只露出上半截，就是这么来的）。 */
+.tool-body.has-foot{padding-bottom:calc(var(--tab-h) + var(--safe-b) + var(--sp-10) + var(--sp-12))}/* ── 工具宫格 ── */
+.tools-sec{margin:2px 0 var(--sp-5)}.tools-sec > h2{
+  font:600 var(--t-md)/1 var(--ui-font);color:var(--ink-3);letter-spacing:.08em;
+  margin:0 var(--sp-1) var(--sp-3);
+}.tools-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-3);animation:fadeUp .18s var(--ease-out) both}.tool-card{
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-2);
+  background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  padding:var(--sp-4) var(--sp-2) var(--sp-4);box-shadow:var(--shadow);color:var(--ink);
+  -webkit-tap-highlight-color:transparent;cursor:pointer;
+  transition:transform var(--dur-1) var(--ease-out),box-shadow var(--dur-2) var(--ease-out);
+}.tool-card:active{transform:scale(.955)}.tool-card .tc-ico{
+  width:38px;height:38px;border-radius:var(--radius-sm);display:grid;place-items:center;
+  background:var(--accent-soft);color:var(--accent);
+}.tool-card .tc-ico svg{width:21px;height:21px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}.tool-card .tc-name{font:500 var(--t-md)/1.25 var(--ui-font);text-align:center;letter-spacing:.01em}.tool-card .tc-sub{font:400 var(--t-xs)/1.2 var(--ui-font);color:var(--ink-3);text-align:center}/* ── 通用列表行 ── */
+.t-list{background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  box-shadow:var(--shadow);overflow:hidden;margin-bottom:var(--sp-4)}.t-row{
+  display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);min-height:52px;
+  border-bottom:1px solid var(--line-2);color:var(--ink);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:background var(--dur-1) linear;
+}.t-row:last-child{border-bottom:none}.t-row .tr-main{flex:1;min-width:0}.t-row .tr-title{font:500 var(--t-base)/1.35 var(--ui-font);overflow:hidden;text-overflow:ellipsis;
+  white-space:nowrap}.t-row .tr-sub{font:400 var(--t-sm)/1.45 var(--ui-font);color:var(--ink-3);margin-top:var(--sp-1);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.t-row .tr-sub.wrap{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}.t-row .tr-ico{width:22px;height:22px;flex:none;color:var(--ink-3);display:grid;place-items:center}.t-row .tr-ico svg{width:19px;height:19px;fill:none;stroke:currentColor;stroke-width:1.7;
+  stroke-linecap:round;stroke-linejoin:round}.t-row .tr-go{color:var(--ink-3);flex:none;display:grid;place-items:center}.t-row .tr-go svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;
+  stroke-linecap:round;stroke-linejoin:round}/* 选中行整行高亮：原来只靠右边一枚小胶囊，远看分不出选的是哪一条 */
+.t-row.on{background:var(--accent-soft)}.t-row.on .tr-title{color:var(--accent)}/* 行内的动作按钮（听书的喇叭）：长得像播放键就得真能点 */
+.t-row .tr-act{
+  width:34px;height:34px;flex:none;border-radius:50%;display:grid;place-items:center;
+  background:var(--paper-2);color:var(--ink-2);cursor:pointer;
+  transition:transform var(--dur-1) var(--ease-out),color var(--dur-2) linear;
+}.t-row .tr-act:active{transform:scale(.9)}.t-row .tr-act svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round;pointer-events:none}.t-row .tr-act.busy{color:var(--accent)}.tr-spin{
+  display:block;width:15px;height:15px;border-radius:50%;border:2px solid var(--line);
+  border-top-color:var(--accent);animation:tspin .7s linear infinite;
+}/* ── 素材列表行 ──
+   三件事：① 分类/时间/字数固定一行、永远完整（以前和标签挤一行被截掉，
+   看起来像"有的条目有时间、有的没有"）；② 标签另起一排小胶囊，超 5 个折成 +N；
+   ③ 摘要统一两行截断 + 省略号（截法在后端 _clip 里按句读断，不会切在半个词上）。 */
+.t-row.m-row{align-items:flex-start}.m-meta{font:400 var(--t-sm)/1.4 var(--ui-font);color:var(--ink-3);margin-top:var(--sp-1);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.m-tags{display:flex;flex-wrap:wrap;gap:var(--sp-1);margin-top:var(--sp-2)}.m-tags i{font:400 var(--t-xs)/1 var(--ui-font);font-style:normal;padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-pill);
+  background:var(--paper-2);color:var(--ink-2);max-width:100%;
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.m-tags i.more{background:transparent;color:var(--ink-3);padding-left:2px}.m-prev{font:400 var(--t-sm)/1.5 var(--ui-font);color:var(--ink-2);margin-top:var(--sp-2);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+  word-break:break-word}/* 多选的勾：一个空心圆，勾上变成实心打勾 */
+.m-check{width:22px;height:22px;flex:none;margin-top:1px;border-radius:50%;
+  border:1.5px solid var(--line);display:grid;place-items:center;color:var(--on-accent);
+  transition:background var(--dur-1) var(--ease-out),border-color var(--dur-1) linear}.m-check.on{background:var(--accent);border-color:var(--accent)}.m-check svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.4;
+  stroke-linecap:round;stroke-linejoin:round;pointer-events:none}.t-row.static{cursor:default}.t-row.static:active{background:transparent}.t-row.warn .tr-title{color:var(--danger)}/* ── 分段控件 ── */
+.t-seg{display:inline-flex;background:var(--paper-2);border-radius:var(--radius-sm);padding:var(--sp-1);gap:2px}.t-seg button{
+  border:0;background:transparent;color:var(--ink-2);font:500 var(--t-sm)/1 var(--ui-font);
+  padding:var(--sp-2) var(--sp-3);border-radius:var(--radius-xs);cursor:pointer;
+  -webkit-tap-highlight-color:transparent;transition:all var(--dur-2) var(--ease-out);
+}.t-seg button.on{background:var(--card);color:var(--ink);box-shadow:var(--shadow)}/* 用不了的那一档：灰掉、点不动，但名字还在（状态不写进选项名里） */
+.t-seg button[disabled]{opacity:.45;cursor:default}.t-seg.wide{display:flex;width:100%}.t-seg.wide button{flex:1;text-align:center}/* ── 表单 ── */
+.t-form{background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:var(--sp-1) var(--sp-4);margin-bottom:var(--sp-4)}.t-field{padding:var(--sp-3) 0;border-bottom:1px solid var(--line-2)}.t-field:last-child{border-bottom:none}.t-field > label{display:block;font:500 var(--t-sm)/1 var(--ui-font);color:var(--ink-3);margin-bottom:var(--sp-2);
+  letter-spacing:.02em}.t-input, .t-area{
+  width:100%;box-sizing:border-box;border:1px solid var(--line);background:var(--paper);
+  color:var(--ink);border-radius:var(--radius-sm);padding:var(--sp-3) var(--sp-3);
+  font:400 var(--t-base)/1.5 var(--ui-font);outline:none;
+  transition:border-color var(--dur-2) var(--ease-out),box-shadow var(--dur-2) var(--ease-out);
+}.t-input:focus, .t-area:focus{border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-soft)}.t-area{resize:none;line-height:1.75;font-family:var(--ui-font);min-height:64px}.t-area.mono{font:400 var(--t-md)/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;min-height:220px;
+  white-space:pre;overflow-wrap:normal;overflow-x:auto}.t-hint{font:400 var(--t-sm)/1.5 var(--ui-font);color:var(--ink-3);margin-top:var(--sp-2)}/* ── 按钮 ── */
+.t-bar{display:flex;gap:var(--sp-2);margin:0 0 var(--sp-4)}.t-btn{
+  flex:1;border:1px solid var(--line);background:var(--card);color:var(--ink);
+  border-radius:var(--radius-sm);padding:var(--sp-3) var(--sp-3);font:500 var(--t-md)/1 var(--ui-font);
+  cursor:pointer;-webkit-tap-highlight-color:transparent;
+  transition:transform var(--dur-1) var(--ease-out),background var(--dur-2) linear;
+}.t-btn:active{transform:scale(.97)}.t-btn.pri{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}.t-btn.dan{color:var(--danger);border-color:var(--danger-line)}/* 列表里的行内删除：次要色，别用危险色抢眼睛（危险色留给"删掉整本/整章"那种） */
+.t-btn.sm.dim{color:var(--ink-3);border-color:var(--line);background:transparent}.t-btn.sm{flex:none;padding:var(--sp-2) var(--sp-3);font-size:var(--t-md)}.t-btn[disabled]{opacity:.45;pointer-events:none}/* ── 标签 / 徽章 ── */
+/* 一排小标签，用来列「它会用到哪些工具」这种东西 */
+.t-chips{
+  display: flex;
+  flex-wrap: wrap;
+  gap:var(--sp-2);
+  padding: 0 var(--sp-1);
+}.t-chips .t-pill{
+  font-size:var(--t-sm);
+}.t-pill{
+  display:inline-block;font:500 var(--t-xs)/1 var(--ui-font);padding:var(--sp-1) var(--sp-2);border-radius:var(--radius-pill);
+  background:var(--accent-soft);color:var(--accent);vertical-align:middle;
+}/* 评分的三段语义（**全局只此一套**：≥90 绿 / 75–89 黄 / <75 红，阈值来自后端 gradeBands）。
+   踩过的坑：这一段原来是 gray（灰）——注释写着"黄"，界面是灰的，对不上下面的 gradeText，
+   也就是"报告里写着一个其实没验的事"。gray 保留给中性的标记（没档案 / 字数…）。 */
+.t-pill.ok{background:var(--ok-soft);color:var(--ok)}.t-pill.mid{background:var(--warn-soft);color:var(--warn)}.t-pill.warn{background:var(--danger-soft);color:var(--danger)}.t-pill.gray{background:var(--paper-2);color:var(--ink-3)}/* 夜间三段胶囊的底现在由 --ok-soft / --warn-soft / --danger-soft 统一给，不在这里重复写 */
+
+/* ── 空态 / 加载 ── */
+.t-empty{
+  text-align:center;color:var(--ink-3);font:400 var(--t-md)/1.7 var(--ui-font);
+  padding:var(--sp-12) var(--sp-6);
+}.t-empty .te-ico{width:44px;height:44px;margin:0 auto var(--sp-3);color:var(--ink-3);opacity:.6}.t-empty .te-ico svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:1.4;
+  stroke-linecap:round;stroke-linejoin:round}.t-load{padding:var(--sp-8);text-align:center}.t-load i{
+  display:inline-block;width:20px;height:20px;border-radius:50%;
+  border:2px solid var(--line);border-top-color:var(--accent);
+  animation:tspin .7s linear infinite;
+}
+@keyframes tspin{to{transform:rotate(360deg)}}html.motion-off .t-load i{animation-duration:2s}
+/* 加载态第 29 轮统一到了全站那一套（.ui-loading，见 components.css）：
+   工具面板里那两个自己的类名（.t-loading）已经没人用了，删掉不留死代码。
+   `.t-load` / `.t-empty` 还留着 —— 它们不只工具面板用（studio.js / bookctx.js 也在用）。 */
+/* 三态容器（UI.state）进工具面板：面板自己已经有一圈内边距，这里不用再撑那么大 */
+#tool-body .ui-state{padding:var(--sp-10) var(--sp-4)}
+#tool-body .ui-state-d{margin-top:calc(-1 * var(--sp-1))}/* ── 文件浏览器 ── */
+.fb-crumb{
+  display:flex;align-items:center;gap:var(--sp-1);flex-wrap:wrap;
+  padding:2px var(--sp-1) var(--sp-3);font:400 var(--t-sm)/1.4 var(--ui-font);color:var(--ink-3);
+}.fb-crumb button{
+  border:0;background:transparent;color:var(--accent);font:inherit;padding:var(--sp-1) 2px;cursor:pointer;
+}.fb-crumb .sep{opacity:.5}.fb-crumb .cur{color:var(--ink-2);font-weight:var(--w-medium)}/* ── 代码 / 预览块 ── */
+.t-pre{
+  background:var(--paper);border:1px solid var(--line-2);border-radius:var(--radius-sm);
+  padding:var(--sp-3) var(--sp-3);font:400 var(--t-sm)/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+  color:var(--ink-2);white-space:pre-wrap;word-break:break-word;overflow-x:auto;
+  max-height:340px;overflow-y:auto;margin:0 0 var(--sp-4);
+}/* ── 封面预览 ── */
+.cv-wrap{display:flex;gap:var(--sp-4);align-items:flex-start;margin-bottom:var(--sp-4)}.cv-box{
+  width:104px;height:142px;border-radius:var(--radius-sm);flex:none;overflow:hidden;
+  background:var(--paper-2);border:1px solid var(--line-2);display:grid;place-items:center;
+  box-shadow:var(--shadow);position:relative;
+}.cv-box img{width:100%;height:100%;object-fit:cover;display:block}.cv-box .cv-none{font:400 var(--t-xs)/1.4 var(--ui-font);color:var(--ink-3);text-align:center;padding:var(--sp-3) var(--sp-2);display:flex;flex-direction:column;gap:var(--sp-2);justify-content:center}
+.cv-none-t{font-size:var(--t-sm);font-weight:var(--w-semi);color:var(--ink-2)}
+.cv-none-d{font-size:var(--t-xs);line-height:1.6;color:var(--ink-3)}.cv-side{flex:1;min-width:0;display:flex;flex-direction:column;gap:var(--sp-2)}.cv-side .t-hint{margin:0}/* ── 统计小卡 ── */
+.t-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:var(--sp-2);margin-bottom:var(--sp-4)}.t-stat{
+  background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  box-shadow:var(--shadow);padding:var(--sp-3) var(--sp-2);text-align:center;
+}.t-stat b{display:block;font:600 var(--t-xl)/1.15 var(--ui-font);color:var(--ink);
+  overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.t-stat span{display:block;font:400 var(--t-xs)/1.3 var(--ui-font);color:var(--ink-3);margin-top:var(--sp-1)}
+
+/* 弹出的输入框（复用 modal/sheet 的壳） */
+.t-dialog{display:flex;flex-direction:column;gap:var(--sp-3);padding:var(--sp-5)}/* 多字段弹层（App.form）：标签在上、控件在下，字段之间用同一档间距 —— 不这么做就会出现「这个框贴着标签、那个框离得老远」那种不齐 */.t-dialog .t-field{display:flex;flex-direction:column;gap:var(--sp-2)}.t-dialog .t-lab{font:500 var(--t-sm)/1.4 var(--ui-font);color:var(--ink-2)}.t-dialog h3{margin:0;font:600 var(--t-lg)/1.3 var(--ui-font);color:var(--ink)}.t-dialog .t-acts{display:flex;gap:var(--sp-2)}/* ── 工作室面板共用的小件（写作台 / 世界 / 剧情 / 质检 / 统计…） ── */
+.st-h{
+  font:600 var(--t-md)/1 var(--ui-font);color:var(--ink-3);letter-spacing:.06em;
+  /* 左基准线：面板里小标题 / 字段名 / 卡片内容 都从「容器 14px + 卡片描边 1px」这条线起，
+     也就是这里的 15px（原来写 4px，小标题比卡片里的字往左凸了 11px，看着像没对齐）。 */
+  margin:var(--sp-4) var(--sp-4) var(--sp-3);
+}.st-h:first-child{margin-top:2px}/* 进度条：章节进度、目标完成度、成就进度都用它 */
+.st-bar{
+  height:4px;border-radius:2px;background:var(--paper-2);overflow:hidden;   /* token-ok: 4px 细进度条 */
+}.st-bar > i{
+  display:block;height:100%;border-radius:2px;background:var(--accent);   /* token-ok: 同上 */
+  transition:width var(--dur-3) var(--ease-out);
+}/* 近 30 天的柱子图 */
+.st-chart{
+  display:flex;align-items:flex-end;gap:var(--sp-1);height:76px;padding:0 2px;
+  background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}.st-chart > i{
+  flex:1;min-width:4px;border-radius:2px 2px 0 0;   /* token-ok: 柱状图柱子只圆上沿 */background:var(--accent);opacity:.72;
+}/* 写作日历热力图：一列一周 */
+.st-heat{
+  display:flex;gap:var(--sp-1);overflow-x:auto;padding:var(--sp-3);margin-bottom:var(--sp-3);
+  background:var(--card);border:1px solid var(--line-2);border-radius:var(--radius);
+  box-shadow:var(--shadow);
+}.st-heat-col{display:flex;flex-direction:column;gap:var(--sp-1);flex:none}.st-heat i{width:12px;height:12px;border-radius:3px;   /* token-ok: 12px 热力小格 */background:var(--paper-2);display:block}.st-heat i.lv1{background:var(--accent-soft)}.st-heat i.lv2{background:color-mix(in srgb,var(--accent) 40%,transparent)}.st-heat i.lv3{background:color-mix(in srgb,var(--accent) 68%,transparent)}.st-heat i.lv4{background:var(--accent)}/* 提示词历史对比：只读的一小屏等宽文本，增删用主题里的绿/红，不另造颜色 */
+.st-diff{
+  font:var(--t-md)/1.65 ui-monospace,SFMono-Regular,Menlo,monospace;
+  white-space:pre-wrap;word-break:break-word;
+  padding:var(--sp-3) var(--sp-4);background:var(--card);border:1px solid var(--line-2);
+  border-radius:var(--radius);box-shadow:var(--shadow);
+}.st-diff .add{color:var(--ok)}.st-diff .del{color:var(--danger)}.st-diff .hunk{color:var(--ink-3);margin-top:var(--sp-2)}/* ── 面板的吸底主操作条 ──
+   为什么要它：「开始听」原来写在滚动内容的最后一行，被底部导航盖住，
+   用户压根看不见这个主操作。现在它固定在底部导航之上，永远看得见。 */
+.t-foot{
+  position:fixed;left:0;right:0;bottom:calc(var(--tab-h) + var(--safe-b));z-index:12;
+  display:flex;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);
+  background:var(--card);border-top:1px solid var(--line-2);
+  box-shadow:0 -3px 12px rgba(58,51,43,.07);
+}html[data-theme="night"] .t-foot{box-shadow:0 -3px 12px rgba(0,0,0,.4)}/* ── 参考书架的图片（第 16 轮：用户要"发一张图，告诉 AI 这个人该怎么写"）──────────
+   两种尺寸：列表里的缩略图 .t-thumb、单条详情里的大图 .t-pic。
+   点一下进 .t-bigpic（整屏黑底看大图，点哪儿都关）。
+   圆角只用 token：缩略图 --radius-xs，大图 --radius。 */
+.t-thumb{
+  width:56px;height:56px;flex:none;object-fit:cover;
+  border-radius:var(--radius-xs);background:var(--paper-2);
+  border:1px solid var(--line-2);cursor:zoom-in;
+}.t-thumb:active{transform:scale(.96)}.t-pic{
+  display:block;width:100%;max-height:44vh;object-fit:contain;
+  border-radius:var(--radius);background:var(--paper-2);
+  border:1px solid var(--line-2);cursor:zoom-in;
+}.t-bigpic{
+  position:fixed;inset:0;z-index:80;background:rgba(16,12,8,.92);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-3);
+  padding:var(--sp-5);cursor:zoom-out;
+}.t-bigpic img{
+  max-width:100%;max-height:82vh;object-fit:contain;
+  border-radius:var(--radius);background:#fff;
+}.t-bigpic-cap{
+  color:rgba(255,250,240,.86);font:400 var(--t-md)/1.5 var(--ui-font);
+  text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}/* ══════════════ 故事线 / 章节顺序（第 19 轮新加的两个面板）══════════════
+   两块面板共用同一套行样式（同一个"章节清单"的两种用法）：
+     故事线：一行 = 章号 + 标题 + 一句话（点那句话改它）
+     章节顺序：一行 = 章号 + 标题 + 上移/下移/插一章
+   规矩照旧：圆角只用 var(--radius-sm)，间距只用 4 的倍数，字号只用 11/12/13/14.5/16/18/22。 */
+.al-list{background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}.al-row{display:flex;align-items:center;gap:var(--sp-3);padding:var(--sp-3) var(--sp-4);border-bottom:1px solid var(--line)}.al-row:last-child{border-bottom:0}.al-row:active{background:var(--accent-soft)}.al-no{
+  flex:0 0 auto;min-width:28px;height:24px;padding:0 var(--sp-1);border-radius:var(--radius-xs);
+  background:var(--accent-soft);color:var(--accent);font-size:var(--t-sm);font-weight:var(--w-semi);
+  display:grid;place-items:center;font-variant-numeric:tabular-nums;
+}.al-main{flex:1;min-width:0}.al-title{font-size:var(--t-base);color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.al-sum{
+  margin-top:var(--sp-1);font-size:var(--t-sm);line-height:1.6;color:var(--ink-3);
+  display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;
+}.al-sum.mine{color:var(--ink-2)}.al-sum i{color:var(--ink-3);font-style:normal;opacity:.8}.al-tag{
+  display:inline-block;margin-left:var(--sp-1);padding:0 var(--sp-1);border-radius:var(--radius-xs);
+  font-size:var(--t-xs);font-weight:var(--w-medium);background:var(--accent-soft);color:var(--accent);
+}.al-tag.auto{background:var(--paper-2);color:var(--ink-3)}.al-meta{font-size:var(--t-sm);color:var(--ink-3);margin-top:var(--sp-1)}.al-side{display:flex;align-items:center;gap:var(--sp-2);color:var(--ink-3);font-size:var(--t-sm);flex:0 0 auto}.al-go svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.6}/* 上移/下移/插一章：视觉 32px，热区向外撑到 44×44（移动端硬标准） */
+.al-btns{display:flex;align-items:center;gap:var(--sp-1);flex:0 0 auto}.al-btn{
+  position:relative;width:32px;height:32px;border-radius:var(--radius-sm);
+  border:1px solid var(--line);background:var(--paper-2);color:var(--ink);
+  display:grid;place-items:center;transition:transform .1s var(--ease),background .16s var(--ease);
+}.al-btn::after{content:'';position:absolute;inset:-6px}.al-btn:active{transform:scale(.92);background:var(--accent-soft)}.al-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}.al-btn.dn svg{transform:rotate(90deg)}.al-btn:not(.dn) svg{transform:rotate(-90deg)}.al-btn.ins svg{transform:none}
+
+/* ══════════════════ 大纲（「故事线」工具 · 「剧情」工具的「剧情线」页签共用） ══════════════════
+   第 36 轮。用户拍板：「点击这个故事线之后，它里面的前端和后端都要重做，就相当于删除了，
+   把这个功能换成大纲」；「剧情线可以继续叫这个名字，但它的作用需要改成『大纲』的作用」。
+
+   这两处用的是**同一份实现**（js/outline.js），所以这里也只写一套样式。
+   能用全站已有的控件就用（.t-list / .t-row / .t-bar / .t-btn / .t-pill / .t-empty），
+   这里只补三样它独有的：① 统计行 ② 筛选行（看得出的选中态 + 够 44 的热区）
+   ③ 大纲正文**换行排布**（用户：「手机上很多字儿都看不到」——不许再截断）。 */
+.ol-stat{
+  display:flex;flex-wrap:wrap;gap:var(--sp-1) var(--sp-2);align-items:baseline;
+  margin-top:var(--sp-2);font:400 var(--t-sm)/1.6 var(--ui-font);color:var(--ink-3);
+}.ol-stat b{font-weight:var(--w-semi);color:var(--ink);font-variant-numeric:tabular-nums}
+.ol-chips{margin:var(--sp-3) 0 var(--sp-2)}
+.ol-chips .t-pill{position:relative;cursor:pointer}
+/* 胶囊本身小、但**热区要够 44** —— 用 ::after 撑出来（判据认这种隐形热区） */
+.ol-chips .t-pill::after{content:'';position:absolute;left:-6px;right:-6px;top:-14px;bottom:-14px}
+.ol-row{align-items:flex-start}
+.ol-sum{
+  margin-top:var(--sp-1);white-space:normal;word-break:break-word;overflow-wrap:anywhere;
+  font:400 var(--t-md)/1.6 var(--ui-font);color:var(--ink-2);
+}.ol-acts{display:flex;gap:var(--sp-1);flex:0 0 auto;align-items:center}
+.ol-act{min-height:44px;min-width:44px}
+.ol-scenes{padding:var(--sp-1) var(--sp-4) var(--sp-3);background:var(--card);border-top:1px solid var(--line)}
+.ol-scenes[hidden]{display:none}
+.ol-scene{
+  display:flex;align-items:center;gap:var(--sp-2);padding:var(--sp-2) 0;
+  font:400 var(--t-md)/1.5 var(--ui-font);color:var(--ink-2);
+}.ol-scene + .ol-scene{border-top:1px solid var(--line)}
+.ol-mount{display:block}
+
+/* ── 折叠区（全站第一个，只有「故事线」用：章节速览收在下面，一打开先看到大纲） ── */
+.acc{border-top:1px solid var(--line);margin-top:var(--sp-5)}
+.acc summary{
+  display:flex;align-items:center;gap:var(--sp-2);min-height:44px;padding:var(--sp-2) 0;
+  cursor:pointer;list-style:none;
+}.acc summary::-webkit-details-marker{display:none}
+.acc summary:active{background:var(--paper-2)}
+.acc-t{flex:0 0 auto;font:600 var(--t-base)/1.4 var(--ui-font);color:var(--ink)}
+.acc-n{flex:1;min-width:0;white-space:normal;font:400 var(--t-sm)/1.45 var(--ui-font);color:var(--ink-3)}
+.acc-x{flex:0 0 auto;display:grid;place-items:center;width:20px;height:20px;color:var(--ink-3);
+  transition:transform var(--dur-2) var(--ease)}
+.acc[open] .acc-x{transform:rotate(90deg)}
+.acc-x svg{width:17px;height:17px;fill:none;stroke:currentColor;stroke-width:1.8;
+  stroke-linecap:round;stroke-linejoin:round}
+.acc-body{padding-top:var(--sp-3)}
+html.motion-off .acc-x{transition:none}

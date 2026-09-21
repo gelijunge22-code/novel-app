@@ -1,0 +1,60 @@
+{
+  "at": "2026-09-20 05:35:48",
+  "doc": "file:///android_asset/www/index.html",
+  "cases": [
+    {
+      "raw": "nb/api/agent/sessions/1/events?after=0",
+      "resolved": "file:///android_asset/www/nb/api/agent/sessions/1/events?after=0",
+      "broken": true
+    },
+    {
+      "raw": "api/cover?slug=x",
+      "resolved": "file:///android_asset/www/api/cover?slug=x",
+      "broken": true
+    },
+    {
+      "raw": "api/apk/version",
+      "resolved": "file:///android_asset/www/api/apk/version",
+      "broken": true
+    },
+    {
+      "raw": "api/write/draft",
+      "resolved": "file:///android_asset/www/api/write/draft",
+      "broken": true
+    },
+    {
+      "raw": "nb/api/workspace-files/upload-file",
+      "resolved": "file:///android_asset/www/nb/api/workspace-files/upload-file",
+      "broken": true
+    }
+  ],
+  "broken": 5,
+  "total": 5,
+  "hits": [
+    {
+      "file": "frontend/js/api.js",
+      "line": 226,
+      "path": "nb/api/agent/sessions/"
+    },
+    {
+      "file": "frontend/js/api.js",
+      "line": 182,
+      "path": "api/cover?slug="
+    },
+    {
+      "file": "frontend/js/app.js",
+      "line": 742,
+      "path": "api/apk/version"
+    },
+    {
+      "file": "frontend/js/tools.js",
+      "line": 251,
+      "path": "nb/api/workspace-files/upload-file"
+    },
+    {
+      "file": "frontend/js/tools.js",
+      "line": 267,
+      "path": "nb/api/workspace-files/download?"
+    }
+  ]
+}

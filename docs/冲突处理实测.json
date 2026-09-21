@@ -1,0 +1,99 @@
+{
+ "at": "2026-09-20 02:28:07",
+ "slug": "同步自测-0920-022807",
+ "total": 18,
+ "ok": 18,
+ "fail": 0,
+ "items": [
+  {
+   "name": "① 建一本自测书",
+   "ok": true,
+   "why": "200 {'ok': True, 'slug': '同步自测-0920-022807', 'title': '同步自测 0920-022807'}"
+  },
+  {
+   "name": "② 建一章",
+   "ok": true,
+   "why": "200 {'ok': True, 'path': 'manuscript/冲突这一章.md', 'mtimeMs': 1789842487795, 'slug': '同步自测-0920-022807'}"
+  },
+  {
+   "name": "③ 记住它现在的 mtime",
+   "ok": true,
+   "why": "200 1789842487795"
+  },
+  {
+   "name": "④ 正常推一条：落盘",
+   "ok": true,
+   "why": "200 {\"slug\": \"同步自测-0920-022807\", \"results\": [{\"path\": \"manuscript/冲突这一章.md\", \"status\": \"ok\", \"mtimeMs\": 1789842487802, \"words\": 16}], \"conflicts\": 0, \"ok\": 1, \"total\": 1}"
+  },
+  {
+   "name": "⑤ 内容没变：回 unchanged（不瞎写）",
+   "ok": true,
+   "why": "{\"slug\": \"同步自测-0920-022807\", \"results\": [{\"path\": \"manuscript/冲突这一章.md\", \"status\": \"unchanged\", \"mtimeMs\": 1789842487802}], \"conflicts\": 0, \"ok\": 0, \"total\": 1}"
+  },
+  {
+   "name": "⑥ 模拟电脑那边也改了",
+   "ok": true,
+   "why": "200 {'ok': True, 'mtimeMs': 1789842487809}"
+  },
+  {
+   "name": "⑦ 两边都改过：判为冲突（不是闷头覆盖）",
+   "ok": true,
+   "why": "{\"slug\": \"同步自测-0920-022807\", \"results\": [{\"path\": \"manuscript/冲突这一章.md\", \"status\": \"conflict\", \"conflictId\": 92, \"serverMtimeMs\": 1789842487809, \"baseMtimeMs\": 1789842487802, \"serverText\": \"服务器这版：电脑上改的\"}], \"conflicts\": 1, \"ok\": 0, \"total\": 1}"
+  },
+  {
+   "name": "⑧ 冲突时服务器文件**一个字节没动**",
+   "ok": true,
+   "why": "文件被改了：'服务器这版：电脑上改的'"
+  },
+  {
+   "name": "⑨ 冲突回包里直接带上服务器那版（手机不用再跑一趟）",
+   "ok": true,
+   "why": "{\"path\": \"manuscript/冲突这一章.md\", \"status\": \"conflict\", \"conflictId\": 92, \"serverMtimeMs\": 1789842487809, \"baseMtimeMs\": 1789842487802, \"serverText\": \"服务器这版：电脑上改的\"}"
+  },
+  {
+   "name": "⑩ 冲突进了清单（能看到、能挑）",
+   "ok": true,
+   "why": "200 {\"items\": [{\"id\": 92, \"slug\": \"同步自测-0920-022807\", \"path\": \"manuscript/冲突这一章.md\", \"status\": \"open\", \"baseMtimeMs\": 1789842487802, \"serverMtimeMs\": 1789842487809, \"localMtimeMs\": 1789842487815, \"created"
+  },
+  {
+   "name": "⑪ 冲突详情里两版全文都在",
+   "ok": true,
+   "why": "200 {\"id\": 92, \"slug\": \"同步自测-0920-022807\", \"path\": \"manuscript/冲突这一章.md\", \"status\": \"open\", \"baseMtimeMs\": 1789842487802, \"serverMtimeMs\": 1789842487809, \"localMtim"
+  },
+  {
+   "name": "⑫ 给用户发了通知（不声不响才是坑）",
+   "ok": true,
+   "why": "200 [{\"id\": 40, \"kind\": \"sync\", \"title\": \"有 1 章两边都改过\", \"body\": \"去「同步」里挑一版：两边的内容都留着，没动你的稿子。\", \"slug\": \"同步自测-0920-022807\", \"created_at\": 1789842487815, \"read_at\": nul"
+  },
+  {
+   "name": "⑬ 挑「服务器那版」：文件变成服务器那版",
+   "ok": true,
+   "why": "200 '服务器这版：电脑上改的'"
+  },
+  {
+   "name": "⑭ 再制造一次冲突",
+   "ok": true,
+   "why": "{\"slug\": \"同步自测-0920-022807\", \"results\": [{\"path\": \"manuscript/冲突这一章.md\", \"status\": \"conflict\", \"conflictId\": 93, \"serverMtimeMs\": 1789842487828, \"baseMtimeMs\": 1789842487823, \"serverText\": \"服务器又改了\"}],"
+  },
+  {
+   "name": "⑮ 挑「合并稿」：文件变成我给的合并稿",
+   "ok": true,
+   "why": "200 '两边合起来的第三版'"
+  },
+  {
+   "name": "⑯ 被覆盖的那版仍在历史里（可回退）",
+   "ok": true,
+   "why": "200 n=5"
+  },
+  {
+   "name": "⑰ 章接口带陈旧 mtime：409 + 服务器正文一起给回来",
+   "ok": true,
+   "why": "409 {\"detail\": \"这一章在别处也改过 —— 两边的内容都留着，你挑一版\", \"conflict\": true, \"conflictId\": 94, \"path\": \"manuscript/冲突这一章.md\", \"serverMtimeMs\": 1789842487843.7627, \"localMtimeMs\": 1789842487836, \"serverText\": \"别人改了\"}"
+  },
+  {
+   "name": "⑱ 处理完不再挂 open",
+   "ok": true,
+   "why": "残留 1"
+  }
+ ]
+}
