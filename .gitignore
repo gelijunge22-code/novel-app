@@ -76,3 +76,13 @@ server/ondevice.py
 # app/ 是"通用空白版安装包"，**要进仓库**（别人 clone 完从网页版下载用）。
 !app/
 !app/*.apk
+
+# ── 内部脚本与测试报告：不进公开仓库（文件留在磁盘上）─────────────────
+# 为什么：这些是我自己排障/验收用的，别人看不懂也没用，而且有过把
+# 登录口令写死在里面跟着提交出去的教训。`git add -A` 会把 untracked 的
+# 东西一起加进来，所以必须在这里兜住，不能只靠 git rm --cached。
+tools/*
+!tools/set_password.py
+!tools/check_deps.py
+docs/*
+!docs/功能清单.md

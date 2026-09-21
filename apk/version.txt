@@ -30,8 +30,8 @@
 #        · 新增机器判据：安全区/手势 42 条（+3 条反证各自红在点名的那条上）、UI 硬判据 44 屏
 #        · 用户点名的 5 个新功能全部落地并带实测（故事线 / 常用指令 / 小批注 / 点一下看设定 / 章节顺序）
 #        · 夜间全站体检 0 条红（对比度量化，阈值跟主题走）+ 两条反证
-versionCode=27
-versionName=2.7.0
+versionCode=28
+versionName=2.7.1
 # 2.0.6：**修「手机上怎么输密码都进不去」**（用户实测卡死，服务器日志里一条请求都没有）
 #        根因两条，都在文件开头那段"file:// 页面发不出跨源请求"的老坑上：
 #        · ① `ApiBridge` 里**没有 `ready()` 方法** → 前端 `bridgeUsable()` 回落到
@@ -92,3 +92,19 @@ versionName=2.7.0
 #          RuntimeError，整个 App 起不来。已补 + 新增 tools/check_deps.py 防回归。
 #          修完实测：控制台打印口令 / 登录 200 / 书架 0 本 / 仓库 0 处书名 / /api/apk 返回
 #          27,440,908 字节有效 APK（PK 开头、125 条目、含 AndroidManifest）。
+# 2.7.1：**修「每次打开 App 都要重新输密码」+ 手机上的重复请求**
+#        · ①登录令牌存盘：以前令牌只活在内存（ServerClient.token），App 一退就没了 →
+#          每次重开都要重输密码（用户实测报的）。现在存进 SharedPreferences
+#          （KEY_SESS=sess_token），effectiveToken() 读不到内存那份就兜底读盘上的；
+#          前端 setSessToken 也会顺手调桥的 saveToken 存一份。
+#          （为什么不能用 localStorage：App 的界面是 file:// 打开的，安卓对这种来源的
+#           localStorage 不保证跨重启保留。）
+#        · ②重复请求合并：实测启动一路下来 api/shelf、api/projects、agent/sessions
+#          各被请求 3 次。本机看不出（5ms），手机走公网每个来回几百毫秒 →
+#          多出来的 6~8 次就是好几秒的"说不上来的延迟"。现在同一个 GET 在路上时
+#          第二个调用直接等第一个的结果；GET 再给 1.2 秒极短缓存；任何写操作后立即失效。
+#        · ③口令复制按钮：navigator.clipboard 只在 HTTPS 下能用，用户是 http:// 访问 →
+#          点了没反应。改成先用 execCommand('copy')，不行再把口令摆出来让用户手选。
+#        · ④设置页说明文字穿模：原来塞在 overflow:hidden 的卡片里被裁 → 挪到卡片外面。
+#        · ⑤仓库大扫除：tools/ 只留 set_password.py 与 check_deps.py，docs/ 只留功能清单；
+#          历史里的登录口令与服务器地址已用 filter-repo 抹掉（各 0 处）。

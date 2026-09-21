@@ -153,10 +153,11 @@ def remember_password(pw: str) -> None:
                      "(改口令： python3 tools/set_password.py 新口令；\n"
                      " 也能在 App 的「设置」里改)\n" % pw, encoding="utf-8")
         os.chmod(f, 0o600)
+        # **两个文件都要跟着最新口令走**：以前 initial-password.txt 只在不存在时写一次，
+        # 用户改了口令它就成"过期文件"——别人照着它输永远进不去（自己踩到的坑）。
         g = data / "initial-password.txt"
-        if not g.exists():
-            g.write_text(pw + "\n", encoding="utf-8")
-            os.chmod(g, 0o600)
+        g.write_text(pw + "\n", encoding="utf-8")
+        os.chmod(g, 0o600)
     except Exception:
         pass
 

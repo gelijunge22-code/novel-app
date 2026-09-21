@@ -1168,9 +1168,8 @@
             <span id="pw-slot" class="muted" style="font-size:var(--t-md);font-family:ui-monospace,Menlo,monospace">读取中…</span></div>
           <div class="settings-row"><span class="k">口令还能从哪找</span>
             <span><button class="btn sm" id="do-pw-copy">复制</button> <button class="btn sm" id="do-pw-new">换一个</button></span></div>
-          <p class="hint" style="margin:0;line-height:1.5">后端启动时控制台会打印；也写在 data/口令.txt 里。
-            忘了就点「换一个」——换完立刻生效，当前这个登录不掉，去 App 里输新的就行。</p>
-        </div>`);
+        </div>
+        <p class="settings-note">后端启动时控制台会打印；也写在 data/口令.txt 里。忘了就点「换一个」——换完立刻生效，当前这个登录不掉，去 App 里输新的就行。</p>`);
       /* ── 登录口令 ──────────────────────────────────────────────────
          用户实测卡在"下完 App，密码是多少？"—— 控制台滚过去了、data/口令.txt 又不知道在哪。
          所以就在"下载 App"旁边把它显示出来，忘了还能一键换一个。
@@ -1182,14 +1181,43 @@
         pws.style.color = pw ? 'var(--ink)' : 'var(--ink-3)';
       };
       if (pws) API.appPassword().then((r) => paintPw(r && r.password)).catch(() => paintPw(''));
+      /* 复制口令。**注意**：`navigator.clipboard` 只在 HTTPS（或 localhost）下能用，
+         用户是 http://IP/ 访问的 → 调它**没有任何反应**（用户实测报的 bug）。
+         所以：先用老办法 `execCommand('copy')`（哪儿都能用），不行再退回让用户手选。 */
+      const copyText = (txt) => {
+        try {
+          const ta = document.createElement('textarea');
+          ta.value = txt;
+          ta.setAttribute('readonly', '');
+          ta.style.position = 'fixed';
+          ta.style.top = '-1000px';
+          ta.style.opacity = '0';
+          document.body.appendChild(ta);
+          ta.select();
+          ta.setSelectionRange(0, txt.length);
+          const ok = document.execCommand && document.execCommand('copy');
+          document.body.removeChild(ta);
+          if (ok) return true;
+        } catch (e) {}
+        try {
+          if (navigator.clipboard && window.isSecureContext) {
+            navigator.clipboard.writeText(txt);      // 有 HTTPS 就用新的
+            return true;
+          }
+        } catch (e) {}
+        return false;
+      };
       const pc = body.querySelector('#do-pw-copy');
       if (pc) pc.addEventListener('click', async () => {
         try {
           const r = await API.appPassword();
           const pw = (r && r.password) || '';
           if (!pw) { App.toast('读不到口令，看 data/口令.txt'); return; }
-          try { await navigator.clipboard.writeText(pw); App.toast('口令已复制'); }
-          catch (e) { App.toast('口令：' + pw); }
+          if (copyText(pw)) { App.toast('口令已复制'); return; }
+          /* 两条路都不行（极少数老浏览器）：把口令摆到眼前让他手选，别点了没反应 */
+          const s = body.querySelector('#pw-slot');
+          if (s) { s.textContent = pw; s.style.color = 'var(--ink)'; }
+          App.toast('复制不了，口令是 ' + pw + '，长按可选');
         } catch (e) { App.toast('复制失败：' + (e.message || e)); }
       });
       const pn = body.querySelector('#do-pw-new');

@@ -30,9 +30,15 @@
       return typeof NBApp.localReady !== 'function' || NBApp.localReady();
     } catch (e) { return false; }
   };
-  const callBridge = (name, fallback) => {
-    try { return (NBApp && typeof NBApp[name] === 'function') ? (NBApp[name]() || '') : fallback; }
-    catch (e) { return fallback; }
+  /* 调安卓桥。**第三个参数是要传过去的实参** —— 以前这里写死了"不传参"，
+     所以 callBridge('saveToken', t) 会把空值存进去（差点让"记住登录"白做）。
+     语义保持不变：桥没有/抛错/返回空 → 用 fallback。 */
+  const callBridge = (name, fallback, arg) => {
+    try {
+      if (!(window.NBApp && typeof window.NBApp[name] === 'function')) return fallback;
+      const v = (arg === undefined) ? window.NBApp[name]() : window.NBApp[name](arg);
+      return v || fallback;
+    } catch (e) { return fallback; }
   };
   /* 后端前缀/口令**每次用的时候现问**，不在加载那一刻定死。
      原因：本机 Python 后端要几秒才起来，而界面是**立刻**放出来的（不再黄屏等待）。
@@ -66,6 +72,10 @@
   const setSessToken = (t) => {
     MEM_TOKEN = t || '';
     try { if (t) localStorage.setItem(SESS_KEY, t); else localStorage.removeItem(SESS_KEY); } catch (e) {}
+    /* **同时存到 App 的盘上**：界面是 file:// 打开的，安卓不保证这种页面的
+       localStorage 跨重启保留 —— 以前 App 每次重开都要重新输密码就是这个原因。
+       桥在就存一份；不在（浏览器里）无所谓。 */
+    try { if (t) callBridge('saveToken', t); } catch (e) {}
   };
   const tokenOf = () => callBridge('token', '') || sessToken();
 
@@ -140,7 +150,7 @@
     backendWaiters.push((v) => { clearTimeout(t); resolve(v); });
   });
 
-  const j = async (path, opts = {}) => {
+  const rawJ = async (path, opts = {}) => {
     // 桥优先：只有 JSON 走桥；FormData 上传、流式生成还是走 HTTP（桥是同步返回字符串的）
     if (bridgeUsable() && !opts.formData && !opts.stream) {
       try {
@@ -189,6 +199,41 @@
       throw err;
     }
     return data;
+  };
+
+  /* ── 同一时刻的重复请求合并 ────────────────────────────────────
+     用户报"App 有些说不上来的延迟"。实测：启动一路下来
+     `api/shelf` / `api/projects` / `agent/sessions` **各被请求 3 次** ——
+     在服务器本机看不出（5 毫秒），但手机走公网每个来回都是几百毫秒，
+     多出来的 6~8 次就是好几秒。
+
+     规矩：
+       · 只有 GET 合并；POST/PUT/DELETE 一律直发，绝不省
+       · 同一个地址**正在路上**时，第二个调用直接等第一个的结果（不再发一次）
+       · GET 再给 1.2 秒的极短缓存：连着切页/重复渲染不重复打
+       · **任何写操作之后立刻清空缓存**，所以不会看到旧数据
+       · 流式(SSE)、上传(FormData) 不碰
+  */
+  const INFLIGHT = new Map();
+  const GETCACHE = new Map();
+  const GET_TTL = 1200;
+  const clearReadCache = () => GETCACHE.clear();
+  const j = (path, opts = {}) => {
+    const method = String(opts.method || 'GET').toUpperCase();
+    if (method !== 'GET' || opts.stream || opts.formData) {
+      return rawJ(path, opts).then((v) => { clearReadCache(); return v; });   // 写过 → 旧读作废
+    }
+    const key = String(path);
+    const hit = GETCACHE.get(key);
+    if (hit && (Date.now() - hit.at) < GET_TTL) return Promise.resolve(hit.val);
+    const fly = INFLIGHT.get(key);
+    if (fly) return fly;                    // ← 关键：不再发第二个请求
+    const pr = rawJ(path, opts).then((v) => {
+      GETCACHE.set(key, { at: Date.now(), val: v });
+      return v;
+    }).finally(() => { INFLIGHT.delete(key); });
+    INFLIGHT.set(key, pr);
+    return pr;
   };
 
   const qs = (o) => Object.entries(o).filter(([, v]) => v !== undefined && v !== null)

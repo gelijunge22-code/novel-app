@@ -505,3 +505,15 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .tsd-why.ok{color:var(--ink-2)}
 .tsd-why.bad{color:var(--danger);border-color:var(--danger)}
 .tsd-url{font-size:var(--t-sm);color:var(--ink-3);word-break:break-all;line-height:1.6}
+
+
+/* 设置卡片下面那行说明（口令怎么找、去哪看）。
+   为什么单开一条：原来塞在 .settings-group 里面，而卡片是 overflow:hidden →
+   文字被裁掉、看着像"穿模"（用户实测报的）。现在放在卡片外面，自己管换行。 */
+.settings-note{
+  margin:8px 2px 0; padding:0 2px;
+  font-size:var(--t-sm); line-height:1.65; color:var(--ink-3);
+  white-space:normal; word-break:break-word; overflow-wrap:anywhere;
+}
+/* 口令那一格：等宽字体 + 可选择（复制不了时能长按选） */
+#pw-slot{user-select:text;-webkit-user-select:text;word-break:break-all}
