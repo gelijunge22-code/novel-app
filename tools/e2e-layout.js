@@ -47,12 +47,14 @@ try { password = JSON.parse(fs.readFileSync('/home/ubuntu/nbapp/config.json', 'u
 catch (e) { /* 没登录密码就跑不了 */ }
 
 /* 视觉权重表：字号 → 允许的字重。跟 frontend/css/tokens.css 的 --t-* / --w-* 一一对应。 */
-/* 第 42 轮整体收一档之后的新阶梯（跟 frontend/css/tokens.css 的 --t-* 一一对应）。 */
+/* 第 49 轮的阶梯（那次把"整体收一档"从"乘 --ui:0.92"改成"烤进整数"：
+   11 / 12 / 12 / 13 / 14 / 16 / 18 + 字标 22 / 28 / 36 / 52）——
+   跟 tokens.css 的 --t-* 一一对应，改一个值两处都要动（下面这行就是唯一出处）。 */
 const WEIGHT_TABLE = {
-  11: [400, 500, 600], 12: [400, 500, 600], 13: [400, 500, 600], 14: [400, 500, 600],
-  15: [600, 700], 17: [600, 700], 20: [600, 700],
+  11: [400, 500, 600], 12: [400, 500, 600], 13: [400, 500, 600],
+  14: [600, 700], 16: [600, 700], 18: [600, 700],
 };
-const LADDER = Object.keys(WEIGHT_TABLE).map(Number).concat([24, 30, 40, 56]);
+const LADDER = Object.keys(WEIGHT_TABLE).map(Number).concat([22, 28, 36, 52]);
 
 const AUDIT = (rootSels) => `(() => {
   const SELS = ${JSON.stringify(rootSels)};

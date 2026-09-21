@@ -9,6 +9,9 @@
 
    判据（每条都能报红）：
      甲 **要缩的确实缩了**：正文那一档字号（--t-base）、设置页分组标题、工具宫格间距
+        （第 49 轮：缩放不再是"乘 0.92"，而是把要缩的那一档**烤进整数阶梯** ——
+          间距 12→8、字号 14→13 / 13→12、顶栏 48→44、页边距 16→12；
+          反证 UISCALE_FORCE=noscale = 把老值写回去）
         都必须**小于**改前（改前实测值钉在下面常量 BEFORE 里，来自 logs/r46-probe-before.json）。
      乙 **不许缩的两排，分毫不差**：
         `#tabbar` 高 = 50px、`.tab` 字号 = 11px、`.tab` padding-top = 8px（底部导航）
@@ -69,8 +72,11 @@ const SCAN = `(() => {
       st.textContent = '.tabbar,.reader-foot{--sp-2:7.36px !important;--t-sm:11.04px !important}';
       document.head.appendChild(st); return 1; })()`);
   } else if (FORCE === 'noscale') {
+    /* 反证：把**没缩之前**的阶梯值写回去（第 46 轮那版的做法是乘 --ui:0.92，
+       第 49 轮改成"把缩的那一档烤进整数阶梯"，所以反证也要跟着改成"写回老值"） */
     await s.js(`(() => { const st = document.createElement('style');
-      st.textContent = ':root{--ui:1 !important}'; document.head.appendChild(st); return 1; })()`);
+      st.textContent = ':root{--t-base:15px !important;--t-md:13px !important;--sp-3:12px !important}';
+      document.head.appendChild(st); return 1; })()`);
   }
   await sleep(400);
 

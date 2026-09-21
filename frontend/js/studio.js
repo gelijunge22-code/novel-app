@@ -1316,7 +1316,7 @@
           Object.keys(byEnt).map((k) =>
             '<div class="t-hint" style="margin:var(--sp-3) 0 var(--sp-1)"><b>' + esc(k) + '</b> · ' + byEnt[k].length + ' 条</div>' +
             byEnt[k].map((x) =>
-              '<label style="display:flex;gap:var(--sp-2);align-items:flex-start;padding:6px 0">' +
+              '<label style="display:flex;gap:var(--sp-2);align-items:flex-start;padding:var(--sp-2) 0">' +
               '<input type="checkbox" checked data-f="' + x._i + '">' +
               '<span><b>' + esc(x.section ? x.section + ' · ' : '') + esc(x.key) + '</b>：' +
               esc(String(x.value).slice(0, 70)) + '</span></label>').join('')).join('') +

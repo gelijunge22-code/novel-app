@@ -1,5 +1,5 @@
 {
- "at": "2026-09-21 09:44:46",
+ "at": "2026-09-21 10:49:57",
  "force": null,
  "before": {
   "tabbarH": 50,
@@ -16,8 +16,8 @@
   "tabbarH": 50,
   "tabFont": "11px",
   "tabPadTop": "8px",
-  "tBase": "13.8px",
-  "settingsH3": "11.96px",
+  "tBase": "14px",
+  "settingsH3": "12px",
   "toolGap": null,
   "rdFbH": 48,
   "rdFbFont": "11px",
@@ -43,12 +43,12 @@
   "topbars": [
    {
     "id": "screen-settings",
-    "h": 89
+    "h": 72
    }
   ],
   "rdFootH": 116,
-  "tmd": 11.96,
-  "sp3": 11.04
+  "tmd": 12,
+  "sp3": 8
  },
  "bad": []
 }
