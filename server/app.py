@@ -266,13 +266,13 @@ def bootstrap_user() -> None:
     #   ① 设了 NOVELAPP_LEGACY_CONFIG 就**只用它**（设成不存在的路径 = 强制走"随机生成口令"那条路）
     #   ② 没设 → 先看**仓库根目录的 config.json**（别人 clone 下来放这儿就认）
     #   ③ 都没有 → 再看老平台那份（只在这台机器上存在，别的机器上这一步自然跳过）
+    #   ④ 想认自己以前那份配置 → 用 NOVELAPP_LEGACY_CONFIG 指过去（不写死任何人的路径）
     cands = []
     _env = os.environ.get("NOVELAPP_LEGACY_CONFIG", "").strip()
     if _env:
         cands = [Path(_env)]
     else:
-        cands = [Path(__file__).resolve().parents[1] / "config.json",
-                 Path("/home/ubuntu/nbapp/config.json")]
+        cands = [Path(__file__).resolve().parents[1] / "config.json"]
     if not pw:
         for legacy in cands:
             try:

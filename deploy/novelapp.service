@@ -5,8 +5,8 @@ Wants=network-online.target
 
 [Service]
 Type=simple
-WorkingDirectory=/home/ubuntu/novel-app
-ExecStart=/home/ubuntu/novel-app/server/venv/bin/python -m uvicorn server.app:app --host 127.0.0.1 --port 8899 --log-level warning --timeout-graceful-shutdown 3
+WorkingDirectory=%h/novel-app
+ExecStart=%h/novel-app/server/venv/bin/python -m uvicorn server.app:app --host 127.0.0.1 --port 8899 --log-level warning --timeout-graceful-shutdown 3
 Restart=always
 RestartSec=3
 # 挂着 SSE 长连接时 uvicorn 会一直等它断，默认要等满 90 秒才被 SIGKILL
@@ -14,8 +14,8 @@ RestartSec=3
 TimeoutStopSec=7
 KillMode=mixed
 SendSIGKILL=yes
-StandardOutput=append:/home/ubuntu/novel-app/logs/novelapp.log
-StandardError=append:/home/ubuntu/novel-app/logs/novelapp.log
+StandardOutput=append:%h/novel-app/logs/novelapp.log
+StandardError=append:%h/novel-app/logs/novelapp.log
 
 [Install]
 WantedBy=default.target
