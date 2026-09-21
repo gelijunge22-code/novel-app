@@ -667,12 +667,29 @@
        用它换一个正常会话，用户就不用在手机上再输一遍密码。
        网页版地址上没有 t，这一段自然跳过。 */
     const m = location.search.match(/[?&]t=([^&#]+)/);
-    if (m && Prefs.get('localLogged') !== '1') {
+    if (m) {
+      const _tk = decodeURIComponent(m[1]);
+      let _got = false;
+      /* ① 手机端：本机后端给的一次性口令（老路子，服务器只在 127.0.0.1 上认它） */
       try {
-        await API.loginToken(decodeURIComponent(m[1]));
+        await API.loginToken(_tk);
         Prefs.set('localLogged', '1');
-        if (window.BookCtx && BookCtx.loginOk) { try { BookCtx.loginOk().catch(() => {}); } catch (e) {} }
-      } catch (e) { /* 换不到就走下面的正常登录流程 */ }
+        _got = true;
+      } catch (e) { /* 不是本机口令，往下试 */ }
+      /* ② 网页端 / 免登录链接：地址上带的是一串**会话口令**。
+            以前这里没有这一支，所以网页上带 ?t= 完全没用 ——
+            用户实测"免登录链接打开还是要登录"就是这么来的。 */
+      if (!_got) {
+        try {
+          API.useToken(_tk);
+          const _st = await API.status();
+          if (_st && _st.loggedIn) _got = true;
+          else API.useToken('');
+        } catch (e) { try { API.useToken(''); } catch (e2) {} }
+      }
+      if (_got && window.BookCtx && BookCtx.loginOk) {
+        try { BookCtx.loginOk().catch(() => {}); } catch (e) {}
+      }
     }
     try {
       const st = await API.status();
@@ -755,6 +772,15 @@
   }
 
   function start() {
+    /* 走到这儿就说明**已经登录了**，登录页必须关掉。
+       以前只有"点密码按钮"那条路会关它 —— 于是任何"本来就有会话"的入口
+       （免登录链接 / 之前登录过 / 手机上自动登录）都会看到：数据都出来了，
+       登录页还赖在上面 → 用户以为"怎么都要登录，密码还没用"。
+       实测（监督人）：带 ?t= 打开时 status.loggedIn=true、书架 2 本，登录页仍然显示。 */
+    try {
+      const _lg = document.getElementById('login');
+      if (_lg) _lg.classList.add('hidden');
+    } catch (e) {}
     const st = location.hash.replace('#/', '').split('?')[0];
     /* 自定义背景图：登录之后才知道"这本书是哪本"，所以在这一步读一次。
        读不到（还没传 / 没联网）就是默认纸纹 —— 不许因此把界面卡住。 */

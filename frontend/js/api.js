@@ -223,6 +223,9 @@
       return d;
     },
     sessionToken: sessToken,        // 排错/测试用：现在手上是哪一串口令
+    /* 直接采用一串已有的口令（免登录链接 / 从别处带过来）——
+       以前没有这个出口，所以地址上带 ?t=<会话口令> 在网页端完全没用。 */
+    useToken: (t) => { setSessToken(t || ''); return sessToken(); },
 
     /* 书架 / 正文 */
     shelf: () => j('api/shelf'),
