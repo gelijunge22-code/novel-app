@@ -216,6 +216,33 @@ async def _cors(request: Request, call_next):
     return resp
 
 
+@app.middleware("http")
+async def _watch_outside(request: Request, call_next):
+    """记下**外部来访**（只记非本机）。
+
+    排障用：用户说"进不去 / 连不上"时，先看这里有没有他的请求 ——
+      · 有 → 网络是通的，问题在认证或前端
+      · 没有 → 请求根本没到服务器（DNS / 端口 / 安全组 / 手机网络）
+    本机自测不记，免得刷屏。
+    """
+    import time as _t
+    # 经过 Caddy 转发时，后端看到的源地址是 127.0.0.1 —— 真实客户端在 X-Forwarded-For 里
+    _xff = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip()
+    ip = _xff or (request.client.host if request.client else "?")
+    local = ip in ("127.0.0.1", "::1", "localhost", "")
+    t0 = _t.time()
+    resp = await call_next(request)
+    if not local:
+        try:
+            print("[外部访问] %s %s %s → %s  %.0fms  ua=%s" % (
+                ip, request.method, request.url.path, resp.status_code,
+                (_t.time() - t0) * 1000, (request.headers.get("user-agent") or "")[:70]),
+                flush=True)
+        except Exception:
+            pass
+    return resp
+
+
 @app.exception_handler(Exception)
 async def _any_error(request: Request, exc: Exception):
     import traceback

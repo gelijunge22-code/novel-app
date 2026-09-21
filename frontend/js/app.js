@@ -612,6 +612,13 @@
       if (el) App.act(el.dataset.act, e);
     });
     const pass = document.getElementById('login-pass');
+    /* 为什么聚焦就全选：输入法/浏览器的"自动填"会塞进上一次的旧密码，
+       用户看着框里像空的、直接点「进入」，发出去的是旧密码 → 永远 401。
+       （用户实测踩过：手机上一直进不去，服务器日志里全是 401。） */
+    if (pass) {
+      pass.addEventListener('focus', () => { try { pass.select(); } catch (e) {} });
+      pass.addEventListener('click', () => { try { if (pass.value) pass.select(); } catch (e) {} });
+    }
     const go = async () => {
       const v = pass.value.trim();
       if (!v) return;
