@@ -100,7 +100,7 @@ def _one(key: str) -> dict:
 def _sweep(prefix: str, keep: str = "") -> int:
     """把这一档**旧**的图删掉，只留 keep 这一个文件名。
 
-    ⚠ 踩到的真 bug（此处指出「换背景图没办法好好换」的根因）：
+    ⚠ 踩到的真 bug（此前的反馈的根因）：
        原来写的是 `d.glob(prefix + ".*")`，而落盘名是 `f"{prefix}-{now_ms()}{ext}"`
        （`global-1789964022862.jpg`）—— 模式 `global.*` 里的 `.` 是字面量，
        **一个都匹配不到**，于是"换一张"永远留着旧图、"移除"也清不掉，

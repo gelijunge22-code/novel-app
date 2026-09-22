@@ -21,7 +21,7 @@ import httpx
 TIMEOUT = httpx.Timeout(600.0, connect=15.0, read=600.0)
 
 # 首字看门狗：渠道**通了但不吐字**（排队卡住 / 中转挂了）时，绝不能让用户对着
-# 「回复中…」干等 —— 这正是此处指出「AI 聊天输出之后出不了字」的体感。
+# 「回复中…」干等 —— 这正是此前的反馈的体感。
 # 第一个字之前给 FIRST_TOKEN_S（**只当安全网**：界面自己在 30 秒时就会写一句"还在等模型"，
 # 让用户继续等；这里只兜底"再也不会回来了"的那种），出字之后每个字之间给 IDLE_TOKEN_S。
 FIRST_TOKEN_S = float(os.environ.get("LLM_FIRST_TOKEN_S") or 300.0)

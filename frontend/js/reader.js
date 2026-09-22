@@ -1382,7 +1382,7 @@
     return '<button class="rd-act ' + st + '" data-a="tts">' + iconHtml(icon) + '<span>' + label + '</span></button>' +
       '<button class="rd-act" data-a="note">' + iconHtml('note') + '<span>记一笔</span></button>' +
       '<button class="rd-act" data-a="mark">' + iconHtml('bookmark') + '<span>加书签</span></button>' +
-      /* 此处指出"App 里听书没声音"时的入口：点一下逐项亮灯，把卡在哪一环说清楚 */
+      /* 此前的反馈时的入口：点一下逐项亮灯，把卡在哪一环说清楚 */
       '<button class="rd-act" data-a="ttsdiag">' + iconHtml('search') + '<span>听书自检</span></button>';
   }
 
@@ -1555,7 +1555,7 @@
        然后外部那个 setTimeout 640ms 又把它开了一次 → 看着就像"在设置里点开了目录"。 */
     if (App.sheetOpen && App.sheetOpen()) { App.closeSheet(() => tocOpen()); return; }
     /* 从底栏「目录」进：设置面板让位。**用 fromBack=true 收它** —— 历史那一格留给目录，
-       不然两层面板各压一格、返回键要按两下才退得出去（此处指出过"退出到别的工具里"那类怪事）。 */
+       不然两层面板各压一格、返回键要按两下才退得出去（此前的反馈那类怪事）。 */
     if (quickOn) closeQuick(true);
     tocPaint();
     if (tocOn) return;
@@ -2231,7 +2231,7 @@
     if (gen !== R.ttsGen || !R.ttsWant) return;             // 等的过程中被停掉了
     if (!meta || !meta.count) {
       ttsStop(false);
-      /* 说清楚**到底为什么没声**（此处指出"听书没声音"的时候，这一句就是唯一线索）：
+      /* 说清楚**到底为什么没声**（此前的反馈的时候，这一句就是唯一线索）：
          以前不管什么原因都写"这一章没有可朗读的内容" ——
          连不上服务器时用户看到的是"没内容"，其实人话是"连不上、听书要联网"。
          合成在服务器上做（edge-tts），手机自己不会发声，所以断网就是没声。 */
@@ -2302,7 +2302,7 @@
   }
 
   /* ══════════ 听书自检：把"点了听书没声"从哑巴失败变成看得见 ══════════
-     此处指出是「App 里听书从来没有出过声音」，而界面上什么都不说。
+     此前的反馈是「App 里听书从来没有出过声音」，而界面上什么都不说。
      服务器侧那半由 `GET /api/tts/selfcheck` 给（它只回真数值）；这里补**手机侧**那半：
      音频直链能不能取到（HTTP 码 / 类型 / 字节数 / 开头四字节）、
      `new Audio()` 加载成不成（error.code / networkState / readyState / duration）、

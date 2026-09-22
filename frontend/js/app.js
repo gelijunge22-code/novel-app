@@ -605,7 +605,7 @@
     /* `data-act` 的动作**统一在 document 上收一次**（事件委托）。
        为什么改成委托：以前是"启动那一刻，给当时存在的每个 [data-act] 绑一次"——
        启动之后才插进 DOM 的元素（弹层里的动作、面板里后画出来的按钮）**永远绑不上**，
-       用户点下去就是"点了只闪一下、一点用都没有"（此处指出过这一类）。
+       用户点下去就是"点了只闪一下、一点用都没有"（此前的反馈这一类）。
        委托一次就都管住。⚠ 只在这里绑一次：元素自己不许再绑一遍，否则同一个动作会跑两次。 */
     document.addEventListener('click', (e) => {
       const el = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
@@ -710,7 +710,7 @@
          App 的界面是从安装包里（file://）加载的，安卓对 file:// **不保留
          cookie/localStorage** —— 所以每次打开都没有登录态。
          老版是从服务器加载页面、cookie 由 WebView 自己保管，所以当年不用每次输密码；
-         改内嵌之后这个待遇就没了（此处指出"做大了之后才有的问题"就是这个）。
+         改内嵌之后这个待遇就没了（此前的反馈就是这个）。
          解法：登录成功时把口令存进手机，这里静默登录一次，用户根本看不到登录页。 */
       if (!st.loggedIn) {
         try {
@@ -991,7 +991,7 @@
       ['ttsEngine', `<div class="settings-row"><span class="k">朗读引擎</span><select class="input" data-select="ttsEngine"></select></div>`],
       ['rate', `<div class="settings-row"><span class="k">语速</span>${seg('rate', [['-20%', '慢'], ['+0%', '正常'], ['+25%', '快'], ['+50%', '更快']])}</div>`],
       ['ttsFollow', `<div class="settings-row"><span class="k">页面跟着朗读走<small>读到哪翻到哪</small></span>${sw('ttsFollow', p.ttsFollow !== false, '页面跟着朗读走')}</div>`],
-      /* 此处指出「App 里听书从来没有出过声音」——
+      /* 此前的反馈——
          这条入口点一下就把整条路逐项量一遍（地址 → 服务器 → 音频直链 → 加载 → 播放），
          哪一环断了、什么码、为什么，都摆在眼前。不再让"没声音"变成哑巴失败。 */
       ['ttsdiag', `<div class="settings-row"><span class="k">听书没声音？<small>逐项量一遍，看卡在哪一环</small></span>`
@@ -1393,7 +1393,7 @@
     /* 阅读器底部快捷面板：返回键**第一下**先收它（不能一步退出阅读器）。
        为什么放在这里而不是靠 history：App 里页面是 file://，pushState 会抛
        SecurityError（见 App.show 里那段注释），所以返回键这一层只能由 Java 转给前端算。 */
-    /* 阅读器的两层浮层：**先收目录、再收设置面板**（此处指出过"退出没有退到该退的地方"）。
+    /* 阅读器的两层浮层：**先收目录、再收设置面板**（此前的反馈）。
        顺序反了的话，从目录里按返回会先把底下没开的设置面板"收"一遍 —— 点了跟没点一样。 */
     if (window.Reader && Reader.tocOn && Reader.tocOn()) { Reader.tocClose(); return true; }
     if (window.Reader && Reader.quickOn && Reader.quickOn()) { Reader.quickClose(); return true; }

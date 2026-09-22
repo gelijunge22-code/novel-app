@@ -477,7 +477,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .web-try-list small{font-size:var(--t-sm);color:var(--ink-3);line-height:1.6}
 
 /* ══════════ 八、听书自检 ══════════
-   此处指出是「App 里听书从来没有出过声音」，界面上当时什么都不说 ——
+   此前的反馈是「App 里听书从来没有出过声音」，界面上当时什么都不说 ——
    服务器侧实测全通（合成成功 / 接口 200 / 公网反代也通），所以缺的是
    「**卡在哪一环、什么码、为什么**」能被看见。这一块就是那份逐项清单。
    一行一步：✓/✗ + 这一步的名字 + 它量到的**真数值**（HTTP 码、字节数、error.code…）。 */
