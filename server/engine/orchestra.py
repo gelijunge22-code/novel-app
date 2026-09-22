@@ -205,12 +205,27 @@ def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str
         每一棒用的**本来就是同一个模型** —— 所以"棒多"不等于"人变多"，
         变的只是这一步戴哪顶帽子。"""
         allsteps = list(_m["steps"])
+        # 走到哪一步，就带上**那一步自己的预设**（用户在「一个人（全套）」里填的）。
+        # 用户原话：「你现在这个一个人的预设里面几乎没有东西」—— 对。原来 7 步共用一份设置，
+        # 等于每一步都调不了。这里按"戴哪顶帽子"取对应那一格，拼进这一步的要求里。
+        _S1 = {}
+        try:
+            from ..llm.prompts import preset_values as _pv
+            _S1 = _pv(slug) if slug else {}
+        except Exception:
+            _S1 = {}
+        _BY_ROLE = {"leader": "soloLeader", "retriever": "soloRetriever",
+                    "researcher": "soloResearcher", "writer": "soloWriter",
+                    "critic": "soloCritic"}
         out = []
         for i, (role, title, demand) in enumerate(allsteps, 1):
             want = ("这一轮只有你一个人（分工模式下的那几个角色，全由你一个人演）。\n"
                     "你现在是**第 %d 步 / 共 %d 步**，这一步只做「%s」这件事。\n"
                     % (i, len(allsteps), title)
                     + ONE_SHOT.get(mode, ""))
+            _extra = str(_S1.get(_BY_ROLE.get(role, ""), "") or "").strip()
+            if _extra:
+                want += "\n【这一步的专门要求（用户写的，照做）】\n" + _extra
             out.append((role, "第%d步·%s" % (i, title), want, role == "writer"))
         return out
 

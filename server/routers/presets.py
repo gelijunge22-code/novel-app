@@ -64,6 +64,38 @@ PROFILES: list[dict] = [
              "description": "一个人干的时候尺度全看这里。留空就用上面的「写作者立场」。",
              "placeholder": "例如：亲密戏直接写、不淡出；暴力写到什么程度；哪些不写。",
              "defaultValue": ""},
+
+            # ── 分步设置：一个人跑起来是一步一步走的，**每一步该有自己那份要求** ──
+            # 用户原话：「你不是说给他弄了好多个步骤吗？那他相应步骤下不都应该有专门的那种预设吗？
+            # 比如说挑刺，它是一个具体的功能，在聊天中遇到了某些特定场景下，挑刺这个功能就会
+            # 出现在这个功能下，AI 在说东西的时候会调用到某些预设」。
+            # 所以按"戴哪顶帽子"分 5 组，走到那一步就把这组的话带上（不用按 7 条硬拆，
+            # 因为"写初稿"和"按批注改稿"都是写手，"排计划/汇总/收敛"都是主创）。
+            {"path": "soloLeader", "component": "textarea", "rows": 3,
+             "label": "① 主创那几步（排计划 / 出主张 / 回应与收敛 / 定稿 / 汇总）",
+             "description": "轮到它当主创时额外要求。例：这一章要写到哪、留什么钩子、别铺太长。",
+             "placeholder": "例：一章一场戏写透；钩子只留一个；不许用总结句收尾。",
+             "defaultValue": ""},
+            {"path": "soloRetriever", "component": "textarea", "rows": 3,
+             "label": "② 取上下文那一步",
+             "description": "轮到它翻资料时额外要求。例：要把涉及亲密/暴力的段落原样摘出来。",
+             "placeholder": "例：把前面这场戏写到哪一步、用了什么词，原样摘出来。",
+             "defaultValue": ""},
+            {"path": "soloResearcher", "component": "textarea", "rows": 3,
+             "label": "③ 查证那一步",
+             "description": "轮到它核对时额外要求。例：要连尺度相关的先例一起查。",
+             "placeholder": "例：查清前文有没有写过同类场面，别写出前后矛盾的尺度。",
+             "defaultValue": ""},
+            {"path": "soloWriter", "component": "textarea", "rows": 3,
+             "label": "④ 写正文那两步（写初稿 / 按批注改稿）",
+             "description": "**最关键的一格**。轮到它下笔时要什么、不要什么，写这儿。",
+             "placeholder": "例：该露骨就写透，不许用比喻绕开，不许「一夜过去」。",
+             "defaultValue": ""},
+            {"path": "soloCritic", "component": "textarea", "rows": 3,
+             "label": "⑤ 挑刺那一步",
+             "description": "轮到它自己审自己时额外要求 —— 这一步最容易和稀泥，写狠一点。",
+             "placeholder": "例：最少挑 5 条；该露骨处含糊了必须点出来并要求重写；不许说「整体不错」。",
+             "defaultValue": ""},
         ],
     },
     {
