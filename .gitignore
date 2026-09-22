@@ -86,3 +86,4 @@ tools/*
 !tools/check_deps.py
 docs/*
 !docs/功能清单.md
+!docs/更新记录.md

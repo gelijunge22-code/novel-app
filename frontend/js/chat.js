@@ -523,11 +523,35 @@
 
   /* ═══════════════ 渲染消息 ═══════════════ */
   function bodyEl() { return $('#chat-body'); }
-  function atBottom(el) { return el.scrollHeight - el.scrollTop - el.clientHeight < 90; }
+  /* ── 自动滚动：**以用户的意图为准**（用户报的"一滑就被拽回去、来回跳"）
+     原来是只看"离底部的距离"（<90px 就算还在底部、就贴底）。可流式输出时
+     内容在**持续变长** —— 你刚往上滑几十像素，下一批字一进来又判定成"还在底部"，
+     立刻被拽回最底下，来回跳。
+     现在记住"用户是不是自己滑上去过"这个意图：一旦滑上去就**不再自动贴底**，
+     直到他自己滑回最底下（或发新消息 / 切会话）。这样 AI 一边发一边能安心往上翻。 */
+  let follow = true;                       // true = 跟着最新内容走
+  function atBottom(el) { return el.scrollHeight - el.scrollTop - el.clientHeight < 60; }
+  function watchScroll() {
+    const el = bodyEl();
+    if (!el || el.dataset.scWired === '1') return;   // 只绑一次
+    el.dataset.scWired = '1';
+    el.addEventListener('scroll', () => { follow = atBottom(el); }, { passive: true });
+    /* 手指一按到就停止跟随：不等 scroll 事件（那时候已经被拽回去了） */
+    el.addEventListener('touchstart', () => {
+      const e2 = bodyEl();
+      if (e2) follow = atBottom(e2);
+    }, { passive: true });
+    el.addEventListener('wheel', () => {
+      const e2 = bodyEl();
+      if (e2) follow = atBottom(e2);
+    }, { passive: true });
+  }
   function scrollDown(force) {
     const el = bodyEl();
     if (!el) return;
-    if (force || atBottom(el)) el.scrollTop = el.scrollHeight;
+    watchScroll();
+    if (force) { follow = true; el.scrollTop = el.scrollHeight; return; }
+    if (follow || atBottom(el)) el.scrollTop = el.scrollHeight;
   }
 
   function clearBody(emptyHtml) {
