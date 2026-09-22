@@ -1068,6 +1068,68 @@
     refreshStrip();
   }
 
+  /* ═══════════ 全书搜索（用户要的"知识库那种搜索"）═══════════════
+     后端 `api/books/search` 一直都在（扫这本书所有章节、返回命中处前后文），
+     只是从来没在界面上接过入口 —— 用户翻半天找不到，就是这么来的。
+     这里补上：顶栏放大镜 → 输入 → 边打边搜 → 点结果直接跳到那一章那一处。 */
+  function openBookSearch() {
+    /* 当前这本书从哪儿拿：**BookCtx 是全局正主**（阅读器/书架都认它）。
+       踩过的坑：一开始写成 S.slug —— 那个字段根本不存在，于是每次都弹"先进一本书再搜"，
+       面板死活出不来。兜底链一路排到会话和前端的 data，尽量别再空手。 */
+    let slug = '';
+    try { slug = (window.BookCtx && BookCtx.slug && BookCtx.slug()) || ''; } catch (e) {}
+    slug = slug || S.bookSlug || (S.session && S.session.slug) || (S.data && S.data.slug) || '';
+    if (!slug) { App.toast('先进一本书再搜'); return; }
+    App.sheet(
+      '<div class="sheet-grip"></div>'
+      + '<h3 class="sheet-h">找内容</h3>'
+      + '<p class="pfield-ds">把这本书的**正文**从头到尾搜一遍（设定、人物、大纲另外在「设定库」里搜）。</p>'
+      + '<div class="pfield-ct"><input class="pinput" id="bs-q" placeholder="输入要查的词，边打边搜" autocomplete="off"></div>'
+      + '<div class="bs-wrap" id="bs-wrap"></div>',
+      { onMount(panel) {
+          const inp = panel.querySelector('#bs-q');
+          const wrap = panel.querySelector('#bs-wrap');
+          let timer = null, last = '';
+          const draw = (hits, kw) => {
+            if (!hits || !hits.length) {
+              wrap.innerHTML = '<p class="pfield-ds" style="padding:var(--sp-3) 0">没找到「' + esc(kw) + '」。</p>';
+              return;
+            }
+            wrap.innerHTML = hits.map((h) =>
+              '<button type="button" class="bs-hit" data-p="' + esc(h.path) + '">'
+              + '<span class="bs-name">' + esc(h.name || h.path) + '</span>'
+              + '<span class="bs-txt">…' + esc(h.before || '') + '<b>' + esc(h.match || kw) + '</b>' + esc(h.after || '') + '…</span>'
+              + '</button>').join('');
+            wrap.querySelectorAll('.bs-hit').forEach((b) => {
+              b.addEventListener('click', () => {
+                try { App.closeSheet && App.closeSheet(); } catch (e) {}
+                if (window.Reader && Reader.goChapter) Reader.goChapter(b.dataset.p, 0);
+                else App.toast('打开失败：阅读器没准备好');
+              });
+            });
+          };
+          const run = async (kw) => {
+            kw = String(kw || '').trim();
+            if (!kw) { wrap.innerHTML = ''; return; }
+            if (kw === last) return;
+            last = kw;
+            wrap.innerHTML = '<p class="pfield-ds" style="padding:var(--sp-3) 0">正在找…</p>';
+            try {
+              const r = await API.bookSearch(slug, kw);
+              draw((r && r.hits) || [], kw);
+            } catch (e) {
+              wrap.innerHTML = '<p class="pfield-ds" style="padding:var(--sp-3) 0">搜不了：' + esc(String(e.message || e)) + '</p>';
+            }
+          };
+          inp.addEventListener('input', () => {
+            clearTimeout(timer);
+            timer = setTimeout(() => run(inp.value), 260);   // 防抖，别一个字一个请求
+          });
+          inp.addEventListener('keydown', (e) => { if (e.key === 'Enter') { clearTimeout(timer); run(inp.value); } });
+          setTimeout(() => inp.focus(), 120);
+      } });
+  }
+
   /* 新对话：开一个干净会话。
      用户报「我没看到有个新对话，相当于不能新建对话」—— 功能一直在（newSession），
      但界面上没入口。现在顶栏有个 ＋。**会先问一句**：正写着的时候点错就麻烦了。 */
@@ -2153,6 +2215,7 @@
     open(id, opts) { return openSession(id, opts); },
     newSession(pk) { return newSession(pk); },
     startNewChat() { return startNewChat(); },
+    openBookSearch() { return openBookSearch(); },
     send(text) { return sendText(text); },
     quick(kind) { return fillQuick(kind); },
     /* 供其它面板（设定编辑器）把草稿塞进输入框，不发送。 */

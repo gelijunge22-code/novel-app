@@ -460,6 +460,9 @@
     updateCheck: () => window.API.nb('api/update/check'),
     updateApply: () => window.API.nb('api/update/apply', { method: 'POST', body: {} }),
     /* 自定义文风 / 范文：留在自己机器上（data/styles），可加可删 */
+    /* 全书搜索：一次搜完这本书的**所有章节**（正文），返回命中处的前后文。
+       后端早就有了（api/books/search），只是一直没有界面入口。 */
+    bookSearch: (slug, q) => window.API.nb('api/search?slug=' + encodeURIComponent(slug || '') + '&q=' + encodeURIComponent(q || '')),
     styleSave: (body) => window.API.nb('api/presets/style', { method: 'POST', body: body || {} }),
     styleDelete: (name) => window.API.nb('api/presets/style?name=' + encodeURIComponent(name || ''), { method: 'DELETE', body: {} }),
     appPassword: () => window.API.nb('api/app/password'),

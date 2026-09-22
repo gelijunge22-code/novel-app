@@ -871,6 +871,7 @@
       'chat-back': () => App.show('shelf'),
       'chat-menu': () => window.Chat && Chat.menu && Chat.menu(),
       'chat-new': () => window.Chat && Chat.startNewChat && Chat.startNewChat(),
+      'chat-search': () => window.Chat && Chat.openBookSearch && Chat.openBookSearch(),
       'lore-back': () => App.show('shelf'),
       'lore-search': () => window.Lore && Lore.toggleSearch && Lore.toggleSearch(),
       'settings-back': () => App.show('shelf'),

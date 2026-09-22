@@ -270,3 +270,12 @@
 }
 .net-pill.on::before{opacity:1;background:#fff}
 .net-pill[disabled]{opacity:.5}
+
+/* 全书搜索的结果条（顶栏放大镜那个面板） */
+.bs-wrap{max-height:52vh;overflow-y:auto;margin-top:var(--sp-2)}
+.bs-hit{display:block;width:100%;text-align:left;padding:var(--sp-3);border:1px solid var(--line);
+  border-radius:var(--radius);background:var(--paper);margin-bottom:var(--sp-2);cursor:pointer}
+.bs-hit:active{transform:scale(.995)}
+.bs-name{display:block;font-size:var(--t-sm);color:var(--ink-2);margin-bottom:4px}
+.bs-txt{display:block;font-size:var(--t-sm);color:var(--ink-3);line-height:1.7;word-break:break-all}
+.bs-txt b{color:var(--ink-1);font-weight:600}
