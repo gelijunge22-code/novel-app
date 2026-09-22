@@ -219,10 +219,15 @@ def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str
                     "critic": "soloCritic"}
         out = []
         for i, (role, title, demand) in enumerate(allsteps, 1):
-            want = ("这一轮只有你一个人（分工模式下的那几个角色，全由你一个人演）。\n"
-                    "你现在是**第 %d 步 / 共 %d 步**，这一步只做「%s」这件事。\n"
-                    % (i, len(allsteps), title)
-                    + ONE_SHOT.get(mode, ""))
+            # 每一步**只做自己那一步的事**。
+            # 这里曾经把 ONE_SHOT（"一个人演全套：①主创 ②写手——写完整章 ③挑刺 ④润色"）
+            # 拼进**每一步**，于是 7 步每一步都被要求"写完整章"→ 连着输出 7 遍正文，
+            # 用户看到的是一堆正文、也分不清哪版算数。一个人 ≠ 每步重写一遍。
+            want = ("这一轮由你一个人完成全过程（分工模式下的几个角色，都由你一个人依次扮演）。\n"
+                    "你现在是**第 %d 步 / 共 %d 步**，**这一步只做「%s」这一件事**。\n"
+                    "没轮到的步骤不要抢着做：没轮到写正文就一个字正文都不要写；"
+                    "没轮到挑刺就不要挑刺。做完这一步就停，等下一步。\n"
+                    % (i, len(allsteps), title))
             _extra = str(_S1.get(_BY_ROLE.get(role, ""), "") or "").strip()
             if _extra:
                 want += "\n【这一步的专门要求（用户写的，照做）】\n" + _extra
@@ -375,6 +380,37 @@ def _target_path(slug: str, text: str, payload: dict) -> str:
     m = re.search(r"(manuscript|正文)/\S+\.(md|txt)", text or "")
     if m:
         return m.group(0)
+    # 用户说"改第 3 章 / 第三章 / 第二章"时，认出他要改的是**已有的那一章**。
+    # 以前只认完整路径，所以用户说"把第二章改一下"会被当成"写新章"，
+    # 落到"最大章号 +1"，于是永远改不了前面几章（用户实测：改不了第一章第二章）。
+    try:
+        from ..store import chapter_files
+        _files = chapter_files(slug)
+    except Exception:
+        _files = []
+    if _files:
+        _cn = "零一二三四五六七八九十百"
+        _want_idx = None
+        mm = re.search(r"第\s*(\d+)\s*章", text or "")
+        if mm:
+            _want_idx = int(mm.group(1))
+        else:
+            mm = re.search(r"第\s*([%s]+)\s*章" % _cn, text or "")
+            if mm:
+                _z = mm.group(1)
+                _n = 0
+                if _z == "十":
+                    _n = 10
+                elif "十" in _z:
+                    a, _, b = _z.partition("十")
+                    _n = (_cn.index(a) if a else 1) * 10 + (_cn.index(b) if b else 0)
+                elif _z in _cn:
+                    _n = _cn.index(_z)
+                _want_idx = _n or None
+        if _want_idx:
+            for f in _files:
+                if int(f.get("index") or 0) == _want_idx:
+                    return f["path"]
     try:
         from ..store import chapter_files
         files = chapter_files(slug)
@@ -524,7 +560,17 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
     if target and role in ("writer", "leader"):
         head.append(f"【要写的文件】{target}")
     if handoff_from:
-        head.append(f"【上一棒「{ROLES[handoff_from]['name']}」交给你的东西】\n{handoff_text[:HANDOFF_CHARS]}")
+        # 必须说清"这是**本轮刚产出的草稿**，不是这本书已有的章节"。
+        # 踩过的坑：交接文本就是一篇完整正文，模型看到"上一棒交给你的东西"里有整章文字，
+        # 会以为那是**已经存在的上一章**，于是"接着往下写"—— 结果自己把自己的草稿
+        # 当成前文，整章重复、或者从中间续写。
+        head.append(
+            f"【上一棒「{ROLES[handoff_from]['name']}」交给你的东西 —— 注意】\n"
+            f"下面这段是**本轮刚刚产出的草稿/结论**，**不是这本书已有的章节**，\n"
+            f"也不是上一章。你要做的是在它基础上推进，**不要把它当成前文去续写**，\n"
+            f"更不要把它的内容再抄一遍。\n"
+            f"----- 上一棒产出开始 -----\n{handoff_text[:HANDOFF_CHARS]}\n"
+            f"----- 上一棒产出结束 -----")
     if role == "critic":
         head.append("【机器质检命中】（这些是规则抓出来的，你在批注里要顺带确认哪些是真问题）\n"
                     + (ctx.get("lint_bits") or "（没有命中）"))
