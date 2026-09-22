@@ -169,7 +169,7 @@ ONE_SHOT: dict[str, str] = {
 
 ① 主创（三五行，别长）—— 说清这一章要写什么、写到哪、为什么这么写。
 ② 写手 —— **紧接着一口气写完整章正文**。不许省、不许"待续"、不许交回给我、不许写大纲代替正文。
-   该露骨的地方就写透，不许用比喻糊过去，不许"一夜过去"式地跳过关键场面。
+   该露骨的地方就写透，不许用比喻含混处理，不许"一夜过去"式地跳过关键场面。
    一章就是一整章（能写多长写多长，别惜字）。
 ③ 挑刺 —— 正文写完，立刻**站到挑刺者的位置**，列出最少 3 条真问题：
    哪里情绪是假的、哪里跳了、哪里该写透却含糊了。要**具体到句子**，不许说"整体不错"。
@@ -516,7 +516,7 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
     system += "\n\n" + _book_state_bits(slug, target)
     system += ("\n\n【你这一步的角色】" + r["name"] + "：" + r["duty"] +
                "\n【你只能看到这些】" + "、".join(r["sees"]) +
-               "\n【硬规矩】" + ("你不改任何文件，只交结论。" if r["scope"] == "read" else
+               "\n【约束】" + ("你不改任何文件，只交结论。" if r["scope"] == "read" else
                                 ("你只写正文（manuscript/ 下的文件），设定和世界观不要动。"
                                  if r["scope"] == "prose" else "你可以改文件，但改之前要说清影响面。")))
 
@@ -710,7 +710,7 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
                     rt.append_entry(sid, "system", [{"type": "text",
                         "content": f"{r['name']}这一步（收口）模型出错：{ev['error']}"}])
         except Exception as e:
-            # 第 9 遍打磨：以前这里是 `pass` —— 收口那一趟挂了，整棒会安静地"成功结束"，
+            # 打磨：以前这里是 `pass` —— 收口那一趟挂了，整棒会安静地"成功结束"，
             # 用户看到的是"写完了"，其实结论没产出。现在记进对话和状态里。
             status = "error"
             rt.append_entry(sid, "system", [{"type": "text",
@@ -945,7 +945,7 @@ async def run(sid: int, text: str, inv: str, payload: dict, model_key: str = "")
     status = "done"
     prev_role = ""
     # 注意：这一整段（含最开始的"把用户这句话记进对话"）都要包在 SessionGone 的兜底里 ——
-    # 第 9 遍打磨实测：把 try 从中间开始，用户刚好在这两步之间删掉会话，异常还是会漏出去。
+    # 打磨实测：把 try 从中间开始，用户刚好在这两步之间删掉会话，异常还是会漏出去。
     try:
         rt.append_entry(sid, "user", [{"type": "text", "content": text}])
         # 单人 / 分工：用户在前端选的（默认分工）。三种干活方式**都能**切成单人。

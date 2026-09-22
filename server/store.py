@@ -419,7 +419,7 @@ def create_book(title: str, summary: str = "", kind: str = "novel") -> dict:
         "INSERT INTO book(slug,title,kind,summary,created_at,updated_at) VALUES(?,?,?,?,?,?)",
         (slug, title, kind, summary, now, now))
     # 一本新书默认给一章，用户点进去就能写。
-    # 正文留空：第 9 遍打磨实测过，以前模板写的是 `# {书名}` —— 自家质检的 ai.markdown 会把它
+    # 正文留空：打磨实测过，以前模板写的是 `# {书名}` —— 自家质检的 ai.markdown 会把它
     # 当成"markdown 残留"（严重度 3），于是用户刚建好的书打开「质检」就是 **0 分 · 要改**。
     # 空章在阅读器里显示「（本章暂无正文）」，比一个假警报好。
     write_text(slug, "manuscript/第001章-未命名.md", "", snapshot=False)

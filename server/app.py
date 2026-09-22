@@ -34,7 +34,7 @@ from server.store import P, now_ms                 # noqa: E402
 
 VERSION = "1.0.0"
 
-# ── 数值参数的边界（第 8 遍打磨加的）────────────────────────────────────────
+# ── 数值参数的边界（打磨加的）────────────────────────────────────────
 # 为什么要有：SQLite 的 INTEGER 是 64 位，`?limit=99999999999999999999` 会一路走到
 # sqlite3 里炸成 `Python int too large to convert to SQLite INTEGER` → **HTTP 500**。
 # 前端不可能发这种数，但书签/收藏里的老链接、或者别人手敲地址栏都能发出来。
@@ -111,7 +111,7 @@ _log_state = {"size": None, "writes": 0}
 def _roll_if_needed() -> None:
     """日志滚动：后端现在也跑在**手机里**，一个只涨不缩的文件迟早把存储吃光。
 
-    （第 9 遍打磨补的：`logs/server.jsonl` 以前没有上限，开发期就长到 950KB；
+    （打磨补的：`logs/server.jsonl` 以前没有上限，开发期就长到 950KB；
     手机上装一年、错误日志攒起来没人清，用户会先发现"空间不够了"。）
     """
     try:

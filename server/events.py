@@ -41,7 +41,7 @@ class Bus:
 class SessionGone(RuntimeError):
     """这个会话已经不在了（用户把对话删了）。
 
-    第 9 遍打磨抓到的真 bug：会话删掉之后，编排还在跑 —— 它每写一条 entry / 每发一个事件
+    打磨抓到的真 bug：会话删掉之后，编排还在跑 —— 它每写一条 entry / 每发一个事件
     都撞 `sqlite3.IntegrityError: FOREIGN KEY constraint failed`（chat_entry.session_id 指向
     已经删掉的会话）。更糟的是**出错处理本身也在写 entry**，于是异常一层套一层，
     日志里一次运行能刷出几十行 traceback，真正的错因反而被埋了。

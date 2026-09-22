@@ -286,7 +286,7 @@ def find_entity(slug: str, name: str) -> dict | None:
 
 
 def _aliases_map(d, entity_ids: list[int]) -> dict[int, list[str]]:
-    """一次把一批实体的别名查完（第 9 遍打磨：以前是"每个实体查一次"的 N+1）。"""
+    """一次把一批实体的别名查完（打磨：以前是"每个实体查一次"的 N+1）。"""
     out: dict[int, list[str]] = {}
     ids = [int(i) for i in entity_ids if i]
     for i in range(0, len(ids), 400):                 # 别把 SQL 撑爆（SQLite 变量上限 999）

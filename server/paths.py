@@ -53,7 +53,7 @@ def slugify(title: str) -> str:
 def safe_slug(slug: str) -> str | None:
     """作品标识必须是单个干净目录名，防目录穿越。
 
-    第 9 遍打磨：**非文字一律当没给**。以前 `slug=["数组"]` 会一路走到 `.strip()`
+    打磨：**非文字一律当没给**。以前 `slug=["数组"]` 会一路走到 `.strip()`
     变成 HTTP 500（`'list' object has no attribute 'strip'`）—— 用户的错填不该是"服务器内部错误"。
     """
     if not isinstance(slug, str):

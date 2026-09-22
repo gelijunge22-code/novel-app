@@ -154,7 +154,7 @@ def remember_password(pw: str) -> None:
                      " 也能在 App 的「设置」里改)\n" % pw, encoding="utf-8")
         os.chmod(f, 0o600)
         # **两个文件都要跟着最新口令走**：以前 initial-password.txt 只在不存在时写一次，
-        # 用户改了口令它就成"过期文件"——别人照着它输永远进不去（自己踩到的坑）。
+        # 用户改了口令它就成"过期文件"——别人照着它输永远进不去（自己相关记录（）。
         g = data / "initial-password.txt"
         g.write_text(pw + "\n", encoding="utf-8")
         os.chmod(g, 0o600)

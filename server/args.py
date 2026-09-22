@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """用户传进来的东西 → 数字（不合法就 400，别让它冒成 500）。
 
-第 8 遍打磨新加的：`tools/verify_badinput.py` 一跑就抓出一串 ——
+打磨新加的：`tools/verify_badinput.py` 一跑就抓出一串 ——
 `percent='abc'`、`entityId='abc'`、`version='abc'` 全把服务打成 **HTTP 500**
 （`float("abc")` 的 ValueError 直接冒到框架）。用户看到的是"服务出错了"，
 其实只是他填错了一个数；正经做法是 400 加一句人话。
@@ -62,7 +62,7 @@ def clamp(value, default, *, lo, hi, kind=int):
 def s(value, default: str = "", *, name: str = "字段") -> str:
     """把用户传的标量变成文字；**容器（数组/对象）一律 400**。
 
-    第 9 遍打磨补的：`tools/verify_edges.py` 的错类型模糊测试一跑就抓出
+    打磨补的：`tools/verify_edges.py` 的错类型模糊测试一跑就抓出
     **58 处 HTTP 500** —— `title=["数组"]`、`path={"对象":1}`、`name=12345` 全会撞上
     `'list' object has no attribute 'strip'`。用户看到的是"服务器内部错误"，
     其实只是他把一个字段填成了数组。
