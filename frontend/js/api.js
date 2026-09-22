@@ -67,7 +67,7 @@
   /* 前端版本戳：**每次改前端都改它**。
      为什么要有：App 的界面是打进安装包里的，出了"改了没生效"的问题时，
      得有一个一眼能看出"现在跑的是哪一份前端"的东西，不然只能靠猜。 */
-  const FE_STAMP = 'FE-2026-09-22-b';
+  const FE_STAMP = 'FE-2026-09-22-c';
   const REQLOG = [];            // 最近几次请求的耗时（自检面板要看）
   const noteReq = (path, ms, ok) => {
     try {
@@ -166,7 +166,20 @@
   const rawJ = async (path, opts = {}) => {
     const __t0 = (typeof performance !== 'undefined' ? performance.now() : Date.now());
     // 桥优先：只有 JSON 走桥；FormData 上传、流式生成还是走 HTTP（桥是同步返回字符串的）
-    if (bridgeUsable() && !opts.formData && !opts.stream) {
+    /* ══════════════════════════════════════════════════════════════════
+       **JSON 请求一律不走桥** —— 用户报的"卡顿/延迟"真凶就在这一行。
+
+       桥是**同步**调用：JS 调 Java，要**停下来等** Java 把 HTTP 发完再回话。
+       公网上一个来回几百毫秒，界面就跟着卡几百毫秒 —— 每次请求都卡一下。
+       老版 App 用的是 fetch（异步、不挡界面），所以当年丝滑；改成"内嵌前端"之后，
+       为了绕开 file:// 的跨源限制才把请求塞进桥，代价就是这个卡顿。
+
+       现在 WebView 已经开了跨源（setAllowUniversalAccessFromFileURLs(true)），
+       服务器也给了 CORS，所以直接 fetch 就行 —— 异步、不挡界面。
+       桥只留给"必须同步拿值"的小事：版本号、震动、下载、存口令。
+       ══════════════════════════════════════════════════════════════════ */
+    const USE_SYNC_BRIDGE = false;
+    if (USE_SYNC_BRIDGE && bridgeUsable() && !opts.formData && !opts.stream) {
       try {
         return bridgeCall((opts.method || 'GET').toUpperCase(), path, opts.body || null);
       } catch (bridgeErr) {
