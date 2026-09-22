@@ -516,9 +516,11 @@
   /* 模型名去掉渠道前缀（"[渠道]某模型" → "某模型"），
      再去掉结尾的 "-preview/-latest" 之类的噪音；太长的留头留尾。 */
   function shortModel(name) {
-    let s2 = String(name || '').replace(/^\[[^\]]*\]\s*/, '').replace(/\s+/g, ' ').trim();
-    s2 = s2.replace(/-(preview|latest|beta|exp)$/i, '');
-    return s2.length > 18 ? (s2.slice(0, 10) + '…' + s2.slice(-6)) : s2;
+    /* 用户原话：「在AI对话的界面，不用点开具体模型就能看到**完整的**模型名字」。
+       所以这里**不许再摘前缀、不许再省略号截断** ——
+       以前那句会把方括号里的渠道前缀整段删掉，还截成「10 个字…6 个字」；
+       同一个模型的 A/B/E/F 档看着一模一样，根本分不出是哪个渠道。 */
+    return String(name || '').replace(/\s+/g, ' ').trim();
   }
 
   function refreshStrip() {
@@ -1679,6 +1681,19 @@
     renderModels(q);
   }
 
+  /* 模型显示名：**必须带上渠道前缀**（`[渠道]` `[次]` `[企]` 这种）。
+     用户原话：「在AI对话的界面，不用点开具体模型就能看到完整的模型名字」。
+     坑：接口给的是 {id, name, source}，以前这里读的是 m.key / m.provider（undefined），
+     前缀和渠道名全丢了。这里统一成一处，模型列表和"当前用的哪个"都走它。 */
+  function fullModelName(m) {
+    if (!m) return '';
+    const id = String(m.id || m.key || '');
+    let nm = String(m.name || m.label || id || '');
+    const pf = (id.match(/^\[[^\]]{1,12}\]/) || [])[0];
+    if (pf && nm.indexOf(pf) !== 0) nm = pf + nm;
+    return nm;
+  }
+
   async function renderModels(q) {
     const box = $('#md-list');
     if (!box) return;
@@ -1692,7 +1707,7 @@
     const top = list.slice(0, 80);
     box.className = '';
     box.innerHTML = top.map((m) => '<div class="picker-item' + (m.key === S.modelKey ? ' on' : '') + '" data-k="' + esc(m.key) + '">' +
-      '<div class="nm"><b>' + esc(m.name) + '</b><div class="desc">' + esc(m.provider || '') + ' · ' + esc(m.key) + '</div></div>' +
+      '<div class="nm"><b>' + esc(fullModelName(m)) + '</b><div class="desc">' + esc(m.source || m.provider || '') + ' · ' + esc(m.id || m.key || '') + '</div></div>' +
       (m.key === S.modelKey ? '<span class="ck">当前</span>' : '') +
       /* 每行右侧的「⋯」：调这个模型自己的参数（上下文 1M/256K、推理、高级 JSON）。
          用户点名"三个点要放的就是这个地方" —— 就是这张「选模型」列表。
