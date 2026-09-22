@@ -65,6 +65,8 @@
        等于把最危险的那个模式设成默认。要写正文自己切过去（切了会记住）。 */
     mode: 'discuss', modes: null, roles: null, modeFromPreset: false,
     divided: true,          // 谁来做：true=多 Agent 分工 / false=一个人干完
+    autoWrite: false,       // 自动写作：写完自己接着往下写，直到这一章写完
+    autoLeft: null,         // 这一轮还剩几次自动续写（安全绳，防失控烧额度）
     seen: Object.create(null), lastSeq: -1, epoch: null,
     turnCtx: null,   /* 这一轮「AI 用了什么」的账（后端 turn_context 事件推过来） */
     waitT: null, waitN: 0,   /* "模型一直不出字"的看门狗计时器（见 waitTick） */
@@ -366,6 +368,29 @@
      用户要求：默认跟主创共用一个模型（后端 web.enabled 只管"能不能上网"），
      一枚胶囊直接开/关；**开着才联网**，关着一个请求都不发。 */
   const NET = { on: null, busy: false };
+  /* 自动写作那枚胶囊（跟"联网"同一套观感） */
+  function paintAuto() {
+    const b = $('#chat-auto');
+    if (!b) return;
+    const on = S.autoWrite === true;
+    b.classList.toggle('on', on);
+    b.setAttribute('aria-checked', on ? 'true' : 'false');
+    b.title = on ? '自动写作：开着 —— 写完自己接着往下写，直到这一章写完（点中断可停）'
+                 : '自动写作：关着 —— 一轮写完就停';
+  }
+  function bindAuto() {
+    const b = $('#chat-auto');
+    if (!b || b.dataset.bound === '1') return;
+    b.dataset.bound = '1';
+    b.addEventListener('click', (e) => {
+      e.preventDefault();
+      S.autoWrite = !S.autoWrite;
+      S.autoSeen = bodyEl() ? (bodyEl().innerText || '').length : 0;
+      if (S.autoWrite) { S.autoLeft = 30; App.toast('自动写作开了：写完会自己接着写'); }
+      else { App.toast('自动写作关了'); }
+      paintAuto();
+    });
+  }
   function bindNet() {
     const b = $('#chat-net');
     if (!b || b.dataset.bound === '1') return;
@@ -428,7 +453,8 @@
       '" aria-pressed="' + (m.key === S.mode ? 'true' : 'false') + '"' +
       ' title="' + esc(m.desc || '') + '">' + esc(m.name) + '</button>').join('');
     renderSplit();
-    bindNet();          // 胶囊绑一次
+    bindNet();          // 联网胶囊绑一次
+    bindAuto();         // 自动写作胶囊绑一次
     loadNet();          // 联网开关的真实状态每次进来都重读
     applyMode();
   }
@@ -1042,6 +1068,18 @@
     refreshStrip();
   }
 
+  /* 新对话：开一个干净会话。
+     用户报「我没看到有个新对话，相当于不能新建对话」—— 功能一直在（newSession），
+     但界面上没入口。现在顶栏有个 ＋。**会先问一句**：正写着的时候点错就麻烦了。 */
+  async function startNewChat() {
+    if (S.running) { App.toast('正在写，先点中断再开新对话'); return; }
+    if (!confirm('开一个新对话？现在这个会话会留着，随时能从「工具 → 会话」回去看。')) return;
+    try {
+      await newSession(S.profileKey);
+      App.toast('新对话开好了');
+    } catch (e) { App.toast('开不了新对话：' + (e.message || e)); }
+  }
+
   async function newSession(profileKey) {
     const slug = await curSlug();
     const pk = profileKey || S.profileKey || 'leader.default';
@@ -1256,6 +1294,28 @@
       ensureTurnSpoke(ev.status);
       if (S.run && S.run.i >= 900) { /* 编排自己会收尾，这里不抢 */ } else { runReset(); }
       refreshStrip();
+      /* ── 自动写作：一轮写完自己接着往下写 ──────────────────────────
+         用户原话：「点了一个自动写作，就它一直写一直写，让他把这一章写完为止。」
+         安全绳（一个都不能少）：开关关掉 / 点了中断 / 状态不是正常完成 /
+         **连着这一轮一点新字都没增加** / 到次数上限 —— 任何一条都立刻停。 */
+      if (S.autoWrite && ev.status === 'completed' && !S.aborted) {
+        const n = bodyEl() ? (bodyEl().innerText || '').length : 0;
+        const grow = n - (S.autoSeen || 0);
+        S.autoSeen = n;
+        if (grow < 40) {                       // 没写新东西 = 已经写完了，别空转
+          S.autoWrite = false; paintAuto();
+          App.toast('自动写作：这一轮没新增内容，停了');
+        } else if ((S.autoLeft == null ? 30 : S.autoLeft) <= 0) {
+          S.autoWrite = false; paintAuto();
+          App.toast('自动写作：到上限了（30 轮），先停下');
+        } else {
+          S.autoLeft = (S.autoLeft == null ? 30 : S.autoLeft) - 1;
+          setStatus('自动写作：接着写（还剩 ' + S.autoLeft + ' 轮，点中断可停）');
+          setTimeout(() => {
+            if (S.autoWrite && !S.running) sendText('接着上一段继续往下写。不要重复已经写过的内容，不要写总结，不要问我，直接写正文。');
+          }, 1500);
+        }
+      }
       return;
     }
   }
@@ -2092,6 +2152,7 @@
     sessions() { return S.sessions; },
     open(id, opts) { return openSession(id, opts); },
     newSession(pk) { return newSession(pk); },
+    startNewChat() { return startNewChat(); },
     send(text) { return sendText(text); },
     quick(kind) { return fillQuick(kind); },
     /* 供其它面板（设定编辑器）把草稿塞进输入框，不发送。 */

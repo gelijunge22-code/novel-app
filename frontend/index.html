@@ -162,6 +162,8 @@
     <button class="icon-btn" data-icon="back" data-act="chat-back" aria-label="返回"></button>
     <h1 id="chat-title" class="topbar-title">对话</h1>
     <div class="topbar-right">
+      <!-- 新对话：开一个干净的会话。功能本来就有，只是没按钮，用户找不到 -->
+      <button class="icon-btn" data-icon="plus" data-act="chat-new" aria-label="新对话" title="新对话"></button>
       <button class="icon-btn" data-icon="more" data-act="chat-menu" aria-label="设置"></button>
     </div>
   </header>
@@ -172,6 +174,7 @@
     <!-- 联网搜索：一枚看得见、一下就能开/关的胶囊（用户点名"专门的那种类似于胶囊的按钮"）。
          关着的时候一个请求都不发；开着的时候后台用主创的模型自己跑。 -->
     <button id="chat-net" class="net-pill" role="switch" aria-checked="false" aria-label="联网搜索">联网</button>
+    <button id="chat-auto" class="net-pill" role="switch" aria-checked="false" aria-label="自动写作">自动写</button>
     <textarea id="chat-input" class="chat-input" rows="1" placeholder="说点什么…"></textarea>
     <button id="chat-send" class="btn btn-send" data-icon="send" aria-label="发送"></button>
   </div>

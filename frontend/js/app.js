@@ -870,6 +870,7 @@
       },
       'chat-back': () => App.show('shelf'),
       'chat-menu': () => window.Chat && Chat.menu && Chat.menu(),
+      'chat-new': () => window.Chat && Chat.startNewChat && Chat.startNewChat(),
       'lore-back': () => App.show('shelf'),
       'lore-search': () => window.Lore && Lore.toggleSearch && Lore.toggleSearch(),
       'settings-back': () => App.show('shelf'),
