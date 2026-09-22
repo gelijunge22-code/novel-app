@@ -325,7 +325,6 @@ PROFILES: list[dict] = [
 ]
 
 # 顺序 = 预设页上从左到右的标签顺序
-# 排在最前面的是「一个人（全套）」—— 此处指出"我没在一个人里面看到可以调整这些的预设呀"，
 # 根因就是它没进这张排序表，被 sort 推到了最后（99），列表要滑到底才看得到。
 PROFILE_ORDER = ["solo.default", "writer", "leader.default", "leader.assets",
                  "world.engine", "researcher", "critic", "retriever", "inline.editor"]

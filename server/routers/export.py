@@ -174,7 +174,7 @@ async def export_pdf(request: Request, slug: str, chapters: str = "", font_size:
         from reportlab.pdfbase.ttfonts import TTFont
         from reportlab.pdfgen import canvas
     except ImportError:
-        raise HTTPException(500, "服务器没装 PDF 组件（reportlab），先用 EPUB 或 TXT 吧")
+        raise HTTPException(500, "服务器没装 PDF 组件（reportlab），先用 EPUB 或 TXT ")
     import os
     if not os.path.exists(FONT_PATH):
         raise HTTPException(500, "服务器上没有中文字体，导不了 PDF")

@@ -211,7 +211,7 @@
   background:var(--accent-soft);border-radius:var(--radius-pill);padding:2px var(--sp-2);
 }.role-badge .rt{color:var(--ink-3)}/* 只挑刺的徽章用危险色（它本来就是"找毛病"），取料的两个用次要色 —— 都用全站变量 */
 .role-badge[data-role="critic"] .rn{color:var(--danger);background:var(--danger-soft)}.role-badge[data-role="retriever"] .rn, .role-badge[data-role="researcher"] .rn{color:var(--ink-2);background:var(--line-2)}/* ══════════ 常用指令条（新功能 ②：一键把话说完）══════════
-   长在对话框上面：一排"你自己攒的指令"，点一条就发出去。
+   长在对话框上面：一排自定义指令，点击即发送。
    横滑、不换行；高 36px，热区靠 padding 撑到 44。 */
 .chat-quick{padding:0 0 var(--sp-2);flex:0 0 auto}.chat-quick.hidden{display:none}.chat-quick .cq-scroll{
   display:flex;gap:var(--sp-2);overflow-x:auto;padding:0 var(--page-x);-webkit-overflow-scrolling:touch;

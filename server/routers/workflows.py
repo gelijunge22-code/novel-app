@@ -210,7 +210,7 @@ async def workflows_save(request: Request, payload: dict = Body(...)):
     if not isinstance(steps, list) or not steps:
         raise HTTPException(400, "至少得有一两步")
     if len(steps) > 8:
-        raise HTTPException(400, "一步到八步就够了，太多了容易跑到一半忘了自己在干嘛")
+        raise HTTPException(400, "步骤数超出上限（最多 8 步）")
     for st in steps:
         if str((st or {}).get("kind") or "") not in KIND_KEYS:
             raise HTTPException(400, "不认识的步骤：" + str((st or {}).get("kind")))
