@@ -200,6 +200,7 @@
       '<div class="sheet-grip"></div>'
       + '<div class="pk-search"><input id="pk-q" placeholder="搜索" autocomplete="off"></div>'
       + (previewPath ? '<div style="padding:var(--sp-3) var(--sp-4) 0"><button type="button" class="btn sm" id="pk-view">看当前这条写了什么</button></div>' : '')
+      + (opts.head || '')
       + '<div class="pk-preview hidden" id="pk-prev"></div>'
       + '<ul class="pk-list" id="pk-list"></ul>';
     App.sheet(html, {
@@ -253,12 +254,78 @@
 
   function openPick(f) {
     if (!f) return;
-    openList(f.label, (f.options || []).map((o) => ({ value: o.value, label: o.label })),
-      vals()[f.path], (v) => {
-        vals()[f.path] = v;
-        render();
-        mark(true);
-      }, f.path);
+    const isRes = f.component === 'resource-preset';
+    const items = (f.options || []).map((o) => ({ value: o.value, label: o.label, custom: !!o.custom }));
+    /* 文风 / 范文这一类的列表顶部加一个「＋ 新建自定义」——
+       用户原话：「除了可以选的一些文风之外，也可以自己增加一些自定义的，
+       然后自定义的自己弄完了点击确认之后，它就会出现在选择里面，然后可以选择」。
+       自己加的排在最前面，并且带一个「删」（只让自己删自己加的）。 */
+    const opts = isRes ? {
+      head: '<div style="padding:var(--sp-3) var(--sp-4) 0">'
+        + '<button type="button" class="btn sm" id="pk-new">＋ 新建自定义文风</button></div>',
+      rowExtra: (it) => !!(it.custom && it.value),
+      onExtra: async (v) => {
+        if (!confirm('删掉「' + String(v).replace(/\.md$/, '') + '」？删了就选不到了。')) return;
+        try {
+          const r = await API.styleDelete(v);
+          App.toast('已删掉');
+          try { S.data = null; } catch (e) {}
+          const f2 = (prof().fields || []).find((x) => x.path === f.path);
+          if (f2 && r && r.options) f2.options = r.options;
+          App.closeSheet && App.closeSheet();
+          openPick(f2 || f);
+        } catch (err) { App.toast('删不掉：' + (err.message || err)); }
+      },
+    } : undefined;
+    openList(f.label, items, vals()[f.path], (v) => {
+      vals()[f.path] = v;
+      render();
+      mark(true);
+    }, f.path, opts);
+    if (isRes) {
+      setTimeout(() => {
+        const btn = document.getElementById('pk-new');
+        if (btn) btn.addEventListener('click', () => openStyleForm(f));
+      }, 60);
+    }
+  }
+
+  /* 新建自定义文风的表单：名字 + 内容，点确认就存下去并回到列表 */
+  function openStyleForm(f) {
+    App.sheet(
+      '<div class="sheet-grip"></div>'
+      + '<h3 class="sheet-h">新建自定义文风</h3>'
+      + '<p class="pfield-ds">写清楚你要什么、不要什么。存好之后会出现在列表最上面，随时能选、能删。</p>'
+      + '<div class="pfield"><div class="pfield-lb">起个名字</div><div class="pfield-ct">'
+      + '<input class="pinput" id="cs-name" placeholder="例如：市井白话 / 冷硬直白" autocomplete="off"></div></div>'
+      + '<div class="pfield"><div class="pfield-lb">这个文风要什么 <span class="hint">越具体越好用</span></div>'
+      + '<p class="pfield-ds">可以直接抄你喜欢的段落，也可以一条条列要求（要什么 / 不要什么 / 句式 / 用词）。</p>'
+      + '<div class="pfield-ct"><textarea class="pinput" id="cs-body" rows="8" spellcheck="false" '
+      + 'placeholder="例如：\n- 用词：生活化，不堆形容词。\n- 句式：短句为主，少用排比。\n- 不写段尾总结句。"></textarea></div></div>'
+      + '<div class="pk-actions"><button type="button" class="btn" id="cs-cancel">取消</button>'
+      + '<button type="button" class="btn btn-primary" id="cs-save">确认</button></div>',
+      { onMount(panel) {
+        const nm = panel.querySelector('#cs-name');
+        const bd = panel.querySelector('#cs-body');
+        const save = async () => {
+          const name = (nm.value || '').trim();
+          const body = (bd.value || '').trim();
+          if (!name) { App.toast('先起个名字'); nm.focus(); return; }
+          if (!body) { App.toast('内容不能空'); bd.focus(); return; }
+          try {
+            const r = await API.styleSave({ name, content: body });
+            try { S.data = null; } catch (e) {}
+            const f2 = (prof().fields || []).find((x) => x.path === f.path);
+            if (f2 && r && r.options) f2.options = r.options;
+            App.toast('已加进列表');
+            App.closeSheet && App.closeSheet();
+            setTimeout(() => openPick(f2 || f), 120);
+          } catch (e) { App.toast('存不进去：' + (e.message || e)); }
+        };
+        panel.querySelector('#cs-cancel').addEventListener('click', () => { App.closeSheet && App.closeSheet(); openPick(f); });
+        panel.querySelector('#cs-save').addEventListener('click', save);
+        if (nm) setTimeout(() => nm.focus(), 100);
+      } });
   }
 
   function openModelPick() {

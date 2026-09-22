@@ -25,6 +25,18 @@ router = APIRouter(tags=["presets"])
 # 内置风格库（我们的资源，放在 server/assets/styles/ 下，随包走）
 STYLE_DIR = Path(__file__).resolve().parent.parent / "assets" / "styles"
 REF_DIR = Path(__file__).resolve().parent.parent / "assets" / "references"
+# 用户自己加的文风/范文（**存在 data/ 下，不进仓库** —— 每人一份，不互相污染）
+USER_STYLE_DIR = P.data / "styles"
+
+
+def _safe_style_name(name: str) -> str:
+    """把用户起的名字变成安全文件名：去掉路径分隔符与 ..，限制长度。
+
+    为什么必须做：这是**用户输入要落到文件名**的地方 —— 不筛就是白送一个目录穿越。
+    """
+    n = re.sub(r'[\\\\/:*?"<>|\x00-\x1f]', "", str(name or "")).strip().strip(".")
+    n = re.sub(r"\s+", " ", n)[:40]
+    return n
 
 PROFILES: list[dict] = [
     {
@@ -276,7 +288,8 @@ def _label_of(text: str, stem: str) -> str:
 def _style_options() -> list[dict]:
     """内置文风/参考范文（`server/assets/styles`、`server/assets/references`）。"""
     out = [{"key": "", "label": "（不指定）", "content": ""}]
-    for d in (STYLE_DIR, REF_DIR):
+    # 用户的排前面（自己加的优先看见），并标上 custom=True（界面据此给"删"按钮）
+    for d, custom in ((USER_STYLE_DIR, True), (STYLE_DIR, False), (REF_DIR, False)):
         if not d.is_dir():
             continue
         for f in sorted(d.glob("*.md")):
@@ -284,8 +297,55 @@ def _style_options() -> list[dict]:
                 text = f.read_text("utf-8")
             except Exception:
                 continue
-            out.append({"key": f.name, "label": _label_of(text, f.stem), "content": text})
+            it = {"key": f.name, "label": _label_of(text, f.stem), "content": text}
+            if custom:
+                it["custom"] = True
+            out.append(it)
     return out
+
+
+@router.post("/presets/style")
+async def save_custom_style(request: Request, payload: dict = Body(default={})):
+    """**存一个用户自己的文风 / 范文。**
+
+    用户原话：「除了可以选的一些文风之外，也可以自己增加一些自定义的，
+    然后自定义的自己弄完了点击确认之后，它就会出现在选择里面，然后可以选择」。
+    存到 `data/styles/<名字>.md` —— 用户数据，不进仓库，每人一份。
+    """
+    current_user(request)
+    name = _safe_style_name(payload.get("name"))
+    if not name:
+        raise HTTPException(400, "给这个文风起个名字（别用 / \\ : 这些字符）")
+    text = str(payload.get("content") or "").strip()
+    if not text:
+        raise HTTPException(400, "内容不能空 —— 写清楚这个文风要什么、不要什么")
+    try:
+        USER_STYLE_DIR.mkdir(parents=True, exist_ok=True)
+        f = USER_STYLE_DIR / (name + ".md")
+        f.write_text(text + "\n", encoding="utf-8")
+    except Exception as e:
+        raise HTTPException(400, "存不进去：%s" % str(e)[:120])
+    return {"ok": True, "key": f.name, "label": name, "options": _style_options()}
+
+
+@router.delete("/presets/style")
+async def delete_custom_style(request: Request, name: str = ""):
+    """删掉自己加的那个（只让删用户目录里的，内置的一个都动不了）。"""
+    current_user(request)
+    nm = _safe_style_name(name)
+    if not nm:
+        raise HTTPException(400, "要删哪个？")
+    target = USER_STYLE_DIR / (nm + ".md")
+    if not target.exists():
+        # 也允许直接给文件名
+        target = USER_STYLE_DIR / nm
+    if not target.exists():
+        raise HTTPException(404, "没找到这个（只能删自己加的，内置的删不了）")
+    try:
+        target.unlink()
+    except Exception as e:
+        raise HTTPException(400, "删不掉：%s" % str(e)[:120])
+    return {"ok": True, "options": _style_options()}
 
 
 def resource_content(slug: str, profile_key: str, key: str) -> str:
@@ -308,7 +368,8 @@ def resource_content(slug: str, profile_key: str, key: str) -> str:
         try:
             home = book_dir(slug) / "agents" / (profile_key or DEFAULT_PROFILE)
             cands += [home / base, home / name, home / "styles" / name,
-                      home / "references" / name]
+                      home / "references" / name,
+                      USER_STYLE_DIR / name]          # ← 用户自己加的
             b = book_dir(slug)
             cands += [b / base, b / name]
         except Exception:

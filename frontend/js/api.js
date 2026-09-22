@@ -459,6 +459,9 @@
     /* 自己在网页里更新（后端+前端一起）。见 server/routers/update.py */
     updateCheck: () => window.API.nb('api/update/check'),
     updateApply: () => window.API.nb('api/update/apply', { method: 'POST', body: {} }),
+    /* 自定义文风 / 范文：留在自己机器上（data/styles），可加可删 */
+    styleSave: (body) => window.API.nb('api/presets/style', { method: 'POST', body: body || {} }),
+    styleDelete: (name) => window.API.nb('api/presets/style?name=' + encodeURIComponent(name || ''), { method: 'DELETE', body: {} }),
     appPassword: () => window.API.nb('api/app/password'),
     rotatePassword: () => window.API.nb('api/app/password/rotate', { method: 'POST', body: {} }),
     webConfig: () => window.API.nb('api/config/web'),
