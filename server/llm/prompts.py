@@ -189,6 +189,23 @@ PROFILE_EXTRA: dict[str, tuple[str, str]] = {
     "criticFocus": ("critic", "挑刺侧重"),
     "retrieveFocus": ("retriever", "取料侧重"),
     "inlineStyle": ("inline.editor", "改稿要求"),
+    # 破限层：**每个角色一份，全部露在界面上让用户自己改**。
+    # 为什么要做成字段而不是写死在代码里：用户原话 ——
+    # "我没看到关于预设的东西啊？你是自己内置了吗？你内置了你得弄出来，
+    #  别人看不到怎么办？这可能有一些人有别的要求，他需要自己改的呀"。
+    # 结构（每个角色一份）由我们保证；**具体字儿必须让用户能改**。
+    "unlockLeader": ("leader.default", "主创的放开立场"),
+    "unlockWriter": ("writer", "写手的放开立场"),
+    "unlockCritic": ("critic", "挑刺的放开立场"),
+    "unlockInline": ("inline.editor", "润色的放开立场"),
+}
+
+# 角色 → 它那个字段名（拼提示词时用来取用户填的值）
+UNLOCK_FIELD: dict[str, str] = {
+    "leader.default": "unlockLeader",
+    "writer": "unlockWriter",
+    "critic": "unlockCritic",
+    "inline.editor": "unlockInline",
 }
 
 # 派活：这一类活 → 默认谁干 / 用户能改给谁。**每一项都真的改编排**（不是往提示词里塞句话）。
@@ -476,7 +493,11 @@ def build_system(profile_key: str, slug: str, values: dict, *,
     # 用户在预设里改了 unlockLayer 就用他的；没改就用默认的 UNLOCK_CORE。
     if str(values.get("unlockOn", "on")) != "off" and not _landing_off:
         _u = [str(values.get("unlockLayer") or "").strip() or UNLOCK_CORE]
-        _r = UNLOCK_BY_ROLE.get(profile_key)
+        # 角色专属那句：**用户在预设里填了就以用户的为准**（那条字段在界面上看得见、改得动）；
+        # 没填才用内置默认。结构由我们保证，字儿让用户自己定。
+        _fk = UNLOCK_FIELD.get(profile_key)
+        _usr = str(values.get(_fk) or "").strip() if _fk else ""
+        _r = _usr or UNLOCK_BY_ROLE.get(profile_key)
         if _r:
             _u.append(_r)
         parts.append("【写作者立场（用户已放开，按这个来）】\n" + "\n".join(_u))
