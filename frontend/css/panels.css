@@ -101,7 +101,10 @@
   flex:0 0 auto;display:flex;align-items:flex-end;gap:var(--sp-2);
   padding:var(--sp-1) var(--page-x);border-top:1px solid var(--line);
   background:var(--card);
-}.chat-compose .icon-btn{flex:0 0 auto;margin-bottom:var(--sp-1)}.chat-input{
+}.chat-compose .icon-btn{flex:0 0 auto;margin-bottom:var(--sp-1)}/* 联网 / 自动写这两枚胶囊：跟着输入框**垂直居中**，别沉到最下面。
+   用户报「自动写和联网没有在中间，在偏下的位置，稍微往上提一点」——
+   病根是这一行 align-items:flex-end（底部对齐），胶囊被拉到最底。 */
+.chat-compose .net-pill{align-self:center;margin-bottom:var(--sp-1)}.chat-input{
   flex:1;min-width:0;min-height:42px;max-height:140px;resize:none;
   padding:var(--sp-3) var(--sp-3);border-radius:var(--radius);background:var(--paper);
   border:1px solid var(--line);outline:none;line-height:1.5;font-size:var(--t-base);
