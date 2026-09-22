@@ -80,7 +80,7 @@ app = FastAPI(title="小说 App 自研后端", version=VERSION, docs_url=None, r
               openapi_url=None, dependencies=[Depends(_check_query_numbers)])
 
 # ── 路由（同一个 router 挂两套前缀：老前端用 api/，工具页用 nb/api/）────────
-from server.routers import (agent, appearance, authoring, backup, books, config_models, core,  # noqa: E402
+from server.routers import (agent, appearance, authoring, backup, books, config_models, core, update,  # noqa: E402
                             export as export_r,
                             files, lint as lint_r, lore, misc, model_sets, notes, peer, plot,
                             pacing, presets as presets_r, prompts as prompts_r, rag, refs, stats, sync,
@@ -91,7 +91,7 @@ ROUTERS = [core.router, books.router, lore.router, presets_r.router, files.route
            world.router, plot.router, write.router, lint_r.router, stats.router,
            export_r.router, misc.router, backup.router, prompts_r.router,
            notes.router, model_sets.router, sync.router, workflows.router, voice.router,
-           pacing.router, refs.router, peer.router, authoring.router, appearance.router]
+           pacing.router, refs.router, peer.router, authoring.router, appearance.router, update.router]
 
 for r in ROUTERS:
     app.include_router(r, prefix="/api")

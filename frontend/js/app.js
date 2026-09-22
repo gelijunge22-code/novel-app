@@ -1164,6 +1164,8 @@
           ${inApp ? '<div class="settings-row"><span class="k">服务器设置</span><button class="btn sm" id="do-server">改地址</button></div>' : ''}
           ${inApp ? '<div class="settings-row"><span class="k">服务器后端 <span class="hint" id="local-sub" style="font-size:var(--t-sm);color:var(--ink-3)">查一下…</span></span><button class="btn sm" id="do-local">重试连接</button></div>' : ''}
           <div class="settings-row"><span class="k">安卓安装包</span><span id="apk-slot"><button class="btn sm" id="do-apk">下载 / 更新</button></span></div>
+          <div class="settings-row"><span class="k">更新 <span class="hint">后端和网页一起</span></span>
+            <span id="up-slot"><button class="btn sm" id="do-up">检查更新</button></span></div>
           <div class="settings-row"><span class="k">登录口令 <span class="hint">在 App 里登录用</span></span>
             <span id="pw-slot" class="muted" style="font-size:var(--t-md);font-family:ui-monospace,Menlo,monospace">读取中…</span></div>
           <div class="settings-row"><span class="k">口令还能从哪找</span>
@@ -1228,6 +1230,54 @@
           paintPw(r && r.password);
           App.toast('新口令：' + ((r && r.password) || '') + '（去 App 里输这个）');
         } catch (e) { App.toast('换不了：' + (e.message || e)); }
+      });
+      /* ── 自己在网页里更新 ─────────────────────────────────────────
+         本机就是一份 git 副本，所以"更新"= 看远端有没有新提交 → 拉一下 → 重启。
+         前端是后端同一个端口发出去的，**重启一次两边都生效**。
+         连不上远端会明说，不会假装是最新；本地改过代码也会拦下来（怕冲掉改动）。 */
+      const ups = body.querySelector('#up-slot');
+      const upb = body.querySelector('#do-up');
+      const upHint = (html, color) => {
+        if (!ups) return;
+        ups.style.fontSize = 'var(--t-sm)';
+        ups.style.color = color || 'var(--ink-3)';
+        ups.innerHTML = html;
+      };
+      if (upb) upb.addEventListener('click', async () => {
+        if (upb.disabled) return;
+        upb.disabled = true;
+        const oldTxt = upb.textContent;
+        upb.textContent = '检查中…';
+        try {
+          const r = await API.updateCheck();
+          if (!r || !r.canUpdate) {
+            upHint(esc((r && r.reason) || '这个部署没法自动更新'));
+          } else if (r.hasUpdate) {
+            const n = r.behind ? ('落后 ' + r.behind + ' 个版本') : '有新版本';
+            upHint('<button class="btn sm" id="do-up-now">立即更新</button> <span class="hint">' +
+                   esc(n) + '（' + esc(r.local) + ' → ' + esc(r.remote) + '）</span>');
+            const nb = ups.querySelector('#do-up-now');
+            if (nb) nb.addEventListener('click', async () => {
+              if (!confirm('拉到新版会自动重启一次（几秒钟），刷新后生效。现在更新吗？')) return;
+              nb.disabled = true; nb.textContent = '更新中…';
+              try {
+                const r2 = await API.updateApply();
+                upHint(esc((r2 && r2.note) || '更新完了'));
+                App.toast('更新完了，等一下刷新页面');
+                setTimeout(() => location.reload(), 12000);
+              } catch (e) {
+                upHint('更新失败：' + esc(e.message || e), 'var(--danger,#c33)');
+              }
+            });
+          } else {
+            upHint('已是最新（' + esc(r.local) + '）');
+          }
+        } catch (e) {
+          upHint('检查失败：' + esc(e.message || e), 'var(--danger,#c33)');
+        } finally {
+          upb.disabled = false;
+          upb.textContent = oldTxt;
+        }
       });
       const sb = body.querySelector('#do-server');
       if (sb) sb.addEventListener('click', () => { try { Android.openSettings(); } catch (e) {} });
