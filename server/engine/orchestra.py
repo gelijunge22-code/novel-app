@@ -208,6 +208,13 @@ def roles_catalog() -> list[dict]:
 
 
 # ── 可见范围（硬权限）───────────────────────────────────────────────────────
+# **所有会改文件的工具** —— 一个都不能漏。
+# 踩过的坑：闸门原来只写 `tool == "write_file"`，而工具清单里还有 `outline_write`（写大纲），
+# 于是"讨论/计划模式不出文件"这条规矩对它是**失效**的（规则只挡了其中一个名字）。
+# 以后再加写类工具，**必须**往这里补，别只在调用处判断。
+WRITE_TOOLS = {"write_file", "outline_write"}
+
+
 def scope_allows(role: str, tool: str, args: dict, target_path: str = "",
                  mode: str = "", mode_writes: bool = True) -> tuple[bool, str]:
     """这一步能不能这么干。返回 (能不能, 不能的理由)。理由要能直接给人看。
@@ -218,14 +225,14 @@ def scope_allows(role: str, tool: str, args: dict, target_path: str = "",
     r = ROLES.get(role)
     if not r:
         return False, f"没有这个角色：{role}"
-    if tool == "write_file" and not mode_writes:
+    if tool in WRITE_TOOLS and not mode_writes:
         nm = MODES.get(mode, {}).get("name", mode or "这一步")
         return False, f"「{nm}」模式不出文件：先把话谈清楚/把计划排好，正文与设定都不动"
-    if tool == "write_file" and r["scope"] == "read":
+    if tool in WRITE_TOOLS and r["scope"] == "read":
         return False, f"「{r['name']}」只看不改：这一步不允许写文件"
     if tool not in r["tools"]:
         return False, f"「{r['name']}」这一步没有 {tool} 权限"
-    if tool != "write_file":
+    if tool not in WRITE_TOOLS:
         return True, ""
     path = str(args.get("path") or "").strip().lstrip("/")
     if r["scope"] == "prose":
@@ -741,6 +748,16 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
                     "这一步模型只把正文写在回复里、没有落盘，编排已代它写进 " + target +
                     "（上面那步的 wrote 里带 auto 标记）。"}])
 
+
+    # **把"等一下我再继续"这种自言自语从给用户看的产出里去掉。**
+    # 用户实测报过："主创一个字没说，第六章就出来了，我以为它死了" ——
+    # 其实它写了 4000 多字，但中间夹满了模型等工具结果时自己念的
+    # 「空出这一行以等待工具执行结果。call:outline_read {}」这类占位句，
+    # 把正经话全盖住了。这里整行丢掉（只影响**给用户看的那份**，
+    # 工具调用记录在 calls_json 里，一个字没少）。
+    _PH = re.compile(r"^[^\n]*(?:空出这一行以等待工具执行结果|等待工具执行结果)[^\n]*$", re.M)
+    _PH2 = re.compile(r"^\s*call:[a-zA-Z_]+\s*\{?[^\n]*\}?\s*$", re.M)
+    texts = [_PH2.sub("", _PH.sub("", t)) for t in texts]
 
     output = "\n".join(t for t in texts if t.strip()).strip()
     # 只调了 write_file、一个字没说的棒（模型常这样）：产出不能是空的，
