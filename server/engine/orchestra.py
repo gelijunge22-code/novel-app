@@ -601,16 +601,23 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
     tok_in = tok_out = 0
     status = "done"
 
+    # ── 一棒 = 一个气泡 ──────────────────────────────────────────────
+    # 这一棒的 msg_id 在进循环前**只建一次**，后面每一轮（工具来回）都续在同一个气泡里。
+    # 原来每一轮都 `msg_id = uuid4()` + 发一次 message_start → 一棒能蹦出好几个气泡：
+    # 界面上就是一堆重复的「这一轮 AI 用了什么」卡片、一屏填不进字的空泡泡、
+    # 以及永远撤不掉的「正在输入」。分工 / 一个人两种模式都吃这个亏。
+    step_msg_id = uuid.uuid4().hex
     for round_no in range(MAX_STEP_ROUNDS):
         if sid in rt.ABORTS:
             status = "aborted"
             break
-        msg_id = uuid.uuid4().hex
-        events.emit(sid, "message_start", {"type": "message_start", "role": "assistant",
-                                           "messageId": msg_id, "round": round_no,
-                                           "orchestra": {"role": role, "roleName": r["name"],
-                                                         "title": title, "seq": seq}},
-                    invocation_id=inv)
+        msg_id = step_msg_id
+        if round_no == 0:
+            events.emit(sid, "message_start", {"type": "message_start", "role": "assistant",
+                                               "messageId": msg_id, "round": 0,
+                                               "orchestra": {"role": role, "roleName": r["name"],
+                                                             "title": title, "seq": seq}},
+                        invocation_id=inv)
         buf: list[str] = []
         try:
             async for ev in stream_with_fallback(
@@ -730,12 +737,8 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
         nudge = ("时间到了：不要再调用任何工具。现在直接写结论 —— "
                  "把上面读到的内容整理成能交给下一棒的东西。")
         msgs.append({"role": "user", "content": nudge})
-        msg_id = uuid.uuid4().hex
-        events.emit(sid, "message_start", {"type": "message_start", "role": "assistant",
-                                           "messageId": msg_id, "round": MAX_STEP_ROUNDS,
-                                           "orchestra": {"role": role, "roleName": r["name"],
-                                                         "title": title + "（收口）", "seq": seq}},
-                    invocation_id=inv)
+        # 收口不再另起一个气泡：就续在本棒那个气泡里（原来会多长一个"（收口）"泡泡）
+        msg_id = step_msg_id
         buf2: list[str] = []
         try:
             async for ev in stream_chat(provider, mid, msgs, system=system, temperature=0.7,
@@ -784,12 +787,8 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
                      f"你上面的稿子还没落到文件里。现在**只**输出一行 "
                      f"[tool:write_file] {{\"path\": \"{target}\", \"content\": \"正文全文\"}}，"
                      "不要复述正文、不要解释、不要任何别的字。"})
-        msg_id = uuid.uuid4().hex
-        events.emit(sid, "message_start", {"type": "message_start", "role": "assistant",
-                                           "messageId": msg_id, "round": MAX_STEP_ROUNDS,
-                                           "orchestra": {"role": role, "roleName": r["name"],
-                                                         "title": title + "（落盘）", "seq": seq}},
-                    invocation_id=inv)
+        # 落盘同样续在本棒气泡里，不再另起一个"（落盘）"泡泡
+        msg_id = step_msg_id
         buf3: list[str] = []
         try:
             async for ev in stream_chat(provider, mid, msgs, system=system, temperature=0.3,

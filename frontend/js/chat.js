@@ -142,18 +142,34 @@
   }
 
   function argLine(args) {
+    /* 工具行上那行小字（"写文件 · 第007章" 这种）。
+       踩过的坑：以前只认 command/path/query… 这几个键，遇到 write_file 的 `content`
+       就回落成"把整个参数对象打出来" → 界面上出现
+       `写· content="第一堂课开始之前，我先问…"`（整章正文当标签，又长又看不懂）。
+       现在的规矩：① 先找文件路径这类**短而明确**的键；② `content` 这种正文一律不显示；
+       ③ 兜底也**截断到 60 字**，绝不把长文吐到界面上。 */
+    const clip = (x) => {
+      const t = String(x == null ? '' : x).replace(/\s+/g, ' ').trim();
+      return t.length > 60 ? (t.slice(0, 60) + '…') : t;
+    };
     try {
       if (args == null) return '';
-      if (typeof args === 'string') return args;
+      if (typeof args === 'string') return clip(args);
       const v = (args.kind === 'generic') ? args.value : args;
       if (v && v.kind === 'object' && Array.isArray(v.entries)) {
-        const want = ['command', 'path', 'file_path', 'query', 'pattern', 'prompt', 'title', 'text', 'result'];
+        const want = ['path', 'file_path', 'filename', 'target', 'query', 'pattern',
+                      'command', 'prompt', 'title', 'name'];
         for (const k of want) {
-          const hit = v.entries.filter((e) => e.key === k)[0];
-          if (hit) return jval(hit.value);
+          const hit = v.entries.filter((e) => e.key === k && e.value != null)[0];
+          if (hit) {
+            const t = clip(jval(hit.value));
+            if (t) return t;
+          }
         }
+        return '';          /* 只有 content 这类大块参数 → 什么都不显示，别再吐正文 */
       }
-      return jval(args);
+      const t = clip(jval(args));
+      return /content=|"content"/.test(t) ? '' : t;
     } catch (e) { return ''; }
   }
 
@@ -923,6 +939,16 @@
     const c = L.node.querySelector('.caret');
     if (c) c.remove();
     L.node.classList.remove('live');
+    /* 空泡泡直接收掉。
+       图里那些"一个白色方块、里面什么都没有"、以及"竖着的白色竖条"，
+       就是这么来的：服务端建了气泡却没往里填字（多轮工具来回、重试、收口nudge 都会这样），
+       前端把壳留在屏幕上。没字、也没工具记录的气泡 = 没有任何信息，不该留在界面上。 */
+    if (!String(L.text || '').trim() && !L.node.querySelector('.tool-chip')) {
+      try { L.node.remove(); } catch (e) {}
+      S.lastLive = null;
+      S.live = null;
+      return;
+    }
     S.lastLive = { node: L.node, text: L.text, shown: L.shown, frames: L.frames || [] };
     S.live = null;
   }
