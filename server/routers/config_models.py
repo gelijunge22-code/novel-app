@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import json
+import re
 
 import httpx
 from fastapi import APIRouter, Body, HTTPException, Request
@@ -16,6 +17,27 @@ from .. import db as dbm
 from ..config import CFG
 from ..security import current_user
 from ..store import now_ms
+
+
+def _disp(m) -> str:
+    """显示名带上渠道前缀（`[渠道]` `[次]` `[企]` 这种）。
+
+    用户原话：「模型显示那里只显示它的具体名称，没有它的前缀，比如说渠道a、渠道b，
+    有时候我不知道是哪个渠道的」。同一个模型在 渠道 渠道下按档位分成 渠道/B/E/F/G，
+    库里 model_id 带前缀、name 不带，界面用 name —— 于是两个长得一样的名字其实是两个渠道，
+    选错就 400 或"没有这个模型"。这里把前缀补回显示名，眼睛能分辨。
+    """
+    try:
+        nm = str((m["name"] if m["name"] is not None else "") or "").strip() or str(m["model_id"] or "").strip()
+        mid = str(m["model_id"] or "").strip()
+        mm = re.match(r"(\[[^\]]{1,12}\])", mid)
+        if mm and not nm.startswith(mm.group(1)):
+            return mm.group(1) + nm
+        return nm
+    except Exception:
+        return str(m["model_id"] or "")
+
+
 
 router = APIRouter(tags=["config"])
 
@@ -53,7 +75,7 @@ def providers_doc(*, with_secrets: bool = False) -> dict:
         models = {}
         for m in by_provider.get(p["id"], []):
             models[m["model_id"]] = {
-                "id": m["model_id"], "name": m["name"] or m["model_id"],
+                "id": m["model_id"], "name": _disp(m),
                 "group": m["grp"] or p["grp"], "enabled": bool(m["enabled"]),
                 "reasoning": bool(m["reasoning"]),
                 "contextWindowTokens": m["context_window"], "maxTokens": m["max_tokens"],
@@ -71,6 +93,7 @@ def providers_doc(*, with_secrets: bool = False) -> dict:
     return out
 
 
+
 @router.get("/config/models/library")
 async def models_library(request: Request):
     current_user(request)
@@ -81,7 +104,7 @@ async def models_library(request: Request):
     out = []
     for p in d.query("SELECT * FROM provider WHERE enabled=1 ORDER BY sort, id"):
         for m in by_provider.get(p["id"], []):
-            out.append({"id": m["model_id"], "name": m["name"] or m["model_id"],
+            out.append({"id": m["model_id"], "name": _disp(m),
                         "source": p["name"], "reasoning": bool(m["reasoning"]),
                         "thinkingLevelMap": None, "input": ["text"],
                         "contextWindowTokens": m["context_window"], "maxTokens": m["max_tokens"]})
