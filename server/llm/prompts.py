@@ -198,6 +198,11 @@ PROFILE_EXTRA: dict[str, tuple[str, str]] = {
     "unlockWriter": ("writer", "写手的放开立场"),
     "unlockCritic": ("critic", "挑刺的放开立场"),
     "unlockInline": ("inline.editor", "润色的放开立场"),
+    # 第 40 轮补：用户问「你的预设里不是有 8 个功能吗？为什么你这里只弄了四个？」——
+    # 他是对的。取上下文 / 查证看着"只是找材料"，但它们找到什么、肯不肯把露骨的段落
+    # 原样摘出来，直接决定写手手里有没有料。它们保守，写手照样写不透。
+    "unlockRetriever": ("retriever", "取上下文的放开立场"),
+    "unlockResearcher": ("researcher", "查证的放开立场"),
 }
 
 # 角色 → 它那个字段名（拼提示词时用来取用户填的值）
@@ -206,6 +211,8 @@ UNLOCK_FIELD: dict[str, str] = {
     "writer": "unlockWriter",
     "critic": "unlockCritic",
     "inline.editor": "unlockInline",
+    "retriever": "unlockRetriever",
+    "researcher": "unlockResearcher",
 }
 
 # 派活：这一类活 → 默认谁干 / 用户能改给谁。**每一项都真的改编排**（不是往提示词里塞句话）。
@@ -556,6 +563,16 @@ UNLOCK_BY_ROLE = {
     'inline.editor': (
         '- 润色**不许把露骨的地方改含蓄**：只许改病句、水词、节奏和错别字，\n'
         '  尺度一个字都不许动。用户没让你收，你就没有权力收。'
+    ),
+    # 第 40 轮补上的两个（用户指出"8 个功能只弄了四个"）
+    'retriever': (
+        '- 取上下文时，涉及亲密、暴力、重口的段落**原样摘出来**，不要挑「温和的几段」交差，\n'
+        '  更不要把露骨的部分删掉或改写成概述。用户要写的就是这些，你替他过滤等于砸他的活。'
+    ),
+    'researcher': (
+        '- 查证要连**尺度相关的先例**一起查：前文这场戏写到哪一步了、用的是什么写法、\n'
+        '  哪些词已经用过。别只查设定名和地名，那半张纸对写手没用。\n'
+        '- 查到的东西**照着写回来**，不要替用户做「这个不用查了吧」的判断。'
     ),
 }
 

@@ -195,10 +195,24 @@ def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str
     用户要求：讨论/计划/执行**每一种都要能选这两种**，而不是另开一个"单人模式"。"""
     _m = MODES.get(mode, MODES["execute"])
     if not divided:
-        return [("leader", _m["name"],
-                 "这一轮按「%s」的方式，由你**一个人**从头做到尾。" % _m["name"]
-                 + ONE_SHOT.get(mode, ""),
-                 bool(_m.get("writes")))]
+        """「一个人」：**同一个人把分工那几棒的活全干了，但步骤一步不少**。
+
+        用户原话两段：
+          · 「我本来想要的效果是一个AI干的时候，他会一个人扮演着所有的角色，
+             你好像把这些去掉了」—— 所以不能塌成 1 棒（原来就是塌成 1 棒，挑刺/润色全没了）。
+          · 「也得像分工一样演示出来他现在在哪一步」—— 所以步骤要照跑、界面要看得见。
+        为什么能这么做：模型是按 `ctx["modelKey"]` 选的（见下面 primary_key），
+        每一棒用的**本来就是同一个模型** —— 所以"棒多"不等于"人变多"，
+        变的只是这一步戴哪顶帽子。"""
+        allsteps = list(_m["steps"])
+        out = []
+        for i, (role, title, demand) in enumerate(allsteps, 1):
+            want = ("这一轮只有你一个人（分工模式下的那几个角色，全由你一个人演）。\n"
+                    "你现在是**第 %d 步 / 共 %d 步**，这一步只做「%s」这件事。\n"
+                    % (i, len(allsteps), title)
+                    + ONE_SHOT.get(mode, ""))
+            out.append((role, "第%d步·%s" % (i, title), want, role == "writer"))
+        return out
 
     """这一轮实际要跑的那几棒：`(角色, 标题, 要求, 是不是正文那一棒)`。
 
