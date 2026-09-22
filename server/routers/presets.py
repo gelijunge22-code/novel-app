@@ -39,6 +39,33 @@ def _safe_style_name(name: str) -> str:
     return n
 
 PROFILES: list[dict] = [
+    # ── 「一个人」专用那一份 ─────────────────────────────────────────
+    # 用户原话：「预设可以专门写一个专门给一个人用的预设，就是把那些乱七八糟的预设给融到一块，
+    # 然后专门给一个人用，这个得放在预设里专门放」。
+    # 所以它单独占一栏、排在最前面 —— 不分工的时候，所有帽子都戴在这一个脑袋上。
+    {
+        "profileKey": "solo.default",
+        "name": "一个人（全套）",
+        "description": "不分工时用的那一份：主创 + 取上下文 + 查证 + 写正文 + 挑刺 + 润色，一个人全干。"
+                       "分工那几位各自的设置在这份里不生效 —— 它们各管各的。",
+        "fields": [
+            {"path": "customTopSystemPrompt", "component": "textarea",
+             "label": "最高优先级置顶提示词", "rows": 6,
+             "description": "插在这份提示词最前面，优先级最高。想让它更放开、或者钉死某条规矩，写这儿。",
+             "placeholder": "例如：该露骨就写透，不许用比喻绕开；挑刺时不许和稀泥。",
+             "defaultValue": ""},
+            {"path": "writingStylePreset", "component": "resource-preset",
+             "label": "文风要求",
+             "description": "条文式的文风规则（用词、句式、禁用项），作为写作约束注入。",
+             "placeholder": "选择默认文风要求", "rows": 3,
+             "defaultValue": "强节奏网文.md"},
+            {"path": "adultStylePrompt", "component": "textarea",
+             "label": "尺度与禁区", "rows": 4,
+             "description": "一个人干的时候尺度全看这里。留空就用上面的「写作者立场」。",
+             "placeholder": "例如：亲密戏直接写、不淡出；暴力写到什么程度；哪些不写。",
+             "defaultValue": ""},
+        ],
+    },
     {
         "profileKey": "writer",
         "name": "正文写作",

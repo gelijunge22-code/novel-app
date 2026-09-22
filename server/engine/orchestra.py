@@ -494,7 +494,8 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
 
     memory_hits = rt._memory_hits(slug, ctx["goal"] + " " + handoff_text)
     # 每个角色看到的上下文**不一样**：critic/retriever 不给"写作设定堆"，writer 才给
-    system = build_system(r["profile"], slug, values,
+    _pk = "solo.default" if ctx.get("solo") else r["profile"]
+    system = build_system(_pk, slug, values,
                           memory_hits=memory_hits if role in ("leader", "writer") else None)
     # 这本书现在的状态：新书/空章必须说清楚，否则 AI 会跳过空的第一章直接写第二章
     system += "\n\n" + _book_state_bits(slug, target)
@@ -937,6 +938,9 @@ async def run(sid: int, text: str, inv: str, payload: dict, model_key: str = "")
         if isinstance(_dv, str):
             _dv = _dv.strip().lower() not in ("0", "false", "no", "off", "")
         steps = steps_for(mode, slug, divided=bool(_dv))   # 分工在这一刻生效（预设有书级覆盖就按书）
+        # 「一个人」= 所有棒都戴同一份合并档案（solo.default），而不是各角色各拿一份 ——
+        # 用户要的"把那些乱七八糟的预设融到一块，专门给一个人用"。
+        ctx["solo"] = (not bool(_dv))
         events.emit(sid, "orchestra_run_start", {
             "type": "orchestra_run_start", "runId": run_id, "mode": mode,
             "modeName": MODES[mode]["name"], "targetPath": target,
