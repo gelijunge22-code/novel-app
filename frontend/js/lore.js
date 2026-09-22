@@ -67,7 +67,7 @@
     const body = $('#lore-body');
     if (!body) return;
     const slug = await curSlug();
-    /* 三态统一（第 29 轮）：跟书架/工具面板/阅读器**同一套 UI.state** ——
+    /* 三态统一（）：跟书架/工具面板/阅读器**同一套 UI.state** ——
        以前是三个各写各的 .picker-empty 字符串，出错那句里连"重试"都没有，
        用户只能退出去再进来。 */
     const put = (o) => {
@@ -358,7 +358,7 @@
   window.Lore = {
     onShow() {
       if (!S.wired) { S.wired = true; wireSearch(); }
-      /* 顶上那条切书：切完立刻重读新书的设定（此处要求"切完立刻生效"） */
+      /* 顶上那条切书：切完立刻重读新书的设定（"切完立刻生效"） */
       if (window.BookCtx) {
         BookCtx.mount('lore-book', () => { S.loaded = false; S.slug = null; load(true).catch(() => {}); });
       }

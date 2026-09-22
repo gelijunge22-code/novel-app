@@ -105,7 +105,7 @@ def _chapter_text(slug: str, path: str) -> str:
 @router.get("/tts/selfcheck")
 async def tts_selfcheck(request: Request, slug: str = "", path: str = "",
                         voice: str = "", rate: str = "+0%", engine: str = ""):
-    """**听书自检**（第 33 轮）：把"点了听书没声"从**哑巴失败**变成逐项可见。
+    """**听书自检**（）：把"点了听书没声"从**哑巴失败**变成逐项可见。
 
     此处指出是「App 里听书从来没有出过声音」，而界面上什么都不说 ——
     服务器侧当时实测是好的（合成成功、接口 200、公网反代也通），

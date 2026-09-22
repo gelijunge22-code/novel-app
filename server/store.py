@@ -380,7 +380,7 @@ def _record_revision(slug: str, rel: str, before: str, after: str, *,
     d = dbm.db()
     rev = (d.scalar("SELECT MAX(rev) FROM revision WHERE slug=? AND path=?", (slug, rel)) or 0) + 1
     # 用户自己敲的字不进「改动收件箱」——那儿只等 AI 的改动（收/退）。见 docs/设计方案 §3.6
-    # `pending`（第 33 轮新增，可选）：预设里「改动感知」选了"直接用"时，AI 的改动
+    # `pending`（新增，可选）：预设里「改动感知」选了"直接用"时，AI 的改动
     # 也直接算数（不再等确认）。不传就按老规矩（用户=算数，AI=等确认）。
     status = "accepted" if (pending is False or (pending is None and origin == "user")) else "pending"
     d.execute(

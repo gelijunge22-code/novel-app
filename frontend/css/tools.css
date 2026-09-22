@@ -112,7 +112,7 @@
   animation:tspin .7s linear infinite;
 }
 @keyframes tspin{to{transform:rotate(360deg)}}html.motion-off .t-load i{animation-duration:2s}
-/* 加载态第 29 轮统一到了全站那一套（.ui-loading，见 components.css）：
+/* 加载态统一到了全站那一套（.ui-loading，见 components.css）：
    工具面板里那两个自己的类名（.t-loading）已经没人用了，删掉不留死代码。
    `.t-load` / `.t-empty` 还留着 —— 它们不只工具面板用（studio.js / bookctx.js 也在用）。 */
 /* 三态容器（UI.state）进工具面板：面板自己已经有一圈内边距，这里不用再撑那么大 */
@@ -182,7 +182,7 @@
   display:flex;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);
   background:var(--card);border-top:1px solid var(--line-2);
   box-shadow:0 -3px 12px rgba(58,51,43,.07);
-}html[data-theme="night"] .t-foot{box-shadow:0 -3px 12px rgba(0,0,0,.4)}/* ── 参考书架的图片（第 16 轮：用户要"发一张图，告诉 AI 这个人该怎么写"）──────────
+}html[data-theme="night"] .t-foot{box-shadow:0 -3px 12px rgba(0,0,0,.4)}/* ── 参考书架的图片（：用户要"发一张图，告诉 AI 这个人该怎么写"）──────────
    两种尺寸：列表里的缩略图 .t-thumb、单条详情里的大图 .t-pic。
    点一下进 .t-bigpic（整屏黑底看大图，点哪儿都关）。
    圆角只用 token：缩略图 --radius-xs，大图 --radius。 */
@@ -204,7 +204,7 @@
 }.t-bigpic-cap{
   color:rgba(255,250,240,.86);font:400 var(--t-md)/1.5 var(--ui-font);
   text-align:center;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
-}/* ══════════════ 故事线 / 章节顺序（第 19 轮新加的两个面板）══════════════
+}/* ══════════════ 故事线 / 章节顺序（新加的两个面板）══════════════
    两块面板共用同一套行样式（同一个"章节清单"的两种用法）：
      故事线：一行 = 章号 + 标题 + 一句话（点那句话改它）
      章节顺序：一行 = 章号 + 标题 + 上移/下移/插一章
@@ -227,7 +227,7 @@
 }.al-btn::after{content:'';position:absolute;inset:-6px}.al-btn:active{transform:scale(.92);background:var(--accent-soft)}.al-btn svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:1.8}.al-btn.dn svg{transform:rotate(90deg)}.al-btn:not(.dn) svg{transform:rotate(-90deg)}.al-btn.ins svg{transform:none}
 
 /* ══════════════════ 大纲（「故事线」工具 · 「剧情」工具的「剧情线」页签共用） ══════════════════
-   第 36 轮。用户拍板：「点击这个故事线之后，它里面的前端和后端都要重做，就相当于删除了，
+   。用户拍板：「点击这个故事线之后，它里面的前端和后端都要重做，就相当于删除了，
    把这个功能换成大纲」；「剧情线可以继续叫这个名字，但它的作用需要改成『大纲』的作用」。
 
    这两处用的是**同一份实现**（js/outline.js），所以这里也只写一套样式。

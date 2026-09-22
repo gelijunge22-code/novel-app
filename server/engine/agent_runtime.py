@@ -78,7 +78,7 @@ def session_snapshot(sid: int) -> dict:
         "model": model,
         "history": {"entries": entries},
         "activeInvocation": bool(s["status"] == "running"),
-        # ⚠ 第 42 轮只增不减加的一条：**这个会话的事件头**（最大 seq）。
+        # ⚠ 加的一条：**这个会话的事件头**（最大 seq）。
         # 为什么要它：SSE 一接上会把历史事件重放一遍（本来是为了"中途断线补课"），
         # 前端于是把**上一轮已经跑完的 message_start 又当成本轮重新建一遍**，
         # 长出几个"正在打字…"的空气泡（用户看到的一屏空泡泡）。前端拿这个数当 `after` 传回去，
@@ -231,7 +231,7 @@ def _tool_write_file(slug: str, args: dict) -> dict:
     except Exception:
         # 改写前读不到原文 → diff 当成以前是空的，比让这次改写失败好。
         pass
-    # 预设里的「改动感知」（第 33 轮起真生效）：默认"要确认"——AI 改的进「改动」等用户收；
+    # 预设里的「改动感知」（起真生效）：默认"要确认"——AI 改的进「改动」等用户收；
     # 选了"直接用"就当场算数（仍然留版本快照，随时能换回去）。
     try:
         from ..llm.prompts import preset_values
@@ -263,7 +263,7 @@ def _tool_report_result(slug: str, args: dict) -> dict:
 
 
 
-# ── 此处要求要"AI 真能用上工具"（第 31 轮）：下面这些是**把界面里已有的能力接到 AI 手上** ──
+# ── 要"AI 真能用上工具"（）：下面这些是**把界面里已有的能力接到 AI 手上** ──
 # 每一个都**复用界面同一份数据**（同一张表 / 同一个引擎函数），不另开数据源、不复制逻辑。
 # 输出一律压小（只给前若干条 + 总数），别把整本书塞进上下文。
 
@@ -361,7 +361,7 @@ def _tool_consistency_check(slug: str, args: dict) -> dict:
 def _tool_outline_read(slug: str, args: dict) -> dict:
     """大纲（剧情线 + 细纲）：这本书该往哪走、这一章要写什么。
 
-    用户第 32 轮把「剧情线」的作用改成了**大纲**：防忘、防跑偏、防 OOC。
+    用户把「剧情线」的作用改成了**大纲**：防忘、防跑偏、防 OOC。
     `edited` 是"谁最后改的"（user / ai）—— 提示词里会写明**用户改的优先**。
     """
     d = dbm.db()
@@ -379,12 +379,12 @@ def _tool_outline_read(slug: str, args: dict) -> dict:
 
 
 def _tool_outline_write(slug: str, args: dict) -> dict:
-    """AI 改大纲（剧情线 / 细纲）。**只增不减、不覆盖用户手改的条目**：
+    """AI 改大纲（剧情线 / 细纲）。**不覆盖用户手改的条目**：
 
     · 同名剧情线：用户手改过（origin=user）→ **不改**，回一条"这条是用户定的，我不动"；
     · 同名剧情线：AI 自己写过的 → 更新（并记 origin=ai）；
     · 没同名 → 新建（origin=ai）。
-    这样用户改完的东西不会被 AI 下一轮"顺手写回去"（此处要求"用户写的直接没用"）。
+    这样用户改完的东西不会被 AI 下一轮"顺手写回去"（"用户写的直接没用"）。
     """
     d = dbm.db()
     name = str(args.get("name") or "").strip()
@@ -486,7 +486,7 @@ def _tool_pacing_check(slug: str, args: dict) -> dict:
 
 
 def _tool_web_search(slug: str, args: dict) -> dict:
-    """联网搜索（用户第 31 轮要的"所有 AI 都能开联网搜索"）。
+    """联网搜索（用户要的"所有 AI 都能开联网搜索"）。
 
     **没开开关就直接回原因、一个请求都不发**（"绝不偷偷联网"）；开了才真去搜，
     而且只从可信站点里挑（名单见 `engine/websearch.py`，用户能在设置里自己加站）。
@@ -495,7 +495,7 @@ def _tool_web_search(slug: str, args: dict) -> dict:
     r = asyncio.run(web.search(str(args.get("q") or ""), int(args.get("n") or 5)))
     if not r.get("ok"):
         # 搜不到时**也要把原因带出去**（哪个引擎、什么错）—— 否则用户只看到"没搜到"，
-        # 判据也没法说清是网络的问题还是过滤的问题（第 31 轮踩到过）。
+        # 判据也没法说清是网络的问题还是过滤的问题（踩到过）。
         return {"error": r.get("error") or "没搜到", "engines": r.get("engines"),
                 "engineErrors": r.get("errors"), "dropped": (r.get("dropped") or [])[:5]}
     return {"query": r["query"], "note": r["note"], "count": r["count"],
@@ -526,7 +526,7 @@ TOOLS = {
     "promise_list": _tool_promise_list,
     "write_file": _tool_write_file,
     "report_result": _tool_report_result,
-    # ↓ 第 31 轮接上来的（界面里本来就有，AI 之前够不着）
+    # ↓ 接上来的（界面里本来就有，AI 之前够不着）
     "chapter_list": _tool_chapter_list,
     "lore_list": _tool_lore_list,
     "lore_read": _tool_lore_read,
@@ -541,7 +541,7 @@ TOOLS = {
     "reference_list": _tool_reference_list,
     "reference_read": _tool_reference_read,
     "pacing_check": _tool_pacing_check,
-    # ↓ 联网搜索（用户第 31 轮）：默认关，开了才真发请求
+    # ↓ 联网搜索（用户）：默认关，开了才真发请求
     "web_search": _tool_web_search,
     "web_fetch": _tool_web_fetch,
 }
@@ -555,7 +555,7 @@ def run_tool(slug: str, name: str, args: dict) -> dict:
     if not fn:
         return {"error": f"没有这个工具：{name}"}
     if name in WEB_TOOLS:
-        # 联网是**用户开关**说了算（第 31 轮）：这里再拦一道，
+        # 联网是**用户开关**说了算（）：这里再拦一道，
         # 不管提示词怎么写、哪个角色来调，"没开就一个请求都不发"都必须成立。
         from . import websearch as web
         if not web.enabled():

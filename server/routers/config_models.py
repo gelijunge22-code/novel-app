@@ -22,7 +22,7 @@ from ..store import now_ms
 def _disp(m) -> str:
     """显示名带上渠道前缀（`[渠道]` `[次]` `[企]` 这种）。
 
-    此处要求。同一个模型在 某渠道 渠道下按档位分成 渠道/B/E/F/G，
+    。同一个模型在 某渠道 渠道下按档位分成 渠道/B/E/F/G，
     库里 model_id 带前缀、name 不带，界面用 name —— 于是两个长得一样的名字其实是两个渠道，
     选错就 400 或"没有这个模型"。这里把前缀补回显示名，眼睛能分辨。
     """
@@ -414,7 +414,7 @@ async def model_recommended_set(request: Request, payload: dict = Body(...)):
     return {"ok": True, "keys": keys}
 
 
-# ── 第 27 轮新增（只增不减）：自己加渠道 / 自己拉取模型 / 备用模型 / 按书选模型 ──────
+# ── 新增：自己加渠道 / 自己拉取模型 / 备用模型 / 按书选模型 ──────
 def _setting_get(key: str) -> str:
     """读一条设置（`value_json` 是 JSON 编过一层的，先解一层再当字符串用）。
 
@@ -565,7 +565,7 @@ async def model_book_get(request: Request, slug: str = ""):
     slug = (slug or "").strip()
     return {"slug": slug, "modelKey": _setting_get("models.book:" + slug) if slug else ""}
 
-# ── 联网搜索的设置（用户第 31 轮：「所有 AI 是可以开启联网搜索功能的」）────────────────
+# ── 联网搜索的设置（用户：「所有 AI 是可以开启联网搜索功能的」）────────────────
 # 默认**关**。关着的时候 AI 手里那两个工具会直接回"没开"，**一个请求都不发**——
 # "绝不偷偷联网"是判据里能报红的硬要求（tools/check_websearch.py）。
 @router.get("/config/web")

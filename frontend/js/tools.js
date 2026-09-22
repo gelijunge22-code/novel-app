@@ -89,7 +89,7 @@
     }
   }
   /* ── 三态：跟全站同一套（reader/书架/预设 都用这个） ────────────────────
-     第 29 轮统一。以前这里是 `.t-load` / `.t-empty` 两套自己的写法，
+     统一。以前这里是 `.t-load` / `.t-empty` 两套自己的写法，
      而且**出错也走"空"** —— 用户看到一句灰字"读不到：xxx"，既分不清是"没东西"
      还是"出错了"，也没有「重试」，只能自己退出去再进来。
      现在：
@@ -112,7 +112,7 @@
     desc: desc2 || (((e && e.message) ? e.message + '。' : '') + '退出去再进来试试。'),
   }) : null);
 
-  /* 第 29 轮：**实现搬去了 UI 一份**（`UI.paintState/loadingIn/emptyIn/failedIn`），
+  /* ：**实现搬去了 UI 一份**（`UI.paintState/loadingIn/emptyIn/failedIn`），
      这里只留三个薄壳给面板里 30 多处老调用点用 —— 全站只此一份实现，
      换皮/两组实现并存是明令禁止的。`failed` 的 `again` 是**真重试**（重跑那个拉取函数）。 */
   const loading = (host, msg) => (window.UI && UI.loadingIn ? UI.loadingIn(host, msg) : null);
@@ -135,7 +135,7 @@
     return (p && p.title) || slug;
   };
 
-  /* ── 当前书：跟书有关的面板，顶上都要有那一条统一切换（此处要求） ──
+  /* ── 当前书：跟书有关的面板，顶上都要有那一条统一切换（） ──
      谁要书就读 BookCtx —— 全站唯一的一份「现在在写哪本」，
      不再每个面板自己弹书单、也不再"没选就摔给第一本"。 */
   const curSlug = () => (window.BookCtx ? BookCtx.slug() : '');
@@ -433,7 +433,7 @@
       (has
         ? '<img src="' + url + '&_=' + Date.now() + '" alt="">'
         /* 空态带上 data-state：全站三态判据只认这个标记 —— 不然脚本会说
-           "封面这屏没有空态"，而用户明明看到了一句「还没有封面」（第 29 轮）。 */
+           "封面这屏没有空态"，而用户明明看到了一句「还没有封面」（）。 */
         : '<div class="cv-none" data-state="empty"><div class="cv-none-t">还没有封面</div>'
           + '<div class="cv-none-d">选一张竖版图（3:4 左右最像书），书架上也跟着变。</div></div>') +
       '</div><div class="cv-side">' +
@@ -670,7 +670,7 @@
     renderSets(host);
   }
 
-  /* 连通自检（第 19 轮 · 接上本来"有接口、界面没入口"的 POST /api/config/models/test）
+  /* 连通自检（· 接上本来"有接口、界面没入口"的 POST /api/config/models/test）
      为什么要它：用户最想知道的一件事就是"现在这个模型到底通不通"。
      以前只能靠"发一条消息试试"，失败了也看不出是网络、密钥还是模型名的锅。 */
   function bindTests(host) {
@@ -1410,7 +1410,7 @@
     try { st = await nb('api/passport/status'); }
     catch (e) { failed(host, '备份状态', e, () => backupView(host)); return; }
     /* 这两处以前也是**吞掉错误**：读不到密钥就说"还没有"、读不到备份就整段不显示 ——
-       用户看到的是"我没有备份"，真相是"没读到"。第 29 轮分开：读不到就说出错 + 重试。 */
+       用户看到的是"我没有备份"，真相是"没读到"。分开：读不到就说出错 + 重试。 */
     try { keys = await nb('api/passport/backup-keys'); } catch (e) { keysErr = e; }
     try { list = await nb('api/passport/backups'); } catch (e) { listErr = e; }
     const ks = (keys && keys.keys) || [];

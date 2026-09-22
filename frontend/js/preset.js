@@ -43,7 +43,7 @@
       const opts = f.options || [];
       if (opts.length > 4) return picker(f);
       /* 标签长的选项（后端发来的「短（2000 字上下）」这种）横排时会被挤成 2~3 行 ——
-         此处要求毛病「跟随系统被挤成两行」是同一类。长标签改成竖排一行一个，左对齐。 */
+         毛病「跟随系统被挤成两行」是同一类。长标签改成竖排一行一个，左对齐。 */
       const longLabel = opts.some((o) => String(o.label || '').replace(/\s+/g, '').length > 5);
       return '<div class="pradio' + (longLabel ? ' pradio-list' : '') + '" data-radio="' + esc(f.path) + '">' + opts.map((o) =>
         '<button type="button" data-v="' + esc(o.value) + '"'
@@ -216,7 +216,7 @@
             + '<span class="t">' + esc(it.label) + '</span>'
             + (it.value === cur ? '<span class="s">当前</span>' : '')
             /* 每行右侧的「⋯」：模型列表用它打开"这个模型自己的参数"面板。
-               此处要求要的：右上角三个点，点进去调上下文（1M/256K…）和高级参数。 */
+               要的：右上角三个点，点进去调上下文（1M/256K…）和高级参数。 */
             + (opts.rowExtra ? '<button type="button" class="pk-more" data-more="' + esc(it.value)
                + '" aria-label="这个模型的参数">' + '\u22ef' + '</button>' : '')
             + '</li>').join('')
@@ -257,7 +257,7 @@
     const isRes = f.component === 'resource-preset';
     const items = (f.options || []).map((o) => ({ value: o.value, label: o.label, custom: !!o.custom }));
     /* 文风 / 范文这一类的列表顶部加一个「＋ 新建自定义」——
-       此处要求。
+       。
        自己加的排在最前面，并且带一个「删」（只让自己删自己加的）。 */
     const opts = isRes ? {
       head: '<div style="padding:var(--sp-3) var(--sp-4) 0">'
@@ -342,7 +342,7 @@
 
 
   /* ── 单个模型的参数面板（模型列表每行右上角那个「⋯」）──────────────
-     此处要求要的：「所有模型的右上角都应该加三个小点，点击之后可以调这个模型的具体参数，
+     要的：「所有模型的右上角都应该加三个小点，点击之后可以调这个模型的具体参数，
      比如最高的上下文 1M、256K 都可以让他们自己调，以及一些代码的填写，
      因为一些 AI 是可以通过这种高级的修改来修改思考强度的。」
      存在的意义：同一个模型在不同渠道上，能吃多长、一次能出多少、是不是推理模型都不一样，
@@ -567,7 +567,7 @@
     async open(scope, slug) {
       const host = q('#preset-body');
       if (!host) return;
-      /* 顶上那条切书（此处要求三个面板之一）。没书时先兜一本，让入口始终在。 */
+      /* 顶上那条切书（三个面板之一）。没书时先兜一本，让入口始终在。 */
       if (window.BookCtx) {
         if (!BookCtx.has()) { try { await BookCtx.ensure(); } catch (e) {} }
         BookCtx.mount('preset-book', () => switchBookTo());
@@ -588,10 +588,10 @@
 
   /* 真拉一次预设并画出来。**单独抽出来是为了「重试」能重跑同一段** ——
      出错态那个按钮按下去必须真的再来一次，不是摆着好看。
-     三态跟全站一套（第 29 轮统一）：UI.loadingIn / UI.failedIn / UI.emptyIn。
+     三态跟全站一套（统一）：UI.loadingIn / UI.failedIn / UI.emptyIn。
      以前这里是 `.preset-loading` 一行字 + 出错时一句裸文案「读不到预设：…」——
      用户分不清"没东西"和"坏了"，也没有重试；而且**形状不对时会走进抛异常那条路**，
-     屏上是错的、判据却当成空态报了绿（第 29 轮自己抓到的假绿）。 */
+     屏上是错的、判据却当成空态报了绿（自己抓到的假绿）。 */
   function loadInto(host) {
     UI.loadingIn(host, '正在读预设…');
     return API.presets(S.scope, S.slug).then((d) => {

@@ -40,7 +40,7 @@ def _safe_style_name(name: str) -> str:
 
 PROFILES: list[dict] = [
     # ── 「一个人」专用那一份 ─────────────────────────────────────────
-    # 此处要求。
+    # 。
     # 所以它单独占一栏、排在最前面 —— 不分工的时候，所有帽子都戴在这一个脑袋上。
     {
         "profileKey": "solo.default",
@@ -65,7 +65,7 @@ PROFILES: list[dict] = [
              "defaultValue": ""},
 
             # ── 分步设置：一个人跑起来是一步一步走的，**每一步该有自己那份要求** ──
-            # 此处要求。
+            # 。
             # 所以按"戴哪顶帽子"分 5 组，走到那一步就把这组的话带上（不用按 7 条硬拆，
             # 因为"写初稿"和"按批注改稿"都是写手，"排计划/汇总/收敛"都是主创）。
             {"path": "soloLeader", "component": "textarea", "rows": 3,
@@ -195,7 +195,7 @@ PROFILES: list[dict] = [
             {"path": "customTopSystemPrompt", "component": "textarea",
              "label": "最高优先级置顶提示词", "rows": 6,
              "description": "插在它的提示词最前面。", "defaultValue": "你是这本书的主管。\n- 用户跟你商量，你给结论、给选项，不写正文（正文交给写作的那位）。\n- 改设定、改大纲之前先问用户。\n- 用户自己写的条目不许覆盖。"},
-            # 第 33 轮：这三项以前是**没人读的死配置**（填了不生效 = 此处说明"儿戏"）。
+            # ：这三项以前是**没人读的死配置**（填了不生效 = 此处说明"儿戏"）。
             # 现在每一项都在 `llm/prompts.py` 的 PROFILE_EXTRA / DELEGATE_ROWS 里有落点，
             # `tools/preset_audit.py` 会挨个核"它到底改了什么"。
             {"path": "planningStyle", "component": "radio",
@@ -324,7 +324,7 @@ PROFILES: list[dict] = [
     },
 ]
 
-# 顺序 = 预设页上从左到右的标签顺序（只增不减：原来那三页一个没动，后面是补上的真档案）
+# 顺序 = 预设页上从左到右的标签顺序
 # 排在最前面的是「一个人（全套）」—— 此处指出"我没在一个人里面看到可以调整这些的预设呀"，
 # 根因就是它没进这张排序表，被 sort 推到了最后（99），列表要滑到底才看得到。
 PROFILE_ORDER = ["solo.default", "writer", "leader.default", "leader.assets",
@@ -366,7 +366,7 @@ def _style_options() -> list[dict]:
 async def save_custom_style(request: Request, payload: dict = Body(default={})):
     """**存一个用户自己的文风 / 范文。**
 
-    此处要求。
+    。
     存到 `data/styles/<名字>.md` —— 用户数据，不进仓库，每人一份。
     """
     current_user(request)

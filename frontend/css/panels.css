@@ -9,7 +9,7 @@
 /* 展开态那一行：**干活方式 + 轮次胶囊并排**（放不下才换行，不许把胶囊挤成"3+1"） */
 .cd-line{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2);padding:0 var(--page-x) var(--sp-2)}
 .cd-line .mode-row, .cd-line .run-row{padding:0;background:transparent;flex:0 0 auto}
-/* ── 顶上的控制块 = 一个「抽屉」（第 42 批：此处要求）──
+/* ── 顶上的控制块 = 一个「抽屉」（第 42 批：）──
    收起态只占一行（摘要 + 箭头）；展开态最多 44vh、而且**它自己也滚得动**。
    为什么：监督人量过，原来这一整块固定吃 **35% 屏高**（298px），消息区只剩一半。
    收起后：顶栏 52 + 当前书 42 + 抽屉头 44 ≈ 138px → 消息区 ≥70% 屏高。 */
@@ -30,8 +30,8 @@
 }.chat-drawer.open .cd-body{display:block}
 /* 顶栏下面的一条状态（人格 / 模型 / 状态），由 chat.js 注入 */
 .chat-strip{
-  /* 第 45 轮：**改成能换行**（原来 nowrap+overflow:hidden）。
-     此处要求——实测 4 个胶囊在 390 宽下被这一行
+  /* ：**改成能换行**（原来 nowrap+overflow:hidden）。
+     ——实测 4 个胶囊在 390 宽下被这一行
      按比例挤扁（模型那枚只剩 56px，`某模型-flash` 被切到只剩「ge…」），
      而且里面那个 `<b>` 连 `min-width:0` 都没有，于是**被压到 12px 装 2 个汉字 → 字被硬切一半**。
      现在：胶囊按**自己内容的宽度**排，排不下就整体换到下一行（抽屉 body 本来就能滚），
@@ -168,7 +168,7 @@
   flex:0 0 auto;display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap;
   padding:var(--sp-2) var(--sp-4) calc(var(--sp-2) + var(--safe-b));border-top:1px solid var(--line);
   background:var(--card);font-size:var(--t-sm);color:var(--ink-3);
-}.ed-foot .grow{flex:1;min-width:0}.ed-foot .dirty{color:var(--accent);font-weight:var(--w-semi)}.ed-foot .btn{padding:var(--sp-2) var(--sp-4);font-size:var(--t-base)}/* ── 多 Agent 编排：模式胶囊 + 角色徽章（第 9 轮）─────────────────────────
+}.ed-foot .grow{flex:1;min-width:0}.ed-foot .dirty{color:var(--accent);font-weight:var(--w-semi)}.ed-foot .btn{padding:var(--sp-2) var(--sp-4);font-size:var(--t-base)}/* ── 多 Agent 编排：模式胶囊 + 角色徽章（）─────────────────────────
    规矩跟全站一致：颜色只用 base.css 的变量，圆角/间距跟现有 pill 一套，
    不给容器加 :active（水波纹只落在手指点住的那个按钮上）。 */
 .mode-row{
@@ -210,7 +210,7 @@
   color:var(--accent);font-weight:var(--w-semi);
   background:var(--accent-soft);border-radius:var(--radius-pill);padding:2px var(--sp-2);
 }.role-badge .rt{color:var(--ink-3)}/* 只挑刺的徽章用危险色（它本来就是"找毛病"），取料的两个用次要色 —— 都用全站变量 */
-.role-badge[data-role="critic"] .rn{color:var(--danger);background:var(--danger-soft)}.role-badge[data-role="retriever"] .rn, .role-badge[data-role="researcher"] .rn{color:var(--ink-2);background:var(--line-2)}/* ══════════ 常用指令条（第 19 轮新功能 ②：一键把话说完）══════════
+.role-badge[data-role="critic"] .rn{color:var(--danger);background:var(--danger-soft)}.role-badge[data-role="retriever"] .rn, .role-badge[data-role="researcher"] .rn{color:var(--ink-2);background:var(--line-2)}/* ══════════ 常用指令条（新功能 ②：一键把话说完）══════════
    长在对话框上面：一排"你自己攒的指令"，点一条就发出去。
    横滑、不换行；高 36px，热区靠 padding 撑到 44。 */
 .chat-quick{padding:0 0 var(--sp-2);flex:0 0 auto}.chat-quick.hidden{display:none}.chat-quick .cq-scroll{
@@ -228,7 +228,7 @@
 
 
 /* 「分工设置」那个小小的快捷按钮（聊天顶部，点了跳到预设页调"哪一步交给谁"）。
-   此处要求。 */
+   。 */
 .pk-mini {
   flex: 0 0 auto; height: 26px; padding: 0 10px; font-size: var(--t-sm);
   border-radius: 999px; border: 1px solid var(--line); background: transparent;
@@ -241,7 +241,7 @@
 
 
 /* 「选模型」列表每行右侧的「⋯」—— 调这个模型自己的参数。
-   此处要求"三个点要放的就是这个地方"。跟预设页那个 .pk-more 同一套观感。 */
+   "三个点要放的就是这个地方"。跟预设页那个 .pk-more 同一套观感。 */
 .picker-item { display: flex; align-items: center; gap: var(--sp-2); }
 .picker-item .nm { flex: 1 1 auto; min-width: 0; }
 .md-more {
@@ -253,7 +253,7 @@
 
 
 /* ── 联网搜索那枚胶囊（聊天输入行左边）─────────────────────────
-   此处要求。
+   。
    关 = 灰描边空心；开 = 强调色实心 + 一点呼吸感。一眼看出现在能不能上网。 */
 .net-pill{
   flex:0 0 auto;height:30px;padding:0 11px;border-radius:999px;

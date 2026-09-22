@@ -42,7 +42,7 @@ input, textarea, [contenteditable], .selectable, .reader-page, .reader-turn{
   will-change:transform,opacity;backface-visibility:hidden;transform:translateZ(0);
 }/* ── 顶栏 ── */
 .topbar{
-  /* 第 46 轮：顶栏改成**可换行**的（min-height 而不是 height）——
+  /* ：顶栏改成**可换行**的（min-height 而不是 height）——
      切书那条长条（`.topbar > .bk-bar`，flex-basis:100%）独占第二行，
      跟标题/按钮同在一片区域里，不另开图层，也就不会有奇怪的穿模。 */
   display:flex;align-items:center;gap:var(--sp-2);row-gap:2px;flex-wrap:wrap;   /* token-ok: 2px 是顶栏两行之间的缝，收薄用 */
@@ -56,7 +56,7 @@ input, textarea, [contenteditable], .selectable, .reader-page, .reader-turn{
   background:var(--line);opacity:0;transition:opacity .22s var(--ease);
 }.topbar.scrolled::after{opacity:1}.topbar-title{
   /* 绝对居中：以前用 flex:1 居中，左边有返回键、右边没按钮时文字会整体偏右 */
-  /* ⚠ 第 47 轮踩到的坑（此处指出「怎么把字儿给弄下来了……还穿模了」）：
+  /* ⚠ 踩到的坑（此处指出「怎么把字儿给弄下来了……还穿模了」）：
      顶栏现在是**两行**（第一行 图标+标题，第二行 切书长条 `.topbar > .bk-bar`）。
      绝对定位**不给 top** 的时候，浏览器按"整条顶栏"的静态落点摆它 ——
      顶栏一变成两行，标题就跟着掉到第二行，正好压在切书长条和下面的卡片上。
@@ -67,7 +67,7 @@ input, textarea, [contenteditable], .selectable, .reader-page, .reader-turn{
   margin:0;font-size:var(--t-lg);font-weight:var(--w-semi);letter-spacing:.02em;
   text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   max-width:calc(100% - 132px);pointer-events:none;
-}/* 第 41 轮：切书入口搬回**内容流里那一行**（此处要求"改回原来的样子"），
+}/* ：切书入口搬回**内容流里那一行**（"改回原来的样子"），
    顶栏里不再挂小方块 → 这条"标题要给方块让位"的规则没人用了，删掉（死代码不许留）。
    标题回到正常的 max-width:calc(100% - 132px)（只让返回键与右上按钮）。 */.icon-btn{
   width:44px;height:44px;border-radius:50%;display:grid;place-items:center;
@@ -144,7 +144,7 @@ html.motion-off *, html.motion-off *::before, html.motion-off *::after{
 /* 系统级「减少动态效果」也跟着走 */
 @media (prefers-reduced-motion:reduce){html.motion-off *, html.motion-off *::before, html.motion-off *::after{animation:none !important}
 }/* ── 抽屉 / 弹窗的进出场（原生 App 的「升起 / 缩现」） ──
-   第 12 轮整理了这段：以前 .sheet / .sheet-panel / .modal / .modal-panel
+   整理了这段：以前 .sheet / .sheet-panel / .modal / .modal-panel
    **在同一个文件里各定义了两次**（圆角一个 20px 22px、一个 20px 20px，还左右不对称），
    靠"谁写在后面谁赢"活着 —— 这种"两套实现并存"就是露白边、圆角不生效的温床。现在只留一处。 */
 .sheet{
@@ -192,7 +192,7 @@ html.motion-off *, html.motion-off *::before, html.motion-off *::after{
   position:fixed;left:50%;bottom:calc(84px + var(--safe-b));transform:translateX(-50%);
   z-index:90;background:#342e26;color:#f6efe4;font-size:var(--t-base);
   /* 原来写的是 rgba(40,34,27,.94)：**半透明**的底，对比度体检从像素里量不出"底下是什么"，
-     于是 toast 这一屏永远"量不准 = 等于没验过"（夜间体检第 19 轮报的红）。
+     于是 toast 这一屏永远"量不准 = 等于没验过"（夜间体检报的红）。
      现值就是那层半透明压在纸上的合成色，视觉几乎没变，但它是**不透明**的：
      既能量，也不再依赖背后是什么。 */
   padding:var(--sp-2) var(--sp-4);border-radius:var(--radius-pill);max-width:80vw;text-align:center;

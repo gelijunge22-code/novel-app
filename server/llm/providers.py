@@ -96,9 +96,9 @@ async def stream_chat(provider: dict, model_id: str, messages: list[dict], *,
                       stream: bool | None = None,
                       first_token_s: float | None = None,
                       idle_s: float | None = None) -> AsyncIterator[dict]:
-    """流式对话。**保证不会"什么都不吐、也不报错"**（此处要求"出不了字"就是这么来的）。
+    """流式对话。**保证不会"什么都不吐、也不报错"**（"出不了字"就是这么来的）。
 
-    第 27 轮加的两道保险（原来是"零分片、零错误、静默结束"）：
+    加的两道保险（原来是"零分片、零错误、静默结束"）：
       · 流式跑完一个 delta 都没有 → **自动回退非流式**（先按声明的 API，再试 chat/completions）；
       · 回退也拿不到正文 → 吐一条**说人话的错误**（带上渠道、状态码、响应头几行），
         界面就能把原因显示出来，而不是干等。
@@ -446,7 +446,7 @@ async def stream_with_fallback(provider: dict, model_id: str, messages: list[dic
     """先走主模型；**这一轮一个字都没出**（挂了/空响应）就自动换备用模型再来一次。
 
     为什么要它：用户要"能选默认 / 备用模型（主模型挂了自动换）"。挂掉的那种情形
-    第 27 轮已经复现过 —— 渠道只回 `data: [DONE]`、正文一个字没有。
+    已经复现过 —— 渠道只回 `data: [DONE]`、正文一个字没有。
     这里只在"一个字都没出"时才换人，**已经出了字就不动**（不许把用户的半截回复弄丢）。
     """
     spoke = False

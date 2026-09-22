@@ -192,12 +192,12 @@ def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str
       · True（默认）—— 多 Agent 分工：计划/取料/查证/写稿/挑刺各是一个人。
         好处是每个角色只装一件事（写手放开写、挑刺往死里挑），互相不折中。
       · False —— **一个人干完**：整轮就一棒，由主创一个人从头做到尾，快、省。
-    此处要求：讨论/计划/执行**每一种都要能选这两种**，而不是另开一个"单人模式"。"""
+    ：讨论/计划/执行**每一种都要能选这两种**，而不是另开一个"单人模式"。"""
     _m = MODES.get(mode, MODES["execute"])
     if not divided:
         """「一个人」：**同一个人把分工那几棒的活全干了，但步骤一步不少**。
 
-        此处要求两段：
+        两段：
           · 「我本来想要的效果是一个AI干的时候，他会一个人扮演着所有的角色，
              你好像把这些去掉了」—— 所以不能塌成 1 棒（原来就是塌成 1 棒，挑刺/润色全没了）。
           · 「也得像分工一样演示出来他现在在哪一步」—— 所以步骤要照跑、界面要看得见。
@@ -206,7 +206,7 @@ def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str
         变的只是这一步戴哪顶帽子。"""
         allsteps = list(_m["steps"])
         # 走到哪一步，就带上**那一步自己的预设**（用户在「一个人（全套）」里填的）。
-        # 此处要求—— 对。原来 7 步共用一份设置，
+        # —— 对。原来 7 步共用一份设置，
         # 等于每一步都调不了。这里按"戴哪顶帽子"取对应那一格，拼进这一步的要求里。
         _S1 = {}
         try:
@@ -231,7 +231,7 @@ def steps_for(mode: str, slug: str = "", divided: bool = True) -> list[tuple[str
 
     """这一轮实际要跑的那几棒：`(角色, 标题, 要求, 是不是正文那一棒)`。
 
-    为什么要单开一个函数（第 33 轮）：用户把预设里"什么活派给谁"从**一个没人读的输入框**
+    为什么要单开一个函数（）：用户把预设里"什么活派给谁"从**一个没人读的输入框**
     改成了**真选项**。选了"正文交给主创"，执行模式里写正文那一棒就**真的是主创**在跑
     （落库的 `orchestra_step.role` 就是 leader，界面上也看得出来），不再只是提示词里一句话。
 
@@ -385,7 +385,7 @@ def _target_path(slug: str, text: str, payload: dict) -> str:
     # 空章优先：**最新章节是空的，就写它**，别往后跳。
     # 用户实测的毛病：新开的书自带一个空的「001-第一章.md」，旧逻辑按"最大章号 +1"算
     # → 直接跑去写第二章，第一章永远空着；而且 AI 以为自己是"接着写"，
-    # 根本不知道这本书还没开张（此处要求）。
+    # 根本不知道这本书还没开张（）。
     for f in reversed(files):
         try:
             if int(f.get("words") or 0) <= 0:
@@ -486,7 +486,7 @@ async def _run_step(ctx: dict, seq: int, role: str, title: str, demand: str,
                     is_prose: bool = False) -> str:
     """跑一个角色。返回它的产出（交给下一棒）。
 
-    `is_prose`：**这一棒是不是"写正文"那一棒**（第 33 轮）。原来这两处的兜底都是
+    `is_prose`：**这一棒是不是"写正文"那一棒**（）。原来这两处的兜底都是
     `role == "writer"` —— 可用户可以把正文派给主创，那时候"稿子只在聊天里没落盘"
     的兜底就会失效（主创跑的是 leader 这个角色名）。所以判据从"角色名"改成"这一棒干什么"。
     """
@@ -959,10 +959,10 @@ async def run(sid: int, text: str, inv: str, payload: dict, model_key: str = "")
         events.emit(sid, "orchestra_run_start", {
             "type": "orchestra_run_start", "runId": run_id, "mode": mode,
             "modeName": MODES[mode]["name"], "targetPath": target,
-            # ⚠ `steps_for()` 从第 33 轮起返回的是**四元组**（多一个"这一棒是不是正文"），
+            # ⚠ `steps_for()` 从起返回的是**四元组**（多一个"这一棒是不是正文"），
             # 这里却还按三元组解包 → 抛 "too many values to unpack (expected 3)"，
             # 而且是在**发 run_start 的事件里**抛的 → 整轮连第一棒都没跑就结束。
-            # 实测（第 42 轮）：用户发一句话 → 库里只有一条 user 条目 + 一条 system「编排出错」，
+            # 实测（）：用户发一句话 → 库里只有一条 user 条目 + 一条 system「编排出错」，
             # 界面上就是"AI 出不了字"。四元组全解出来，不用的那个用 _ 接。
             "steps": [{"role": r, "roleName": ROLES[r]["name"], "title": t}
                       for r, t, _p, _pr in steps]}, invocation_id=inv)

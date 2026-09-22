@@ -1,7 +1,7 @@
 /* ══════════════════════════════════════════════════════════════════════════
-   大背景质感（第 35 轮）—— 纸纹 / 竹影 / 水波 / 自然光
+   大背景质感（）—— 纸纹 / 竹影 / 水波 / 自然光
 
-   此处要求
+   
      「现在的大背景，说实话还是有点单调，总感觉有点丑丑的，可以增加一些那种就是
        波纹啊，或者就是比较好看的那种花纹，那种竹子啊」
      「我说的华丽不是各种堆什么特效，而是整体看上去舒服、有美感」
@@ -35,7 +35,7 @@ html[data-theme="night"]{
   --decor-grain:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2796%27 height=%2796%27%3E%3Cfilter id=%27n%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%27.9%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27saturate%27 values=%270%27/%3E%3C/filter%3E%3Crect width=%2796%27 height=%2796%27 filter=%27url(%23n)%27 opacity=%270.026%27/%3E%3C/svg%3E");
   --decor-bamboo:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 220 640%27 fill=%27none%27%3E%3Cg stroke=%27%23e6d9c0%27 stroke-linecap=%27round%27 stroke-width=%277%27 opacity=%270.017%27%3E%3Cpath d=%27M52 648C48 520 54 400 48 280C44 200 50 120 46 44M104 648C100 540 106 430 100 320C96 240 102 160 98 92M156 648C152 560 158 470 152 372C148 300 154 230 150 178%27/%3E%3C/g%3E%3Cg stroke=%27%23e6d9c0%27 stroke-linecap=%27round%27 stroke-width=%272.2%27 opacity=%270.017%27%3E%3Cpath d=%27M40 172h22M40 292h22M42 404h20M42 512h18M92 214h22M90 330h22M92 424h20M94 530h18M142 246h20M142 356h20M144 452h18M144 556h16%27/%3E%3C/g%3E%3Cg fill=%27%23e6d9c0%27 opacity=%270.017%27%3E%3Cpath d=%27M46 44C34 26 18 16 0 12C14 32 30 46 48 56ZM96 92C110 74 128 64 146 62C132 82 116 96 98 104ZM150 178C136 162 120 154 102 152C116 170 132 182 150 190ZM48 280C64 264 82 256 100 256C84 274 66 286 50 292ZM156 372C172 358 190 352 208 352C192 368 174 378 158 384Z%27/%3E%3C/g%3E%3C/svg%3E");
   --decor-ripple:url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 420 420%27 fill=%27none%27%3E%3Cdefs%3E%3CradialGradient id=%27g%27 cx=%27420%27 cy=%270%27 r=%27420%27 gradientUnits=%27userSpaceOnUse%27%3E%3Cstop offset=%270%27 stop-color=%27%23e6d9c0%27 stop-opacity=%270.018%27/%3E%3Cstop offset=%27.5%27 stop-color=%27%23e6d9c0%27 stop-opacity=%270.0126%27/%3E%3Cstop offset=%271%27 stop-color=%27%23e6d9c0%27 stop-opacity=%270%27/%3E%3C/radialGradient%3E%3C/defs%3E%3Cg stroke=%27url(%2523g)%27 stroke-width=%271.7%27%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%2788%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27132%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27180%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27232%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27288%27/%3E%3Ccircle cx=%27420%27 cy=%270%27 r=%27348%27/%3E%3C/g%3E%3C/svg%3E");
-  /* 夜间顶部那道"环境光"。第 42 轮实测：.05 时整屏 p99 差 = 10/255，**超过判据上限 9**（装饰发白）。
+  /* 夜间顶部那道"环境光"。实测：.05 时整屏 p99 差 = 10/255，**超过判据上限 9**（装饰发白）。
      深底 #14120f 与 #ffecce 的差 ≈ 235 → a=.035 时 ≈ 8.2/255，压回阈值以内。
      注意：真正刺眼的不是那几层纹样（它们更淡），是这道 wash —— 所以先调它。 */
   --decor-wash:linear-gradient(180deg, rgba(255,236,206,.035) 0, rgba(255,236,206,.014) 96px, rgba(255,236,206,0) 220px);
@@ -55,10 +55,10 @@ html[data-theme="night"]{
   background-size:96px 96px,auto 96vh,min(140vw,600px) auto,100% 260px,100% 190px,100% 100%,var(--userbg-size);
 }
 
-/* ── 用户自己传的背景图（第 43 轮）───────────────────────────────────────
-   此处要求「我说的大背景是这整个前端」。
+/* ── 用户自己传的背景图（）───────────────────────────────────────
+   「我说的大背景是这整个前端」。
    位置：**最底那一层**（在纸纹/竹影/水波/自然光下面）—— 等于给他换一张"自己的纸"，
-   第 35 轮那套质感一层都没少，照旧压在上面。
+   那套质感一层都没少，照旧压在上面。
    上面那层 `--userbg-veil`（纸色的半透明纱）是**给对比度兜底的**：用户传的可能是全黑图，
    正文直接压上去就读不了了。纱是纸色，所以没传图时它跟底色一模一样（看不出变化）。
    三种铺法用三个 class 切换（`html.ubg-*`，由 js/appearance.js 挂）：
@@ -85,9 +85,9 @@ html.ubg-center {--userbg-size:contain;    --userbg-pos:center center;--userbg-r
   background-size:96px 96px,auto min(80vh,640px),min(124vw,540px) auto,100% 320px,100% 220px;
 }
 
-/* ── 有用户图时：内置质感**退让**（第 44 轮）──────────────────────────────
-   此处要求。
-   第 43 轮把用户图铺成**最底那一层**，上面还压着纸纹/竹影/水波/自然光/收边五层，再压一层
+/* ── 有用户图时：内置质感**退让**（）──────────────────────────────
+   。
+   把用户图铺成**最底那一层**，上面还压着纸纹/竹影/水波/自然光/收边五层，再压一层
    纸色纱 —— 结果就是"传了也看不出"（那一版还有个更致命的问题：地址被当成 /css/… 解析 → 404，
    见 js/appearance.js 顶部）。这一条把"有图"和"没图"分成两种铺法：
 
@@ -96,7 +96,7 @@ html.ubg-center {--userbg-size:contain;    --userbg-pos:center center;--userbg-r
                         纱的浓淡由 js/appearance.js 按这张图的亮度算好（保证墨色压得住）。
 
    为什么不留纸纹：用户传的就是"我要的这张纸"，再叠一层灰噪点只是脏。
-   阅读器（#screen-reader）不在名单里 —— 正文页保持干净（这条从第 35 轮起就没变过）。 */
+   阅读器（#screen-reader）不在名单里 —— 正文页保持干净（这条从起就没变过）。 */
 html[class*="ubg-"] #screen-shelf,html[class*="ubg-"] #screen-chat,html[class*="ubg-"] #screen-lore,
 html[class*="ubg-"] #screen-preset,html[class*="ubg-"] #screen-settings,html[class*="ubg-"] #screen-tools,
 html[class*="ubg-"] #screen-tool{

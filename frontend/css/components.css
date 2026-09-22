@@ -1,7 +1,7 @@
 /* ============================================================
-   components.css — 全站控件库（第 20 轮「前端大改」立起来的那一套）
+   components.css — 全站控件库（「前端大改」立起来的那一套）
 
-   为什么单独一个文件：此处要求毛病就是「**UI 不统一**」——
+   为什么单独一个文件：毛病就是「**UI 不统一**」——
    同一个"按钮 / 选项 / 步进器 / 列表行 / 空态"，八个屏各写一套 padding 和圆角，
    看着哪儿都对、合起来就不像一个 App。所以规矩定死：
 
@@ -85,12 +85,12 @@
 .settings-body{padding:var(--sp-2) var(--page-x) calc(var(--sp-8) + var(--tab-h) + var(--safe-b));overflow:auto}
 /* 分组标题全站只有这一种样子 —— 阅读器的底部面板（#rd-quick-body）也用这同一条规则，
    以前它没被覆盖到，吃的是**浏览器默认的 h3**（18.72px / 700 粗体，还带 1em 外边距），
-   所以"书里的设置"看着跟别处不像（此处要求：还没有原来右上角三个点那版好看）。
+   所以"书里的设置"看着跟别处不像（：还没有原来右上角三个点那版好看）。
    加选择器而不是抄一份值 —— 抄一份就是"两套实现"。 */
 .settings-body h3, .rd-quick-body h3{
   /* 分组标题全站只有这一种样子：13px、ink-3、600 字重、不加字距。
      以前这里带 `letter-spacing:.1em` —— 别处都没有这一个值，
-     于是"底部面板看着跟设置页不像"（用户第 21 轮点名"UI 不统一"）。 */
+     于是"底部面板看着跟设置页不像"（用户点名"UI 不统一"）。 */
   font-size:var(--t-md);color:var(--ink-3);font-weight:var(--w-semi);
   letter-spacing:0;margin:var(--sp-6) var(--sp-1) var(--sp-2);
 }
@@ -129,7 +129,7 @@
 .settings-row.stack{display:block}
 .settings-row.stack .k{display:block;flex:none;margin-bottom:var(--sp-2)}
 
-/* ── 自定义背景图那一组（第 43 轮）────────────────────────────────────────
+/* ── 自定义背景图那一组（）────────────────────────────────────────
    用户传的图长什么样、现在用的是哪一档、要不要撤掉 —— 三件事都在这一格里说清（不许"点了没反应"）。
    预览条高 72px：够看出"是不是我那张"，又不至于把设置页顶下去（用户嫌大，这里就收着点）。 */
 .ubg-prev{
@@ -146,11 +146,11 @@
 /* 「所有书默认 / 这本书」两个按钮等分（跟主题色块那一排同一个规矩） */
 .settings-row > .seg > button.wide{min-width:0}
 
-/* 分段控件：一排"四角微弧的方块"（此处要求不要圆胶囊） */
+/* 分段控件：一排"四角微弧的方块"（不要圆胶囊） */
 .seg{display:flex;gap:var(--sp-2);flex-wrap:wrap}
 /* 分段控件全站**只有这一条规则**：阅读器底部面板那排页签（.rd-qbtn）也吃这一条。
-   （第 26 轮合并：以前 .rd-qbtn 在 reader.css 里另写了一份圆角/边框/选中态，
-    于是"书里的设置"跟设置页看着不像同一套东西 —— 此处要求"UI 不统一"。） */
+   （合并：以前 .rd-qbtn 在 reader.css 里另写了一份圆角/边框/选中态，
+    于是"书里的设置"跟设置页看着不像同一套东西 —— "UI 不统一"。） */
 .seg button, .rd-qbtn{
   min-height:var(--ctl-h-sm);padding:var(--sp-2) var(--sp-3);
   border-radius:var(--radius-sm);border:var(--hair) solid var(--line);background:var(--paper-2);
@@ -165,7 +165,7 @@
 .seg.grid button{min-width:0;padding:var(--sp-2) var(--sp-1);text-align:center;justify-content:center;white-space:nowrap}
 .seg.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 /* 主题色块：**6 个颜色 = 3 列 × 2 行**，两行都铺满、右下不留空
-   （此处要求"7 个排成 4+3、右边空一块"）。
+   （"7 个排成 4+3、右边空一块"）。
    每一格 = 色块（.sw，颜色就是那套主题的 --paper）+ 两个字；色块一眼看得出是哪套。
    选中态**不铺主题色**（以前选中就把底色盖成深棕，看着像另一个颜色）——
    改成描边环 + 加粗字，色块本身照样看得见。 */
@@ -179,7 +179,7 @@
   box-shadow:inset 0 0 0 var(--hair) var(--accent);font-weight:var(--w-semi);
 }
 
-/* 步进器（字号 − 16 ＋）：跟 .seg button 同一副样子。第 42 轮控件高度收了一档（40→36），
+/* 步进器（字号 − 16 ＋）：跟 .seg button 同一副样子。控件高度收了一档（40→36），
    所以可点范围用 ::after 向外撑到 44 —— **视觉变小、热区不减**（判据 e2e-uicheck 会逐个量）。 */
 .stepper{display:flex;align-items:center;gap:var(--sp-1)}
 .stepper button{
@@ -192,7 +192,7 @@
 .stepper button::after{content:'';position:absolute;inset:-4px;border-radius:inherit}   /* token-ok: -4px 是把可点范围撑到 44 */
 .stepper button:active{transform:scale(.9);background:var(--accent-soft)}
 
-/* ── 第 49 轮 · 隐形热区：看得见的框收一档，手指够得着的面积仍然 ≥44 ─────────
+/* ── · 隐形热区：看得见的框收一档，手指够得着的面积仍然 ≥44 ─────────
    用户要"整体缩小"，但"点不准"是另一回事。所以缩的是**看得见的框**（36 / 28 / 26），
    可点面积用一层透明的 ::after 撑回 44 —— 跟上面 .stepper button::after 同一套做法。
    判据：tools/e2e-uicheck.js 的「② 点击热区 ≥44×44」会把 ::after 算进去（它自己就写着这条）。
@@ -207,12 +207,12 @@
    （主题那一排色块的"这是什么颜色"解释文字用它，不给眼睛添乱。） */
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}/* token-ok: sr-only 是无障碍隐藏的标准写法，-1px 不是间距 */
 
-/* ── 触屏热区 ≥44×44：全站一条规矩（第 19 轮 e2e-uicheck 逐个控件量出来的）─────────
+/* ── 触屏热区 ≥44×44：全站一条规矩（e2e-uicheck 逐个控件量出来的）─────────
    视觉尺寸**一个都不放大**（放大就丑了），只把**可点范围**向外撑到 44 ——
    用绝对定位的透明伪元素撑，不占位、不改布局。用 :where() 把优先级压成 0：
    自己已经写了 position / ::after 的控件（.stepper button、.al-btn…）不会被这里覆盖。
    为什么非做不可：手机上按钮只有 29~40px 高时指头按不准 —— 这是移动端硬标准，
-   此处要求"点击热区"就是他说的"有些地方点半天没反应"。 */
+   "点击热区"就是他说的"有些地方点半天没反应"。 */
 :where(.t-btn, .icon-btn, .tr-act, .bk-mini, .pk, .mode-btn, .cq-chip, .btn-send, .fold-btn,
        .seg button, .pseg button, .t-seg button, .mode-seg button, .qa-btn, .al-btn,
        .rd-qbtn, .rd-nav, .btn, .pradio button, .rd-fb, .rd-tab, .switch, [data-crumb]){position:relative}
@@ -225,7 +225,7 @@
 .fb-crumb button::after{inset:-10px -6px}.stepper button:active{transform:scale(.9);background:var(--accent-soft)}.stepper .v{min-width:var(--sp-16);text-align:center;font-variant-numeric:tabular-nums}/* 内联 SVG 里需要实心的小圆点（data-icon=more / list 的圆点） */
 svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首屏/空态 */
 /* ══════════ 三、状态与反馈（空 / 载入 / 出错 / 标签 / 开关 / 色块） ══════════
-   第 20 轮新立的：以前"空态"就是一句 .empty 文字，加载中什么都没有，
+   新立的：以前"空态"就是一句 .empty 文字，加载中什么都没有，
    出错了直接把 e.message 糊上去 —— 用户看到的就是"卡住了"或"坏了"。 */
 .ui-state{display:flex;flex-direction:column;align-items:center;gap:var(--sp-3);padding:var(--sp-10) var(--sp-6);text-align:center}
 .ui-state-ico{
@@ -236,7 +236,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .ui-state-d{font-size:var(--t-md);color:var(--ink-3);line-height:1.7;max-width:34em}
 .ui-state-act{margin-top:var(--sp-1);display:flex;gap:var(--sp-2);flex-wrap:wrap;justify-content:center}
 .ui-state.error .ui-state-ico{background:var(--danger-soft,rgba(164,69,58,.12));color:var(--danger)}   /* token-ok: 1px 不是间距；这里是兜底色 */
-/* 加载态：骨架 + 一句「正在读…」。第 29 轮跟上面那三条一起从工具面板提上来的 ——
+/* 加载态：骨架 + 一句「正在读…」。跟上面那三条一起从工具面板提上来的 ——
    以前工具面板自己一套 `.t-load`、书架自己一套 `.skel-card`、预设又是一句裸文字，
    同一个 App 里"正在读"三种长相（此处说明"不统一"）。现在全站只此一份。 */
 .ui-loading{display:flex;flex-direction:column;gap:var(--sp-3);padding:var(--sp-6) var(--sp-4)}
@@ -302,8 +302,8 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
   width:18px;height:18px;border:2px solid var(--line);border-top-color:var(--accent);
   border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-3px;
 }
-/* ══════════ 五、当前书：**顶栏里的那一条**「在写：xxx ▸ 切换」（第 46 轮） ══════════
-   此处要求
+/* ══════════ 五、当前书：**顶栏里的那一条**「在写：xxx ▸ 切换」（） ══════════
+   
      「现在的那个理论上切换书的那个小方框，现在点一下不是会变成长条的那个吗？让它永久变成长条的，
        然后放在最上面，这样的话就不会穿模了，而且看上去好看一点，以及把它就是相当于是那一片区域，
        连带着他不要给他专门一个独特的区域，不然的话容易出现很奇怪的穿模」
@@ -319,24 +319,24 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .bk-bar-host:empty{display:none}      /* 长条搬进顶栏之后，这儿不留空档 */
 .bk-bar{
   display:block;margin:0;padding:0;
-  background:transparent;               /* 不许自带底色（第 17 轮那条"横线"就是这么来的） */
+  background:transparent;               /* 不许自带底色（那条"横线"就是这么来的） */
   position:static;                      /* 不许 sticky/fixed（同上） */
 }
 /* 顶栏里：长条独占第二行（顶栏本身 flex-wrap:wrap，见 base.css .topbar） */
 .topbar > .bk-bar{flex:1 1 100%;order:99;min-width:0;max-width:100%}
-/* ⚠ 第 47 轮实测：只写 `flex:1 1 100%` 的话，长条会**比顶栏内容盒宽 5px**（380.3 > 375.28）——
+/* ⚠ 实测：只写 `flex:1 1 100%` 的话，长条会**比顶栏内容盒宽 5px**（380.3 > 375.28）——
    因为 flex item 的自动最小尺寸是它的 min-content，长书名的 min-content 顶破了 100%。
    预设/设定/对话/大设置四屏的副行字长一点，就顶出去 5px（边缘对齐判据会红）。min-width:0 钉死它。 */
 
-/* ── 顶栏里的长条：**它得看着像顶栏的一部分，不像一张内容卡片**（第 47 轮） ──
-   此处要求
+/* ── 顶栏里的长条：**它得看着像顶栏的一部分，不像一张内容卡片**（） ──
+   
      「我是想把上面那个空白然后缩短一下……」（改前实测顶栏 89.3px：第一行 44 + 缝 + 长条 41.6，
        长条里是两行小字，看着像夹了一张卡）
      「想把那个长条的切换放到最上面也没放」
    → 两件事：① **薄**：长条收成**一行**（书名 + 副行同一行，超长各自省略号），
      厚度压到 26px（触控不靠它高，靠它**整条 375px 宽**）；
-     ② **像顶栏**：不加底色、不画边框、不留自己的圆角 —— 第 17 轮"它自己要了一条横线"、
-     第 20 轮"看着像另一层"都是这么来的，别带回来。 */
+     ② **像顶栏**：不加底色、不画边框、不留自己的圆角 —— "它自己要了一条横线"、
+     "看着像另一层"都是这么来的，别带回来。 */
 .topbar > .bk-bar .bk-chip{
   gap:var(--sp-2);min-height:26px;padding:0;                 /* token-ok: 26px 是顶栏里这一条的最小厚度 */
   border:0;border-radius:0;background:transparent;
@@ -359,7 +359,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .bk-chip:active{transform:scale(.985)}
 @keyframes bkPop{from{opacity:.4;transform:translateY(-4px) scale(.985)}to{opacity:1;transform:none}}
 .bk-ico{
-  width:24px;height:24px;flex:0 0 auto;border-radius:var(--radius-xs);display:grid;place-items:center;   /* token-ok: 24px 是顶栏里那条的图标底盘（第 46 轮收薄） */
+  width:24px;height:24px;flex:0 0 auto;border-radius:var(--radius-xs);display:grid;place-items:center;   /* token-ok: 24px 是顶栏里那条的图标底盘（收薄） */
   background:var(--accent-soft);color:var(--accent);
 }
 .bk-ico svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}

@@ -79,7 +79,7 @@
 }.scrub::-moz-range-track{height:6px;border-radius:var(--radius-pill);background:var(--accent-soft)}.scrub::-moz-range-thumb{width:22px;height:22px;border:0;border-radius:50%;background:var(--accent)}.reader-bar-val{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums;
   min-width:38px;text-align:right;flex:0 0 auto}/* 沉浸态：顶栏/底栏**真正让出空间**，不是只变透明。
    只把 opacity 归零的话它们还占着流里的高度，正文就只占中间那一截，
-   上下各留一条空带（此处要求）。
+   上下各留一条空带（）。
    所以这里连高度/内边距一起收掉；reader.js 的 showChrome/hideChrome 会跟着重排一次，
    让正文按新的可用高度重新分页、铺满整屏（分页模式页高按当前可见高度重算）。 */
 #screen-reader.chrome-off .reader-head, #screen-reader.chrome-off .reader-foot{
@@ -91,7 +91,7 @@
    （--safe-t/--safe-b 就是 0），刘海机器上第一行字正好压在摄像头那一条里
    （正跑 tools/e2e-safearea.js 时抓到的：p 的 top=22 < 安全区 47）。
    顶上/底下露出来的是 #screen-reader 自己的纸色底（不是白带），
-   所以**不会**回到用户第 24 轮点名的"上下一条白带"。
+   所以**不会**回到用户点名的"上下一条白带"。
    ❌ 走过一次弯路：把顶栏收成"刘海那一条"（height:var(--safe-t)）——
    顶栏里那些透明但仍在盒子里的按钮/标题就被判成"伸进刘海"，判据依旧报红。 */
 #screen-reader.chrome-off #reader-page{top:var(--safe-t);bottom:max(var(--safe-b),var(--sp-2))}
@@ -169,7 +169,7 @@
   overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.rd-toc-mark .pc{font-size:var(--t-sm);color:var(--ink-3);font-variant-numeric:tabular-nums}.rd-toc-mark .del{width:34px;height:34px;display:grid;place-items:center;color:var(--ink-3)}.rd-toc-mark .del svg{width:17px;height:17px;stroke:currentColor;fill:none;stroke-width:1.6;
   stroke-linecap:round;stroke-linejoin:round}/* 面板里的控件**直接吃全站那套**（.settings-group / .settings-row / .seg / .stepper 都在
    base.css，圆角与间距节距也由那边统一）—— 这里只给一个容器，不再自己写一份 padding/字号。
-   此处要求：
+   ：
    以前 .rd-set 自带 h3 letter-spacing、settings-row 自带 flex-wrap，看着就跟别处不像。 */
 .rd-hint{padding:var(--sp-2) var(--sp-5) 0;font-size:var(--t-sm);color:var(--ink-3);line-height:1.7}.rd-act{
   flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:var(--sp-1);height:56px;
@@ -189,8 +189,8 @@
   column-count:auto !important}#screen-reader.mode-scroll .reader-cols{padding-bottom:var(--sp-6)}
 
 /* 窄屏兜底 */
-/* ───────────────阅读器底部面板：#rd-quick（第 40 轮 · 几乎霸占整屏 + 整块一起滚）───────────────
-   此处要求
+/* ───────────────阅读器底部面板：#rd-quick（· 几乎霸占整屏 + 整块一起滚）───────────────
+   
      「现在点开书里的设置是长这样的，说不上来的丑，因为它**上面那一块就是可以点的那些什么排版啊、背景啊
        之类的是固定在那里的**，**你想划的话，只能划他们下面的那些什么正文字体这里才能划**，
        **上面这是不能滑的**，所以就导致你**看东西划东西的时候很难受**，
@@ -268,13 +268,13 @@
 .rd-quick-acts .rd-act.on{background:var(--accent);color:var(--on-accent)}
 
 /* ─────────────── 目录：#rd-toc（第 2 屏 · 独立成块）───────────────
-   此处要求。
+   。
    所以：它**不是**设置面板里的一个页签 —— 是一块从底下升起的高面板（占 72% 屏高，
    上面留出正文当背景），结构同样是三段式：固定头（书名 + 共几章 + 关闭）/ 独立滚动体 /
    固定底（回到当前章 · 新建一章）。一行一章，**只有章号 + 章名**，当前章高亮。 */
 .rd-toc{position:absolute;inset:0;z-index:var(--z-sheet);display:flex;flex-direction:column;justify-content:flex-end}
 .rd-toc.hidden{display:none}
-/* 蒙层：用户第 19 轮看到过"面板外还露着正文残字，干扰"——这里铺到满屏，压住正文 */
+/* 蒙层：用户看到过"面板外还露着正文残字，干扰"——这里铺到满屏，压住正文 */
 .rd-toc-scrim{
   position:absolute;inset:0;background:var(--scrim);
   opacity:0;transition:opacity var(--dur-3) var(--ease);
@@ -323,7 +323,7 @@
 /* 固定底：两个动作并排（回到当前章 / 新建一章）—— 固定区，滚列表时不动 */
 .rd-toc-foot{flex:0 0 auto;display:flex;gap:var(--sp-2);padding:var(--sp-3) var(--sp-4);
   border-top:var(--hair) solid var(--line)}
-/* ══════════ 新功能 ③ 小批注 / ④ 点一下看设定（第 19 轮）══════════ */
+/* ══════════ 新功能 ③ 小批注 / ④ 点一下看设定（）══════════ */
 /* 批注：面板里的分段小标题 + "加一条"按钮 */
 .rd-qsec{
   margin:var(--sp-3) 0 var(--sp-2);padding:0 var(--sp-1);font-size:var(--t-sm);color:var(--ink-3);letter-spacing:.06em;

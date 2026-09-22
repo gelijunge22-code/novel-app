@@ -1,5 +1,5 @@
 /* ============================================================
-   shelf.css — 第 1 屏「书架」（第 20 轮「前端大改」第一屏）
+   shelf.css — 第 1 屏「书架」（「前端大改」第一屏）
 
    改前的问题（本文件是"改后"）：
      · 书卡是**文字块 + 一小条封面**：书名/字数/进度/按钮挤在一行里，主次不清；
@@ -54,9 +54,9 @@
 @keyframes coverIn{from{opacity:0;transform:scale(1.04)}to{opacity:1;transform:none}}
 
 .book-info{flex:1;min-width:0;display:flex;flex-direction:column;justify-content:center;gap:var(--sp-2)}
-/* 书名独占一行：字号往回收一档（此处要求），
+/* 书名独占一行：字号往回收一档（），
    长书名**换行**最多两行 —— 以前是单行省略号，「一个很长的书名·第二部·外传（同人）」只能放出 82%，
-   被切掉小半截（此处要求那条）。封面尺寸一个像素都不动。 */
+   被切掉小半截（那条）。封面尺寸一个像素都不动。 */
 .book-title{
   display:block;min-width:0;
   font-size:var(--t-base);font-weight:var(--w-semi);color:var(--ink);

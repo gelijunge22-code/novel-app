@@ -224,7 +224,7 @@
      `App.form({title, fields:[{key,label,multiline,rows,value,placeholder}], ok})`
      → 确定回 `{key: 值}`，取消回 `null`。
      为什么要有它：**只留一处实现**。以前"要填好几样东西"的弹层各自拼一套 markup，
-     于是圆角/间距/按钮排布各写各的 —— 此处要求"UI 不统一"就是这么攒出来的。
+     于是圆角/间距/按钮排布各写各的 —— "UI 不统一"就是这么攒出来的。
      `App.ask`（单字段）现在是它的一个薄包装，两者行为完全一样（老调用方一个都不用改）。 */
   App.form = (opts) => new Promise((res) => {
     /* 转义：app.js 里以前没有这个小工具（老的单字段弹层压根没插过变量），
@@ -416,7 +416,7 @@
            转场是异步的（等 aIn/aOut 的 finished），用户在动画没演完时又切了一次屏的话，
            **旧的那次收尾会晚到**，它照着**自己闭包里的旧 outEl** 去 hidden ——
            而那个元素说不定已经是**现在正该显示的那一屏**了 → 整屏空白。
-           第 30 轮无头实测就是这个：`App.show('shelf')` 之后 `body.dataset.tab` 明明是 shelf，
+           无头实测就是这个：`App.show('shelf')` 之后 `body.dataset.tab` 明明是 shelf，
            `#screen-shelf` 却带着 `hidden`，截出来的图墨迹 0.000（只剩一层底色）。
            收拾动画随便收，**藏元素必须看"当前屏是谁"**。 */
         if (outEl.id !== 'screen-' + curName()) outEl.classList.add('hidden');
@@ -766,7 +766,7 @@
   }
 
   /* ── 启动页退场（**排在所有 await 前面**）────────────────────────────────
-     用户 2.0.1 报的"打开 App 一片黄"、以及监督人第 15 轮按像素抓出来的
+     用户 2.0.1 报的"打开 App 一片黄"、以及监督人按像素抓出来的
      "四张截图全是启动页"，根因都是同一件事：`dropSplash` 原来写在 boot0 的**最后**，
      中间夹着 `await API.waitBackend(...)`。那一步只要卡住（App 那边还没把地址敲下来），
      启动页就一直盖在最上面，底下什么都有、用户什么都看不见。
@@ -838,7 +838,7 @@
   /* ── 全局动作（data-act） ── */
   App.act = (name, e) => {
     /* 阅读界面里已经**没有"更多"那个整屏弹层**了：目录/书签/笔记/设置/翻页
-       全部走底栏那一排 + 底部矮面板（此处要求："把右上角的三个点完全去掉，把设置弄到下面"）。
+       全部走底栏那一排 + 底部矮面板（："把右上角的三个点完全去掉，把设置弄到下面"）。
        底栏每个按钮都在这儿有明确落点 —— 点了没反应 / 只闪一下，都是从这里漏掉一条惹的。 */
     const map = {
       'reader-back': () => App.show(App.state.readerReturn || 'shelf'),
@@ -854,7 +854,7 @@
       },
       'reader-quick-close': () => window.Reader && Reader.quickClose && Reader.quickClose(),
       /* 底栏「目录」：**独立的一块**（不是设置面板里的页签）。
-         此处要求 */
+          */
       'rd-toc': () => window.Reader && Reader.tocToggle && Reader.tocToggle(),
       'toggle-tts': () => window.Reader && Reader.toggleTts && Reader.toggleTts(),
       'rd-prev': () => window.Reader && Reader.prevChapter && Reader.prevChapter(),
@@ -944,7 +944,7 @@
       ` class="${String(p[key]) === String(v) ? 'on' : ''}">${label}</button>`).join('') + '</div>';
     /* 二元开关：全站**只有这一种形态**（48×28 的 .switch）。
        以前「界面动效」和「阅读时保持亮屏」用的是 .seg 里两个按钮（开 / 关），
-       窄屏一挤就折成**上下堆叠的两个方块**（此处要求）。 */
+       窄屏一挤就折成**上下堆叠的两个方块**（）。 */
     const sw = (key, on, label) => `<button class="switch${on ? ' on' : ''}" data-switch="${key}" role="switch"`
       + ` aria-checked="${on ? 'true' : 'false'}" aria-label="${label}" title="${label}"><i></i></button>`;
     /* 主题色块：**色块本身就画着那套主题的底色**（不是只有两个字 —— 此处说明"看不出米黄/暖褐长什么样"）。
@@ -961,7 +961,7 @@
     };
     /* 主题按"是什么"分成三类，不再 7 个混排：
        ① 跟随系统（跟手机深色模式走）② 夜间模式（深色底）③ 颜色主题（6 个底色，规整 3×2 网格）。
-       以前 7 个挤在一排 4+3，第二行右边空一块、色块还看不出颜色 —— 此处要求"乱"。 */
+       以前 7 个挤在一排 4+3，第二行右边空一块、色块还看不出颜色 —— "乱"。 */
     const THEMES = [['paper', '米黄'], ['sepia', '暖褐'], ['white', '纸白'],
       ['green', '护眼'], ['slate', '青灰'], ['night', '夜间']];
     return group('外观', [
@@ -974,7 +974,7 @@
       ['lineHeight', `<div class="settings-row"><span class="k">行距</span>${step('lineHeight', 0.1, 1.3, 2.6, '倍')}</div>`],
       ['margin', `<div class="settings-row"><span class="k">页边距</span>${step('margin', 2, 8, 48, 'px')}</div>`],
     ]) +
-    /* 自定义背景图（第 43 轮）：此处要求。
+    /* 自定义背景图（）：。
        这一组的 HTML 由 js/appearance.js 出（它管着"哪一档 / 铺法 / 上传移除"），
        这里只放一个挂载点 —— 实现只有那一份，别在设置页里再写一套。 */
     (want('bgimg') && window.Appearance ? Appearance.settingsHtml() : '') +
@@ -997,8 +997,8 @@
       ['ttsdiag', `<div class="settings-row"><span class="k">听书没声音？<small>逐项量一遍，看卡在哪一环</small></span>`
         + `<button class="btn sm" id="do-ttsdiag">听书自检</button></div>`],
     ]) +
-    /* AI 那一摊（模型 / 密钥 / 上网搜索）**不在这儿** —— 此处要求。
-       第 37 轮把「联网搜索」整段**搬到「对话」页的设置里**（js/chat.js 的「模型与渠道」）。
+    /* AI 那一摊（模型 / 密钥 / 上网搜索）**不在这儿** —— 。
+       把「联网搜索」整段**搬到「对话」页的设置里**（js/chat.js 的「模型与渠道」）。
        这里只留**一行指路**：不是第二份控件，是个门（点一下就跳到那边并把它打开）——
        免得用户在大设置里翻不到、以为"这个功能根本没有按钮"。 */
     group('AI 与上网', [
@@ -1069,7 +1069,7 @@
           const o = document.createElement('option');
           o.value = e.key;
           /* 下拉框里只放**短的**引擎名（"edge-tts"），括号里的说明进 title / aria-label ——
-             以前放全名，在手机上被硬截成「edge-tts（微软在:」，看着像坏掉（此处要求）。 */
+             以前放全名，在手机上被硬截成「edge-tts（微软在:」，看着像坏掉（）。 */
           const full = (e.label || e.key) + (e.available ? '' : '（不可用）');
           const short = visibleLabel(full);
           o.textContent = short;

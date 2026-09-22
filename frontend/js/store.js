@@ -6,7 +6,7 @@
 
   const DEFAULTS = {
     theme: 'paper',        // paper | sepia | slate | white | green | night | auto（跟随系统深浅）
-    themeColor: 'paper',   // 颜色主题单独记一份：关掉「跟随系统」/「夜间」时退回这套（第 26 轮）
+    themeColor: 'paper',   // 颜色主题单独记一份：关掉「跟随系统」/「夜间」时退回这套（）
     themePrev: 'paper',    // 进「夜间」之前是什么主题 —— 关掉夜间时退回它
     fontSize: 19,
     lineHeight: 1.9,

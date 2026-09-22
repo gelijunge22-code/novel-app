@@ -42,7 +42,7 @@ def _next_version(scope: str, slug: str, key: str) -> int:
     """下一个版本号 = 历史里最大的 +1。
 
     不能拿「当前那一行的 version」来加 —— 删掉自定义再重存时那一行没了，
-    会从 1 重新开始，跟旧历史撞号（出现过两个 v1）。历史只增不减、号只往上走。
+    会从 1 重新开始，跟旧历史撞号（出现过两个 v1）。历史号只往上走。
     """
     return int(dbm.db().scalar("SELECT COALESCE(MAX(version),0) FROM prompt_version"
                                " WHERE scope=? AND slug=? AND key=?", (scope, slug, key)) or 0) + 1

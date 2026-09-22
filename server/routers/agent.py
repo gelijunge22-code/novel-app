@@ -210,7 +210,7 @@ async def session_command(sid: str, request: Request, payload: dict = Body(...))
 async def orchestra_catalog(request: Request, slug: str = ""):
     """角色与模式目录：界面上要显示"这一步是谁在干活"。
 
-    多带一个 `defaultMode`（第 33 轮）：预设里主创的「干活方式」以前是个**没人读**的 radio，
+    多带一个 `defaultMode`（）：预设里主创的「干活方式」以前是个**没人读**的 radio，
     现在它是"这本书 AI 对话的默认干活方式"。用户在对话页临时切换，以对话页为准
     （前端只在"这本书还没选过"时才拿它当初值）。没配置 / 配得不认识 → 空串，前端自己回落。
     """
@@ -300,7 +300,7 @@ async def profiles_compile(request: Request):
 async def agent_skills(request: Request):
     """AI **真正能调用**的工具清单。
 
-    第 31 轮改的（此处要求）：「说不上来的，有一种**儿戏感**……很多功能没什么用」——
+    改的（）：「说不上来的，有一种**儿戏感**……很多功能没什么用」——
     以前这里是**写死的 5 条描述**（write_chapter / llmlint / consistency…），
     跟运行时真放行的工具**对不上**：面板说有「一致性检查」，AI 手里根本没有这个工具。
     现在改成**从真注册表读**（`engine/agent_runtime.py: TOOLS`）：每个工具一条，

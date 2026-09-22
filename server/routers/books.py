@@ -126,7 +126,7 @@ async def projects(request: Request):
     for slug in all_slugs():
         row = ensure_book_row(slug)
         # slug 和 projectRoot 是**同一个东西**（全站其它接口一律叫 slug、查询参数也叫 slug，
-        # 只有这里是照旧平台的叫法）。两个都返回，省得谁少看一行就踩空 —— 第 11 轮我自己就
+        # 只有这里是照旧平台的叫法）。两个都返回，省得谁少看一行就踩空 —— 我自己就
         # 因为 /api/shelf 给 slug、/api/projects 给 projectRoot，写脚本时取到 undefined。
         items.append({"projectRoot": slug, "slug": slug, "kind": row["kind"], "title": row["title"],
                       "summary": row["summary"],
@@ -191,10 +191,10 @@ _BOOK_STATE = (
     "writing_day", "revision", "achievement", "bookmark", "reading_progress",
     "lint_run", "sync_conflict", "prompt", "prompt_version", "workflow",
     "chat_session", "orchestra_run", "preset",
-    # 对端同步（第 12 轮加的）：这三张表都是"这本书跟服务器同步到哪儿了"的书内状态，
+    # 对端同步（加的）：这三张表都是"这本书跟服务器同步到哪儿了"的书内状态，
     # 书删了它们就是孤儿（verify_book_scope.py 的静态那条正是抓这个 —— 它当场就报了）。
     "peer_state", "peer_file", "peer_log",
-    # 第 42 轮补的两张（`verify_book_scope.py` 的"必须分类"那条当场报红抓出来的）：
+    # 补的两张（`verify_book_scope.py` 的"必须分类"那条当场报红抓出来的）：
     # 「段落批注」和「这本书的常用指令」都是**书内状态**，书删了它们就是孤儿 ——
     # 实测库里真躺着 10 条 margin_note + 63 条 quick_cmd（都是自测书留下的）。
     "margin_note", "quick_cmd",
@@ -232,7 +232,7 @@ def heal_book_index() -> list[str]:
         if r["slug"] not in have:
             dbm.db().execute("DELETE FROM book WHERE slug=?", (r["slug"],))
             # **只删 book 那一行是不够的**：这本书的章节/批注/常用指令…还全在库里当孤儿。
-            # 第 42 轮实测：这么"治好"过的书，留下了 1 条 chapter + 10 条 margin_note +
+            # 实测：这么"治好"过的书，留下了 1 条 chapter + 10 条 margin_note +
             # 63 条 quick_cmd + 2 条 revision（`verify_no_litter` 的⑥当场报红）。
             # 目录都不在磁盘上了，这些索引行就是死的，一并清（书稿本体在回收站里，没动它）。
             purge_book_rows(r["slug"])

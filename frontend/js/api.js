@@ -275,7 +275,7 @@
     bridged: !!NBApp,            // 前端在 App 里（走桥）还是浏览器里（走 HTTP）
     backend, waitBackend,        // 后端定下来了吗（本机离线 / 服务器 / 浏览器）
     base: baseOf,                // 当前后端前缀（App 里是本机 127.0.0.1 或服务器地址）
-    /* 口令与查询串拼法也放出来（第 33 轮）：听书自检要**自己发一次 fetch**去量
+    /* 口令与查询串拼法也放出来（）：听书自检要**自己发一次 fetch**去量
        HTTP 码 / Content-Type / 字节数 / 开头四字节 —— 走 j() 那条路拿不到这些。 */
     token: tokenOf,
     qs: qs,
@@ -433,17 +433,17 @@
       body: Object.assign({ mode: mode || 'prompt', clientMessageId: uuid(), message: { text } },
         (stream === true || stream === false) ? { stream: stream } : {},
         /* 谁来做：true=多 Agent 分工（默认） / false=一个人干完。
-           此处要求三种干活方式（讨论/计划/执行）**都能**切这两种。 */
+           三种干活方式（讨论/计划/执行）**都能**切这两种。 */
         (divided === true || divided === false) ? { divided: divided } : {}),
     }),
-    /* 带 slug：预设里主创的「干活方式」是**这本书**的默认干活方式（后端只增不减多加一个
+    /* 带 slug：预设里主创的「干活方式」是**这本书**的默认干活方式（后端多加一个
        defaultMode 字段，没配置就是空串，前端自己回落）。 */
-    /* ⚠ 第 41 轮实测修掉的一个真 bug：这里原来把 `'api/agent/orchestra'` 直接接上了 `qs(...)`，
+    /* ⚠ 实测修掉的一个真 bug：这里原来把 `'api/agent/orchestra'` 直接接上了 `qs(...)`，
        **漏了那个 `?`** → 拼出来是 `/api/agent/orchestra**slug=**xxx` → 后端 404。
        后果：预设里「干活方式」那三种模式的说明文案**从来没取到过**（一直静默回落），
        正是此处说明"像没用/儿戏"。全站别处都是 `'?' + qs(...)`，这里对齐。 */
     orchestra: (slug) => window.API.nb('api/agent/orchestra?' + qs({ slug: slug || '' })),
-    /* 第 27 轮「AI 对话的专门设置」：渠道自己加 / 模型自己拉 / 默认+备用+按书（后端只增不减） */
+    /* 「AI 对话的专门设置」：渠道自己加 / 模型自己拉 / 默认+备用+按书 */
     modelsProviders: () => window.API.nb('api/config/models/providers'),
     modelsPull: (body) => window.API.nb('api/config/models/pull', { method: 'POST', body }),
     modelsDefault: (modelKey) => window.API.nb('api/config/models/default', { method: 'POST', body: { modelKey } }),
@@ -453,7 +453,7 @@
     providerSave: (body) => window.API.nb('api/config/models/provider', { method: 'POST', body }),
     providerDelete: (id) => window.API.nb('api/config/models/provider?id=' + id, { method: 'DELETE' }),
     modelTest: (modelKey) => window.API.nb('api/config/models/test', { method: 'POST', body: { modelKey: modelKey || '' } }),
-    /* 第 31 轮「联网搜索」：所有 AI 都能开（默认关，关着时一个请求都不发） */
+    /* 「联网搜索」：所有 AI 都能开（默认关，关着时一个请求都不发） */
     /* 当前登录口令：只给已登录的人看。前端放在「设置 → 关于 → 下载 App」旁边 ——
        用户下完 App 要输口令，就在同一个地方能看见，不用去翻控制台或找文件。 */
     /* 自己在网页里更新（后端+前端一起）。见 server/routers/update.py */
@@ -478,7 +478,7 @@
     /* after：从哪一条事件之后开始推。**默认 0 = 全量重放**（中途断线补课用）；
        刚读完快照的调用方应该把 `after` 传成快照里的 `lastEventSeq`，
        否则上一轮跑完的 message_start 会被重放一遍、界面上多出几个永远不填字的空气泡
-       （第 42 轮实测的坑，见 tools/e2e-chatmsg.js 的丙）。 */
+       （实测的坑，见 tools/e2e-chatmsg.js 的丙）。 */
     stream(id, { onEvent, onError, after } = {}) {
       const a = (typeof after === 'number' && after >= 0) ? after : 0;
       const es = new EventSource(abs('nb/api/agent/sessions/' + id + '/events?after=' + a));
