@@ -64,6 +64,19 @@
      跨源请求带不上 cookie。**字节流**（封面 / 听书音频 / 导出下载 / APK）和 EventSource
      只能把口令挂在 URL 上（服务器认 ?token=，见 server/security.py 的 token_from）。
      顺带也是兜底：万一安卓桥这条道断了，前端自己也能直连服务器把界面撑起来。 */
+  /* 前端版本戳：**每次改前端都改它**。
+     为什么要有：App 的界面是打进安装包里的，出了"改了没生效"的问题时，
+     得有一个一眼能看出"现在跑的是哪一份前端"的东西，不然只能靠猜。 */
+  const FE_STAMP = 'FE-2026-09-22-a';
+  const REQLOG = [];            // 最近几次请求的耗时（自检面板要看）
+  const noteReq = (path, ms, ok) => {
+    try {
+      REQLOG.push({ p: String(path).slice(0, 60), ms: Math.round(ms), ok: !!ok });
+      if (REQLOG.length > 30) REQLOG.shift();
+    } catch (e) {}
+  };
+  window.__feStamp = () => FE_STAMP;
+  window.__reqlog = () => REQLOG.slice();
   const SESS_KEY = 'nbapp.sess.v1';
   let MEM_TOKEN = '';            // localStorage 写不进去时（有些 WebView 对 file:// 禁写）放内存里
   const sessToken = () => {
@@ -151,6 +164,7 @@
   });
 
   const rawJ = async (path, opts = {}) => {
+    const __t0 = (typeof performance !== 'undefined' ? performance.now() : Date.now());
     // 桥优先：只有 JSON 走桥；FormData 上传、流式生成还是走 HTTP（桥是同步返回字符串的）
     if (bridgeUsable() && !opts.formData && !opts.stream) {
       try {
@@ -196,8 +210,10 @@
       const msg = (data && (data.detail || data.message)) || ('请求失败 ' + r.status);
       const err = new Error(typeof msg === 'string' ? msg : '请求失败 ' + r.status);
       err.status = r.status; err.data = data;
+      try { noteReq(path, (performance.now() - __t0), false); } catch (e2) {}
       throw err;
     }
+    try { noteReq(path, (performance.now() - __t0), true); } catch (e2) {}
     return data;
   };
 

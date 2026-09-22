@@ -1171,7 +1171,10 @@
           <div class="settings-row"><span class="k">口令还能从哪找</span>
             <span><button class="btn sm" id="do-pw-copy">复制</button> <button class="btn sm" id="do-pw-new">换一个</button></span></div>
         </div>
-        <p class="settings-note">后端启动时控制台会打印；也写在 data/口令.txt 里。忘了就点「换一个」——换完立刻生效，当前这个登录不掉，去 App 里输新的就行。</p>`);
+        <p class="settings-note">后端启动时控制台会打印；也写在 data/口令.txt 里。忘了就点「换一个」——换完立刻生效，当前这个登录不掉，去 App 里输新的就行。</p>
+        <h3>自检 <button class="btn sm" id="do-diag" style="margin-left:8px">刷新</button></h3>
+        <div class="settings-group"><div id="diag-box" class="settings-row" style="display:block;line-height:1.7;font-size:var(--t-sm)">正在查…</div></div>
+        <p class="settings-note">这一块是给"改了没生效""到底哪一步慢"用的：装的是哪个版本、跑的是哪一份前端、令牌存没存住、每个请求花了多少毫秒，全在这儿。</p>`);
       /* ── 登录口令 ──────────────────────────────────────────────────
          用户实测卡在"下完 App，密码是多少？"—— 控制台滚过去了、data/口令.txt 又不知道在哪。
          所以就在"下载 App"旁边把它显示出来，忘了还能一键换一个。
@@ -1280,6 +1283,45 @@
         }
       });
       const sb = body.querySelector('#do-server');
+      /* ── 自检 ─────────────────────────────────────────────────────
+         给"改了没生效""到底哪一步慢"用的。一眼能看出：
+         装的是哪个版本 / 跑的是哪一份前端 / 令牌存没存住 / 每个请求多少毫秒。
+         （App 的界面是打进安装包里的，没有这个就只能靠猜 —— 用户实测被这个坑过。）*/
+      const diagBox = body.querySelector('#diag-box');
+      const fillDiag = async () => {
+        if (!diagBox) return;
+        diagBox.innerHTML = '正在查…';
+        const L = [];
+        try {
+          const inApp = !!(window.Android && Android.getVersion);
+          const vn = inApp && Android.getVersion ? Android.getVersion() : '';
+          const vc = (inApp && Android.getVersionCode) ? Android.getVersionCode() : '';
+          L.push('装的是：' + (inApp ? ('App ' + vn + '（' + vc + '）') : '网页版'));
+          L.push('跑的前端：' + ((window.__feStamp && window.__feStamp()) || '旧版（没有版本戳）'));
+          const fileMode = String(location.protocol) === 'file:';
+          L.push('界面来源：' + (fileMode ? '安装包内嵌' : location.origin));
+          L.push('服务器：' + (API.base ? (API.base() || '(空)') : '(未知)'));
+          let lsTok = '读不到';
+          try { lsTok = localStorage.getItem('nbapp.sess.v1') ? '存住了' : '没有'; } catch (e) { lsTok = '写不进去'; }
+          let bTok = '读不到';
+          try { bTok = (window.NBApp && NBApp.token && NBApp.token()) ? '有' : '没有'; } catch (e) {}
+          L.push('令牌：浏览器存储 ' + lsTok + ' · App 存储 ' + bTok);
+          try {
+            const st = await API.status();
+            L.push('登录状态：' + ((st && (st.loggedIn || st.token)) ? '已登录' : '未登录'));
+          } catch (e) { L.push('登录状态：查不到（' + (e.message || e) + '）'); }
+          const log = (window.__reqlog && window.__reqlog()) || [];
+          const slow = log.slice().sort((a, b) => b.ms - a.ms).slice(0, 6);
+          L.push('请求记录：最近 ' + log.length + ' 次，最慢的 ' + slow.length + ' 条');
+          slow.forEach((x) => L.push('　' + x.ms + 'ms ' + (x.ok ? '' : '✗ ') + x.p));
+          if (!log.length) L.push('　（还没有记录 —— 说明这次打开还没成功请求过服务器）');
+        } catch (e) { L.push('自检出错：' + (e.message || e)); }
+        diagBox.innerHTML = L.map((t) => esc(String(t))).join('<br>');
+      };
+      fillDiag();
+      const db = body.querySelector('#do-diag');
+      if (db) db.addEventListener('click', fillDiag);
+
       if (sb) sb.addEventListener('click', () => { try { Android.openSettings(); } catch (e) {} });
 
       /* ── 后端状态 ──────────────────────────────────────────────────
