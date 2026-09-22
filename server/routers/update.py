@@ -114,10 +114,13 @@ async def update_check(request: Request):
     local = _local()
     # **fetch 之后再比落后数**：直接比 ls-remote 的哈希会在"本地领先远端"时误报有新版本
     # （自己刚提交还没推的时候，就属这种情况）。
-    code, out = _git_net(["fetch", "--quiet", "origin", branch], timeout=60)
+    # **超时 10 秒**：以前给 60 秒，用户点一下要干等一分钟（还一句提示都没有，
+    # 看着就像卡死）。宁可明说"查不到"，也不要让人等。
+    code, out = _git_net(["fetch", "--quiet", "origin", branch], timeout=10)
     if code != 0:
         return {"ok": False, "canUpdate": True, "hasUpdate": False, "local": local, "remote": "",
-                "branch": branch, "reason": "连不上远端仓库（网络或代理问题）：" + out[:160]}
+                "branch": branch,
+                "reason": "查不到（网络连不上 GitHub，10 秒超时）。不影响你用，先手动更新也行。"}
     code2, out2 = _git(["rev-list", "--count", "HEAD..origin/" + branch], timeout=20)
     behind = out2.strip() if code2 == 0 and out2.strip().isdigit() else "0"
     code3, out3 = _git(["rev-parse", "--short", "origin/" + branch], timeout=20)
