@@ -167,7 +167,7 @@
     const __t0 = (typeof performance !== 'undefined' ? performance.now() : Date.now());
     // 桥优先：只有 JSON 走桥；FormData 上传、流式生成还是走 HTTP（桥是同步返回字符串的）
     /* ══════════════════════════════════════════════════════════════════
-       **JSON 请求一律不走桥** —— 用户报的"卡顿/延迟"真凶就在这一行。
+       **JSON 请求一律不走桥** —— 此处指出"卡顿/延迟"真凶就在这一行。
 
        桥是**同步**调用：JS 调 Java，要**停下来等** Java 把 HTTP 发完再回话。
        公网上一个来回几百毫秒，界面就跟着卡几百毫秒 —— 每次请求都卡一下。
@@ -231,7 +231,7 @@
   };
 
   /* ── 同一时刻的重复请求合并 ────────────────────────────────────
-     用户报"App 有些说不上来的延迟"。实测：启动一路下来
+     此处指出"App 有些说不上来的延迟"。实测：启动一路下来
      `api/shelf` / `api/projects` / `agent/sessions` **各被请求 3 次** ——
      在服务器本机看不出（5 毫秒），但手机走公网每个来回都是几百毫秒，
      多出来的 6~8 次就是好几秒。
@@ -433,7 +433,7 @@
       body: Object.assign({ mode: mode || 'prompt', clientMessageId: uuid(), message: { text } },
         (stream === true || stream === false) ? { stream: stream } : {},
         /* 谁来做：true=多 Agent 分工（默认） / false=一个人干完。
-           用户要求三种干活方式（讨论/计划/执行）**都能**切这两种。 */
+           此处要求三种干活方式（讨论/计划/执行）**都能**切这两种。 */
         (divided === true || divided === false) ? { divided: divided } : {}),
     }),
     /* 带 slug：预设里主创的「干活方式」是**这本书**的默认干活方式（后端只增不减多加一个
@@ -441,7 +441,7 @@
     /* ⚠ 第 41 轮实测修掉的一个真 bug：这里原来把 `'api/agent/orchestra'` 直接接上了 `qs(...)`，
        **漏了那个 `?`** → 拼出来是 `/api/agent/orchestra**slug=**xxx` → 后端 404。
        后果：预设里「干活方式」那三种模式的说明文案**从来没取到过**（一直静默回落），
-       正是用户说的"像没用/儿戏"。全站别处都是 `'?' + qs(...)`，这里对齐。 */
+       正是此处说明"像没用/儿戏"。全站别处都是 `'?' + qs(...)`，这里对齐。 */
     orchestra: (slug) => window.API.nb('api/agent/orchestra?' + qs({ slug: slug || '' })),
     /* 第 27 轮「AI 对话的专门设置」：渠道自己加 / 模型自己拉 / 默认+备用+按书（后端只增不减） */
     modelsProviders: () => window.API.nb('api/config/models/providers'),

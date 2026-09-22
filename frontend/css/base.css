@@ -56,7 +56,7 @@ input, textarea, [contenteditable], .selectable, .reader-page, .reader-turn{
   background:var(--line);opacity:0;transition:opacity .22s var(--ease);
 }.topbar.scrolled::after{opacity:1}.topbar-title{
   /* 绝对居中：以前用 flex:1 居中，左边有返回键、右边没按钮时文字会整体偏右 */
-  /* ⚠ 第 47 轮踩到的坑（用户报「怎么把字儿给弄下来了……还穿模了」）：
+  /* ⚠ 第 47 轮踩到的坑（此处指出「怎么把字儿给弄下来了……还穿模了」）：
      顶栏现在是**两行**（第一行 图标+标题，第二行 切书长条 `.topbar > .bk-bar`）。
      绝对定位**不给 top** 的时候，浏览器按"整条顶栏"的静态落点摆它 ——
      顶栏一变成两行，标题就跟着掉到第二行，正好压在切书长条和下面的卡片上。
@@ -67,7 +67,7 @@ input, textarea, [contenteditable], .selectable, .reader-page, .reader-turn{
   margin:0;font-size:var(--t-lg);font-weight:var(--w-semi);letter-spacing:.02em;
   text-align:center;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
   max-width:calc(100% - 132px);pointer-events:none;
-}/* 第 41 轮：切书入口搬回**内容流里那一行**（用户点名"改回原来的样子"），
+}/* 第 41 轮：切书入口搬回**内容流里那一行**（此处要求"改回原来的样子"），
    顶栏里不再挂小方块 → 这条"标题要给方块让位"的规则没人用了，删掉（死代码不许留）。
    标题回到正常的 max-width:calc(100% - 132px)（只让返回键与右上按钮）。 */.icon-btn{
   width:44px;height:44px;border-radius:50%;display:grid;place-items:center;

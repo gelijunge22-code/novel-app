@@ -220,7 +220,7 @@ async def _cors(request: Request, call_next):
 async def _watch_outside(request: Request, call_next):
     """记下**外部来访**（只记非本机）。
 
-    排障用：用户说"进不去 / 连不上"时，先看这里有没有他的请求 ——
+    排障用：此处说明"进不去 / 连不上"时，先看这里有没有他的请求 ——
       · 有 → 网络是通的，问题在认证或前端
       · 没有 → 请求根本没到服务器（DNS / 端口 / 安全组 / 手机网络）
     本机自测不记，免得刷屏。

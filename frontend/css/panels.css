@@ -9,7 +9,7 @@
 /* 展开态那一行：**干活方式 + 轮次胶囊并排**（放不下才换行，不许把胶囊挤成"3+1"） */
 .cd-line{display:flex;flex-wrap:wrap;align-items:center;gap:var(--sp-2);padding:0 var(--page-x) var(--sp-2)}
 .cd-line .mode-row, .cd-line .run-row{padding:0;background:transparent;flex:0 0 auto}
-/* ── 顶上的控制块 = 一个「抽屉」（第 42 批：用户原话「做成抽屉式的行不行？太丑了」）──
+/* ── 顶上的控制块 = 一个「抽屉」（第 42 批：此处要求）──
    收起态只占一行（摘要 + 箭头）；展开态最多 44vh、而且**它自己也滚得动**。
    为什么：监督人量过，原来这一整块固定吃 **35% 屏高**（298px），消息区只剩一半。
    收起后：顶栏 52 + 当前书 42 + 抽屉头 44 ≈ 138px → 消息区 ≥70% 屏高。 */
@@ -31,8 +31,8 @@
 /* 顶栏下面的一条状态（人格 / 模型 / 状态），由 chat.js 注入 */
 .chat-strip{
   /* 第 45 轮：**改成能换行**（原来 nowrap+overflow:hidden）。
-     用户原话：「底下就只能露出来 ge 了，全都看不清」——实测 4 个胶囊在 390 宽下被这一行
-     按比例挤扁（模型那枚只剩 56px，`某模型` 被切到只剩「ge…」），
+     此处要求——实测 4 个胶囊在 390 宽下被这一行
+     按比例挤扁（模型那枚只剩 56px，`某模型-flash` 被切到只剩「ge…」），
      而且里面那个 `<b>` 连 `min-width:0` 都没有，于是**被压到 12px 装 2 个汉字 → 字被硬切一半**。
      现在：胶囊按**自己内容的宽度**排，排不下就整体换到下一行（抽屉 body 本来就能滚），
      单枚超过一行宽时由 `<b>` 的省略号兜底（min-width:0 才真的出得来省略号）。 */
@@ -65,7 +65,7 @@
 .live-err .det{margin-top:var(--sp-1);font-size:var(--t-sm);color:var(--ink-3);line-height:var(--lh-base)}
 .live-err .acts{display:flex;gap:var(--sp-2);margin-top:var(--sp-2)}
 /* 「模型还没出字」的等待提示（看门狗，30 秒没第一个字才出现；一有字就撤掉）——
-   不是错误（不报红），但必须**看得见**：用户报的"发出去出不了字"最难受的就是干等。 */
+   不是错误（不报红），但必须**看得见**：此处指出"发出去出不了字"最难受的就是干等。 */
 .live-wait{
   margin-top:var(--sp-2);padding-top:var(--sp-2);border-top:1px dashed var(--line);
   font-size:var(--t-sm);color:var(--ink-2);line-height:var(--lh-base);
@@ -102,7 +102,7 @@
   padding:var(--sp-1) var(--page-x);border-top:1px solid var(--line);
   background:var(--card);
 }.chat-compose .icon-btn{flex:0 0 auto;margin-bottom:var(--sp-1)}/* 联网 / 自动写这两枚胶囊：跟着输入框**垂直居中**，别沉到最下面。
-   用户报「自动写和联网没有在中间，在偏下的位置，稍微往上提一点」——
+   此处指出「自动写和联网没有在中间，在偏下的位置，稍微往上提一点」——
    病根是这一行 align-items:flex-end（底部对齐），胶囊被拉到最底。 */
 .chat-compose .net-pill{align-self:center;margin-bottom:var(--sp-1)}.chat-input{
   flex:1;min-width:0;min-height:42px;max-height:140px;resize:none;
@@ -228,7 +228,7 @@
 
 
 /* 「分工设置」那个小小的快捷按钮（聊天顶部，点了跳到预设页调"哪一步交给谁"）。
-   用户原话：「增加一个快捷的小小的按钮…只是跳转就行，因为很多人可能不太懂」。 */
+   此处要求。 */
 .pk-mini {
   flex: 0 0 auto; height: 26px; padding: 0 10px; font-size: var(--t-sm);
   border-radius: 999px; border: 1px solid var(--line); background: transparent;
@@ -241,7 +241,7 @@
 
 
 /* 「选模型」列表每行右侧的「⋯」—— 调这个模型自己的参数。
-   用户点名"三个点要放的就是这个地方"。跟预设页那个 .pk-more 同一套观感。 */
+   此处要求"三个点要放的就是这个地方"。跟预设页那个 .pk-more 同一套观感。 */
 .picker-item { display: flex; align-items: center; gap: var(--sp-2); }
 .picker-item .nm { flex: 1 1 auto; min-width: 0; }
 .md-more {
@@ -253,8 +253,7 @@
 
 
 /* ── 联网搜索那枚胶囊（聊天输入行左边）─────────────────────────
-   用户原话：「现在联网搜索根本就没有开启或者关闭的功能…弄个专门的那种类似于胶囊的按钮，
-   然后开启之后我在下面问东西，它会调用主创的模型在后台自己跑」。
+   此处要求。
    关 = 灰描边空心；开 = 强调色实心 + 一点呼吸感。一眼看出现在能不能上网。 */
 .net-pill{
   flex:0 0 auto;height:30px;padding:0 11px;border-radius:999px;

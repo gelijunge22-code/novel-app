@@ -21,7 +21,7 @@ import httpx
 TIMEOUT = httpx.Timeout(600.0, connect=15.0, read=600.0)
 
 # 首字看门狗：渠道**通了但不吐字**（排队卡住 / 中转挂了）时，绝不能让用户对着
-# 「回复中…」干等 —— 这正是用户报的「AI 聊天输出之后出不了字」的体感。
+# 「回复中…」干等 —— 这正是此处指出「AI 聊天输出之后出不了字」的体感。
 # 第一个字之前给 FIRST_TOKEN_S（**只当安全网**：界面自己在 30 秒时就会写一句"还在等模型"，
 # 让用户继续等；这里只兜底"再也不会回来了"的那种），出字之后每个字之间给 IDLE_TOKEN_S。
 FIRST_TOKEN_S = float(os.environ.get("LLM_FIRST_TOKEN_S") or 300.0)
@@ -53,7 +53,7 @@ def other_shape(api: str) -> str:
     """另一种"流式形状"：声明 /responses 的换 /chat/completions，反之亦然。
 
     为什么要它（2026-09-21 实测，有日志）：
-      · 本机中转（`渠道-shim`，声明 `openai-responses`）的 `/responses` **流式只回一个
+      · 本机中转（`某渠道-shim`，声明 `openai-responses`）的 `/responses` **流式只回一个
         `data: [DONE]`、正文一个字不给**，而**同一个中转的 `/chat/completions` 流式逐字吐得好好的**；
       · 老代码只按声明的形状试一次，零分片就退回**非流式** —— 字还是出得来，但**是一次蹦出来的**，
         用户在界面实测里看到的就是 `streamed:false`、字数 `0,0,…,4`（"没有流式"）。
@@ -96,7 +96,7 @@ async def stream_chat(provider: dict, model_id: str, messages: list[dict], *,
                       stream: bool | None = None,
                       first_token_s: float | None = None,
                       idle_s: float | None = None) -> AsyncIterator[dict]:
-    """流式对话。**保证不会"什么都不吐、也不报错"**（用户点名的"出不了字"就是这么来的）。
+    """流式对话。**保证不会"什么都不吐、也不报错"**（此处要求"出不了字"就是这么来的）。
 
     第 27 轮加的两道保险（原来是"零分片、零错误、静默结束"）：
       · 流式跑完一个 delta 都没有 → **自动回退非流式**（先按声明的 API，再试 chat/completions）；

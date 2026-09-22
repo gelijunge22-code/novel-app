@@ -12,7 +12,7 @@
 /* 顶部：三个身份（正文写作 / 主创 / 资产助手），等宽 */
 /* 三个身份（正文写作 / 主创 / 资产助手…）等宽。
    角色一多，一行挤不下 —— 以前是 flex:1 + nowrap + ellipsis，于是每个只剩 36px，
-   「正文写作」被切成「正文写…」（用户原话：「完全看不到，全这种字全都超了」）。
+   「正文写作」被切成「正文写…」（此处要求）。
    现在放不下就**换行**（一行最多 3 个），字一个都不许切。 */
 .preset-seg{display:flex;flex-wrap:wrap;gap:var(--sp-2);padding:2px 2px var(--sp-3)}
 .preset-seg button{
@@ -75,11 +75,11 @@
 }
 .pradio button:active{transform:scale(.96)}
 /* 标签长的单选（如「短（2000 字上下）」＝11 个字）：竖排一行一个、左对齐。
-   横排时 flex 会给成 ~100px 宽 → 折成 2~3 行，正是用户点名的"被挤成两行"。 */
+   横排时 flex 会给成 ~100px 宽 → 折成 2~3 行，正是此处要求"被挤成两行"。 */
 .pradio-list{flex-direction:column}
 /* 竖排变体只改"排布"（一行一个、左对齐、撑满），**内边距跟横排保持一模一样** ——
    以前这里单独写了 padding:var(--sp-3)，于是同一族控件里有的 16px 有的 24px，
-   正是用户说的"一部分 UI 太大、跟别处不一个尺寸"（DOM 判据 tools/e2e-layout.js 的"同类同尺寸"抓到的）。 */
+   正是此处说明"一部分 UI 太大、跟别处不一个尺寸"（DOM 判据 tools/e2e-layout.js 的"同类同尺寸"抓到的）。 */
 .pradio-list button{flex:0 0 auto;width:100%;min-width:0;text-align:left}
 .pradio button.on{background:var(--accent);color:var(--on-accent);box-shadow:0 1px 4px rgba(60,50,40,.18)}
 .pradio button.on small{color:rgba(255,255,255,.78)}
@@ -182,7 +182,7 @@
 
 
 /* ── 模型列表每行右侧的「⋯」（打开"这个模型自己的参数"）───────────────
-   用户点名：「所有模型的右上角都应该加三个小点」。 */
+   此处要求：「所有模型的右上角都应该加三个小点」。 */
 .pk-list li { display: flex; align-items: center; gap: var(--sp-2); }
 .pk-list li .t { flex: 1 1 auto; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pk-more {

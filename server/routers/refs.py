@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """参考书架（18.5）：摘抄 / 心得 / 整篇范文 / **图片与文件** —— 放进来、搜得到、写的时候能带进提示词。
 
-图片这一块是用户点名要的：
+图片这一块是此处要求要的：
   「可以让他弄成支持文件输入，通过图片输入，比如说来告诉他这个人的具体感觉该怎么写，我可以发一个图片」。
 所以一条参考可以是：文字（老样子）、一张图（png/jpg/webp/gif/avif，能多张）、或者一个文件（md/txt/json/csv）。
 文件存在书自己的目录里（`<书>/.novel/refs/`），跟着书走；库里只记文件名与类型。
@@ -168,7 +168,7 @@ async def del_ref(request: Request, slug: str = "", id: int = 0):
 async def upload_refs(request: Request, slug: str = Form(""), title: str = Form(""), tags: str = Form(""),
                       note: str = Form(""), kind: str = Form(""),
                       files: list[UploadFile] = File(default=[])):
-    """**用户点名要的那条**：把图片 / 文件直接丢进参考书架（一次最多 6 个）。
+    """**此处要求要的那条**：把图片 / 文件直接丢进参考书架（一次最多 6 个）。
 
     - 每张图 = 一条参考：说明文字（`note`，可不写）就是它的正文 —— 以后写作时进提示词的就是这段话；
     - `title` 给了就统一用它（多张时自动加 `1/2/3`），没给就用原文件名；

@@ -300,7 +300,7 @@ async def profiles_compile(request: Request):
 async def agent_skills(request: Request):
     """AI **真正能调用**的工具清单。
 
-    第 31 轮改的（用户原话）：「说不上来的，有一种**儿戏感**……很多功能没什么用」——
+    第 31 轮改的（此处要求）：「说不上来的，有一种**儿戏感**……很多功能没什么用」——
     以前这里是**写死的 5 条描述**（write_chapter / llmlint / consistency…），
     跟运行时真放行的工具**对不上**：面板说有「一致性检查」，AI 手里根本没有这个工具。
     现在改成**从真注册表读**（`engine/agent_runtime.py: TOOLS`）：每个工具一条，

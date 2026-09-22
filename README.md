@@ -58,7 +58,7 @@ cat data/口令.txt
 
 ```bash
 python3 tools/set_password.py            # 随机生成一个新的
-python3 tools/set_password.py 我的新口令   # 设成你要的
+python3 tools/set_password.py 新的登录口令   # 设成你要的
 ```
 
 登录后也能在 App 的「设置」里改，或者在 **设置 → 关于 → 换一个** 一键换新的。

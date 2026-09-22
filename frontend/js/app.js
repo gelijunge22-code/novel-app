@@ -224,7 +224,7 @@
      `App.form({title, fields:[{key,label,multiline,rows,value,placeholder}], ok})`
      → 确定回 `{key: 值}`，取消回 `null`。
      为什么要有它：**只留一处实现**。以前"要填好几样东西"的弹层各自拼一套 markup，
-     于是圆角/间距/按钮排布各写各的 —— 用户点名的"UI 不统一"就是这么攒出来的。
+     于是圆角/间距/按钮排布各写各的 —— 此处要求"UI 不统一"就是这么攒出来的。
      `App.ask`（单字段）现在是它的一个薄包装，两者行为完全一样（老调用方一个都不用改）。 */
   App.form = (opts) => new Promise((res) => {
     /* 转义：app.js 里以前没有这个小工具（老的单字段弹层压根没插过变量），
@@ -361,7 +361,7 @@
   /* 点书卡那一刻只做一件事：把卡片的位置记下来。
      真正的「展开」由下面 switchScreen 里那一次变换完成。
      之前这里是「飞卡幽灵 + 整屏横移推入」两层动画各演各的，再加上阅读页要等联网
-     回来才蹦字，三层叠在一起 —— 就是用户说的「闪屏 / 这儿冲突那儿冲突」。 */
+     回来才蹦字，三层叠在一起 —— 就是此处说明「闪屏 / 这儿冲突那儿冲突」。 */
   App.bookRect = null;
   App.riseCard = (el) => {
     if (!el) return;
@@ -531,7 +531,7 @@
              而 Chrome/WebView 对 file: 文档禁止 pushState（SecurityError：
              "cannot be created in a document with origin 'file:'"）。
              以前没兜住 → 异常从这里抛出去，下面的 mod.onShow() **根本不会执行** →
-             换屏了但那一屏永远不渲染（用户说的"点开设置什么都没有"就是这个）。
+             换屏了但那一屏永远不渲染（此处说明"点开设置什么都没有"就是这个）。
              退回改 hash：不动历史栈，但界面一定换得过去。 */
           try { location.hash = h; } catch (e2) {}
         }
@@ -605,7 +605,7 @@
     /* `data-act` 的动作**统一在 document 上收一次**（事件委托）。
        为什么改成委托：以前是"启动那一刻，给当时存在的每个 [data-act] 绑一次"——
        启动之后才插进 DOM 的元素（弹层里的动作、面板里后画出来的按钮）**永远绑不上**，
-       用户点下去就是"点了只闪一下、一点用都没有"（用户报过这一类）。
+       用户点下去就是"点了只闪一下、一点用都没有"（此处指出过这一类）。
        委托一次就都管住。⚠ 只在这里绑一次：元素自己不许再绑一遍，否则同一个动作会跑两次。 */
     document.addEventListener('click', (e) => {
       const el = e.target && e.target.closest ? e.target.closest('[data-act]') : null;
@@ -710,7 +710,7 @@
          App 的界面是从安装包里（file://）加载的，安卓对 file:// **不保留
          cookie/localStorage** —— 所以每次打开都没有登录态。
          老版是从服务器加载页面、cookie 由 WebView 自己保管，所以当年不用每次输密码；
-         改内嵌之后这个待遇就没了（用户报"做大了之后才有的问题"就是这个）。
+         改内嵌之后这个待遇就没了（此处指出"做大了之后才有的问题"就是这个）。
          解法：登录成功时把口令存进手机，这里静默登录一次，用户根本看不到登录页。 */
       if (!st.loggedIn) {
         try {
@@ -838,7 +838,7 @@
   /* ── 全局动作（data-act） ── */
   App.act = (name, e) => {
     /* 阅读界面里已经**没有"更多"那个整屏弹层**了：目录/书签/笔记/设置/翻页
-       全部走底栏那一排 + 底部矮面板（用户点名："把右上角的三个点完全去掉，把设置弄到下面"）。
+       全部走底栏那一排 + 底部矮面板（此处要求："把右上角的三个点完全去掉，把设置弄到下面"）。
        底栏每个按钮都在这儿有明确落点 —— 点了没反应 / 只闪一下，都是从这里漏掉一条惹的。 */
     const map = {
       'reader-back': () => App.show(App.state.readerReturn || 'shelf'),
@@ -854,7 +854,7 @@
       },
       'reader-quick-close': () => window.Reader && Reader.quickClose && Reader.quickClose(),
       /* 底栏「目录」：**独立的一块**（不是设置面板里的页签）。
-         用户原话："点开目录之后，只是相当于在设置里面点开了目录一样，并没有那种简洁的感觉。" */
+         此处要求 */
       'rd-toc': () => window.Reader && Reader.tocToggle && Reader.tocToggle(),
       'toggle-tts': () => window.Reader && Reader.toggleTts && Reader.toggleTts(),
       'rd-prev': () => window.Reader && Reader.prevChapter && Reader.prevChapter(),
@@ -916,7 +916,7 @@
 
   /* 水波纹只有一处实现，在上面（按指尖定位、半径封顶、被元素自身裁掉）。
      这里原来还藏着第二套：半径 max(w,h)*2.1 —— 小按钮 54px 也能铺出 113px 的
-     一大团，点一下同时冒两个圈，正是用户说的「框了一大块区域在那儿震」。已删。 */
+     一大团，点一下同时冒两个圈，正是此处说明「框了一大块区域在那儿震」。已删。 */
   Prefs.onChange(() => applyPrefs());
   if (DARK_MQ) {
     const onScheme = () => { if (Prefs.get('theme') === 'auto') applyPrefs(); };
@@ -944,10 +944,10 @@
       ` class="${String(p[key]) === String(v) ? 'on' : ''}">${label}</button>`).join('') + '</div>';
     /* 二元开关：全站**只有这一种形态**（48×28 的 .switch）。
        以前「界面动效」和「阅读时保持亮屏」用的是 .seg 里两个按钮（开 / 关），
-       窄屏一挤就折成**上下堆叠的两个方块**（用户原话：「竟然是上下的一个开一个关，太丑了」）。 */
+       窄屏一挤就折成**上下堆叠的两个方块**（此处要求）。 */
     const sw = (key, on, label) => `<button class="switch${on ? ' on' : ''}" data-switch="${key}" role="switch"`
       + ` aria-checked="${on ? 'true' : 'false'}" aria-label="${label}" title="${label}"><i></i></button>`;
-    /* 主题色块：**色块本身就画着那套主题的底色**（不是只有两个字 —— 用户说"看不出米黄/暖褐长什么样"）。
+    /* 主题色块：**色块本身就画着那套主题的底色**（不是只有两个字 —— 此处说明"看不出米黄/暖褐长什么样"）。
        颜色值只有一份，在 tokens.css 的 .sw-* 里；tools/verify_tokens.py 会核对它跟主题块里的 --paper 一致。 */
     const swatch = (v, label) => `<button data-v="${v}" class="${String(p.theme) === v ? 'on' : ''}"`
       + ` title="${label}" aria-label="颜色主题：${label}">`
@@ -961,7 +961,7 @@
     };
     /* 主题按"是什么"分成三类，不再 7 个混排：
        ① 跟随系统（跟手机深色模式走）② 夜间模式（深色底）③ 颜色主题（6 个底色，规整 3×2 网格）。
-       以前 7 个挤在一排 4+3，第二行右边空一块、色块还看不出颜色 —— 用户点名的"乱"。 */
+       以前 7 个挤在一排 4+3，第二行右边空一块、色块还看不出颜色 —— 此处要求"乱"。 */
     const THEMES = [['paper', '米黄'], ['sepia', '暖褐'], ['white', '纸白'],
       ['green', '护眼'], ['slate', '青灰'], ['night', '夜间']];
     return group('外观', [
@@ -974,7 +974,7 @@
       ['lineHeight', `<div class="settings-row"><span class="k">行距</span>${step('lineHeight', 0.1, 1.3, 2.6, '倍')}</div>`],
       ['margin', `<div class="settings-row"><span class="k">页边距</span>${step('margin', 2, 8, 48, 'px')}</div>`],
     ]) +
-    /* 自定义背景图（第 43 轮）：用户原话「整个大背景要弄成可以自己上传图片的」。
+    /* 自定义背景图（第 43 轮）：此处要求。
        这一组的 HTML 由 js/appearance.js 出（它管着"哪一档 / 铺法 / 上传移除"），
        这里只放一个挂载点 —— 实现只有那一份，别在设置页里再写一套。 */
     (want('bgimg') && window.Appearance ? Appearance.settingsHtml() : '') +
@@ -991,15 +991,13 @@
       ['ttsEngine', `<div class="settings-row"><span class="k">朗读引擎</span><select class="input" data-select="ttsEngine"></select></div>`],
       ['rate', `<div class="settings-row"><span class="k">语速</span>${seg('rate', [['-20%', '慢'], ['+0%', '正常'], ['+25%', '快'], ['+50%', '更快']])}</div>`],
       ['ttsFollow', `<div class="settings-row"><span class="k">页面跟着朗读走<small>读到哪翻到哪</small></span>${sw('ttsFollow', p.ttsFollow !== false, '页面跟着朗读走')}</div>`],
-      /* 用户报「App 里听书从来没有出过声音」——
+      /* 此处指出「App 里听书从来没有出过声音」——
          这条入口点一下就把整条路逐项量一遍（地址 → 服务器 → 音频直链 → 加载 → 播放），
          哪一环断了、什么码、为什么，都摆在眼前。不再让"没声音"变成哑巴失败。 */
       ['ttsdiag', `<div class="settings-row"><span class="k">听书没声音？<small>逐项量一遍，看卡在哪一环</small></span>`
         + `<button class="btn sm" id="do-ttsdiag">听书自检</button></div>`],
     ]) +
-    /* AI 那一摊（模型 / 密钥 / 上网搜索）**不在这儿** —— 用户原话：
-        「我不清楚他为什么把联网搜索放在这儿了，不应该放到 AI 对话里吗？……
-          AI 对话需要弄一个专门的设置啊，就是放那种拉取 AI 之类的」。
+    /* AI 那一摊（模型 / 密钥 / 上网搜索）**不在这儿** —— 此处要求。
        第 37 轮把「联网搜索」整段**搬到「对话」页的设置里**（js/chat.js 的「模型与渠道」）。
        这里只留**一行指路**：不是第二份控件，是个门（点一下就跳到那边并把它打开）——
        免得用户在大设置里翻不到、以为"这个功能根本没有按钮"。 */
@@ -1071,7 +1069,7 @@
           const o = document.createElement('option');
           o.value = e.key;
           /* 下拉框里只放**短的**引擎名（"edge-tts"），括号里的说明进 title / aria-label ——
-             以前放全名，在手机上被硬截成「edge-tts（微软在:」，看着像坏掉（用户点名的）。 */
+             以前放全名，在手机上被硬截成「edge-tts（微软在:」，看着像坏掉（此处要求）。 */
           const full = (e.label || e.key) + (e.available ? '' : '（不可用）');
           const short = visibleLabel(full);
           o.textContent = short;
@@ -1395,7 +1393,7 @@
     /* 阅读器底部快捷面板：返回键**第一下**先收它（不能一步退出阅读器）。
        为什么放在这里而不是靠 history：App 里页面是 file://，pushState 会抛
        SecurityError（见 App.show 里那段注释），所以返回键这一层只能由 Java 转给前端算。 */
-    /* 阅读器的两层浮层：**先收目录、再收设置面板**（用户报过"退出没有退到该退的地方"）。
+    /* 阅读器的两层浮层：**先收目录、再收设置面板**（此处指出过"退出没有退到该退的地方"）。
        顺序反了的话，从目录里按返回会先把底下没开的设置面板"收"一遍 —— 点了跟没点一样。 */
     if (window.Reader && Reader.tocOn && Reader.tocOn()) { Reader.tocClose(); return true; }
     if (window.Reader && Reader.quickOn && Reader.quickOn()) { Reader.quickClose(); return true; }

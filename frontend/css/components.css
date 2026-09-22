@@ -1,7 +1,7 @@
 /* ============================================================
    components.css — 全站控件库（第 20 轮「前端大改」立起来的那一套）
 
-   为什么单独一个文件：用户点名的毛病就是「**UI 不统一**」——
+   为什么单独一个文件：此处要求毛病就是「**UI 不统一**」——
    同一个"按钮 / 选项 / 步进器 / 列表行 / 空态"，八个屏各写一套 padding 和圆角，
    看着哪儿都对、合起来就不像一个 App。所以规矩定死：
 
@@ -85,7 +85,7 @@
 .settings-body{padding:var(--sp-2) var(--page-x) calc(var(--sp-8) + var(--tab-h) + var(--safe-b));overflow:auto}
 /* 分组标题全站只有这一种样子 —— 阅读器的底部面板（#rd-quick-body）也用这同一条规则，
    以前它没被覆盖到，吃的是**浏览器默认的 h3**（18.72px / 700 粗体，还带 1em 外边距），
-   所以"书里的设置"看着跟别处不像（用户原话：还没有原来右上角三个点那版好看）。
+   所以"书里的设置"看着跟别处不像（此处要求：还没有原来右上角三个点那版好看）。
    加选择器而不是抄一份值 —— 抄一份就是"两套实现"。 */
 .settings-body h3, .rd-quick-body h3{
   /* 分组标题全站只有这一种样子：13px、ink-3、600 字重、不加字距。
@@ -108,7 +108,7 @@
    控件照样靠右贴（靠 margin-left:auto），视觉位置一点没变。 */
 .settings-row .k{flex:0 1 auto;min-width:fit-content;font-size:var(--t-base);color:var(--ink)}
 /* 控件那一列**统一右贴**：不管标签两个字还是六个字，控件都从右边同一条基准线开始缩 ——
-   这就是用户说的"每一行的标签→控件排布必须完全一致，不许这行靠左那行靠右"。 */
+   这就是此处说明"每一行的标签→控件排布必须完全一致，不许这行靠左那行靠右"。 */
 .settings-row > :not(.k){flex:0 0 auto;margin-left:auto}
 /* 分段控件（正文字体 / 切页动画 / 语速）**占满标签右边剩下的全部宽度**：
    一行放得下、等分、永不折行。以前只有 .seg.grid 拿到了 flex:1，
@@ -146,11 +146,11 @@
 /* 「所有书默认 / 这本书」两个按钮等分（跟主题色块那一排同一个规矩） */
 .settings-row > .seg > button.wide{min-width:0}
 
-/* 分段控件：一排"四角微弧的方块"（用户点名不要圆胶囊） */
+/* 分段控件：一排"四角微弧的方块"（此处要求不要圆胶囊） */
 .seg{display:flex;gap:var(--sp-2);flex-wrap:wrap}
 /* 分段控件全站**只有这一条规则**：阅读器底部面板那排页签（.rd-qbtn）也吃这一条。
    （第 26 轮合并：以前 .rd-qbtn 在 reader.css 里另写了一份圆角/边框/选中态，
-    于是"书里的设置"跟设置页看着不像同一套东西 —— 用户点名的"UI 不统一"。） */
+    于是"书里的设置"跟设置页看着不像同一套东西 —— 此处要求"UI 不统一"。） */
 .seg button, .rd-qbtn{
   min-height:var(--ctl-h-sm);padding:var(--sp-2) var(--sp-3);
   border-radius:var(--radius-sm);border:var(--hair) solid var(--line);background:var(--paper-2);
@@ -165,7 +165,7 @@
 .seg.grid button{min-width:0;padding:var(--sp-2) var(--sp-1);text-align:center;justify-content:center;white-space:nowrap}
 .seg.grid.cols-2{grid-template-columns:repeat(2,minmax(0,1fr))}
 /* 主题色块：**6 个颜色 = 3 列 × 2 行**，两行都铺满、右下不留空
-   （用户点名"7 个排成 4+3、右边空一块"）。
+   （此处要求"7 个排成 4+3、右边空一块"）。
    每一格 = 色块（.sw，颜色就是那套主题的 --paper）+ 两个字；色块一眼看得出是哪套。
    选中态**不铺主题色**（以前选中就把底色盖成深棕，看着像另一个颜色）——
    改成描边环 + 加粗字，色块本身照样看得见。 */
@@ -212,7 +212,7 @@
    用绝对定位的透明伪元素撑，不占位、不改布局。用 :where() 把优先级压成 0：
    自己已经写了 position / ::after 的控件（.stepper button、.al-btn…）不会被这里覆盖。
    为什么非做不可：手机上按钮只有 29~40px 高时指头按不准 —— 这是移动端硬标准，
-   用户点名的"点击热区"就是他说的"有些地方点半天没反应"。 */
+   此处要求"点击热区"就是他说的"有些地方点半天没反应"。 */
 :where(.t-btn, .icon-btn, .tr-act, .bk-mini, .pk, .mode-btn, .cq-chip, .btn-send, .fold-btn,
        .seg button, .pseg button, .t-seg button, .mode-seg button, .qa-btn, .al-btn,
        .rd-qbtn, .rd-nav, .btn, .pradio button, .rd-fb, .rd-tab, .switch, [data-crumb]){position:relative}
@@ -238,7 +238,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .ui-state.error .ui-state-ico{background:var(--danger-soft,rgba(164,69,58,.12));color:var(--danger)}   /* token-ok: 1px 不是间距；这里是兜底色 */
 /* 加载态：骨架 + 一句「正在读…」。第 29 轮跟上面那三条一起从工具面板提上来的 ——
    以前工具面板自己一套 `.t-load`、书架自己一套 `.skel-card`、预设又是一句裸文字，
-   同一个 App 里"正在读"三种长相（用户说的"不统一"）。现在全站只此一份。 */
+   同一个 App 里"正在读"三种长相（此处说明"不统一"）。现在全站只此一份。 */
 .ui-loading{display:flex;flex-direction:column;gap:var(--sp-3);padding:var(--sp-6) var(--sp-4)}
 .ui-loading-hint{font-size:var(--t-md);color:var(--ink-3);text-align:center}
 
@@ -303,7 +303,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
   border-radius:50%;animation:spin .7s linear infinite;display:inline-block;vertical-align:-3px;
 }
 /* ══════════ 五、当前书：**顶栏里的那一条**「在写：xxx ▸ 切换」（第 46 轮） ══════════
-   用户原话（第 46 轮第 ③ 条）：
+   此处要求
      「现在的那个理论上切换书的那个小方框，现在点一下不是会变成长条的那个吗？让它永久变成长条的，
        然后放在最上面，这样的话就不会穿模了，而且看上去好看一点，以及把它就是相当于是那一片区域，
        连带着他不要给他专门一个独特的区域，不然的话容易出现很奇怪的穿模」
@@ -313,7 +313,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
         不是内容流里另起一块，所以**不会有"另一层"**，也就不会出现奇怪的穿模；
      ③ **不再单开区域**：内容流里原来那个 `.bk-bar-host` 空掉后不占高（`:empty{display:none}`）——
         实测（logs/r46-probe-before.json）：它以前在顶栏底下撑出 **42px** 的带子，
-        而里面只有一枚 34×34 的小方块 → 那就是用户说的「顶上这一大块空白」。
+        而里面只有一枚 34×34 的小方块 → 那就是此处说明「顶上这一大块空白」。
    历史三个毛病一条都不许带回来（第 17 / 20 / 41 轮）：不许 sticky/fixed、不许自带底色、不许假占位。 */
 .bk-bar-host{flex:0 0 auto}
 .bk-bar-host:empty{display:none}      /* 长条搬进顶栏之后，这儿不留空档 */
@@ -329,7 +329,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
    预设/设定/对话/大设置四屏的副行字长一点，就顶出去 5px（边缘对齐判据会红）。min-width:0 钉死它。 */
 
 /* ── 顶栏里的长条：**它得看着像顶栏的一部分，不像一张内容卡片**（第 47 轮） ──
-   用户原话（第 47 轮）：
+   此处要求
      「我是想把上面那个空白然后缩短一下……」（改前实测顶栏 89.3px：第一行 44 + 缝 + 长条 41.6，
        长条里是两行小字，看着像夹了一张卡）
      「想把那个长条的切换放到最上面也没放」
@@ -477,7 +477,7 @@ svg .fill, svg circle.fill, svg path.fill{fill:currentColor;stroke:none}/* 首�
 .web-try-list small{font-size:var(--t-sm);color:var(--ink-3);line-height:1.6}
 
 /* ══════════ 八、听书自检 ══════════
-   用户报的是「App 里听书从来没有出过声音」，界面上当时什么都不说 ——
+   此处指出是「App 里听书从来没有出过声音」，界面上当时什么都不说 ——
    服务器侧实测全通（合成成功 / 接口 200 / 公网反代也通），所以缺的是
    「**卡在哪一环、什么码、为什么**」能被看见。这一块就是那份逐项清单。
    一行一步：✓/✗ + 这一步的名字 + 它量到的**真数值**（HTTP 码、字节数、error.code…）。 */

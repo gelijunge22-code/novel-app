@@ -27,7 +27,7 @@
 
   /* ═══════════════ 小工具 ═══════════════ */
   /* 这一屏对的是哪本书 —— 读全站唯一的那个「当前书」（bookctx.js），
-     不再"没值就摔给书架第一本"（那正是用户说的"全都指向书架第一本"）。 */
+     不再"没值就摔给书架第一本"（那正是此处说明"全都指向书架第一本"）。 */
   function slugOf() {
     if (window.BookCtx && BookCtx.has()) return BookCtx.slug();
     if (App.state.slug) return App.state.slug;
@@ -358,7 +358,7 @@
   window.Lore = {
     onShow() {
       if (!S.wired) { S.wired = true; wireSearch(); }
-      /* 顶上那条切书：切完立刻重读新书的设定（用户要求"切完立刻生效"） */
+      /* 顶上那条切书：切完立刻重读新书的设定（此处要求"切完立刻生效"） */
       if (window.BookCtx) {
         BookCtx.mount('lore-book', () => { S.loaded = false; S.slug = null; load(true).catch(() => {}); });
       }

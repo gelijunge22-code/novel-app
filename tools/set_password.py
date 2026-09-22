@@ -4,7 +4,7 @@
 
 用法：
   python3 tools/set_password.py                 # 随机生成一个（好念、好打），打印出来
-  python3 tools/set_password.py 我的新口令        # 设成指定的
+  python3 tools/set_password.py 新的登录口令        # 设成指定的
   python3 tools/set_password.py --user admin     # 指定用户（默认 admin）
 
 为什么需要它：下载本仓库的人**第一次启动时口令是随机生成的**（写在 data/initial-password.txt），
